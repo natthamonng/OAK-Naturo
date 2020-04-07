@@ -1,15 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './assets/scss/themes/lite-purple.scss';
+import './assets/scss/plugins/perfect-scrollbar.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import Moment from 'react-moment';
+import 'moment/locale/fr';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+// Set the locale for every react-moment instance to French.
+Moment.globalLocale = 'fr';
+
+ReactDOM.render(( <App /> ), document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
