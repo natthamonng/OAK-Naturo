@@ -1,14 +1,14 @@
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const ExtractJwt = require('passport-jwt').ExtractJwt;
-const config = require('../config/auth.config');
 
 class JwtStrategy {
 
     constructor() {
         this._options = {
-            secret: config.secret,
-            issuer: config.issuer,
-            audience: config.audience
+            secret: process.env.JWT_SECRET,
+            issuer: process.env.JWT_ISSUER,
+            // audience: process.env.JWT_AUDIENCE
         };
     }
 
