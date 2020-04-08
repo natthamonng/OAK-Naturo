@@ -7,5 +7,6 @@
 * [nodejs](https://nodejs.org/en/)
 * [express](https://expressjs.com/)
 * [mariadb](https://mariadb.org/) 
-* [passport](http://www.passportjs.org/)- authentication: passport-local, passport-jxt
+* [sequelize](https://sequelize.org/) - ORM
+* [passport](http://www.passportjs.org/)- authentication: passport-local, passport-jwt
 * ...
