@@ -18,6 +18,7 @@ api/.sequelizerc
 
 # misc
 api/.env
+web/.env
 .DS_Store
 .env.local
 .env.development.local
