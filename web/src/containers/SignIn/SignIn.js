@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect,useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { signInUser } from "../../actions/auth.actions";
@@ -8,6 +8,9 @@ import logo from '../../assets/images/acorn.png';
 import photoWide from '../../assets/images/photo-wide-6.jpg';
 
 function SignIn({ signInUser, isAuthenticated }) {
+    let location = useLocation();
+    let { from } = location.state || { from: { pathname: "/home" } };
+
     const [formData, setFormData] = useState({
         email: "",
         password: ""
@@ -26,7 +29,7 @@ function SignIn({ signInUser, isAuthenticated }) {
 
     if (isAuthenticated) {
         // If signed in and user navigates to Signin page, should redirect them to home
-        return <Redirect to='/home'/>
+        return <Redirect to={from.pathname} />
     }
 
     return (

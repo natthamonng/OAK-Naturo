@@ -10,14 +10,14 @@ const Authorization = (WrappedComponent, allowedRoles, auth) => {
         } else {
             return <Redirect to="/home" />
         }
-    }
+    };
     return WithAuthorization;
-}
+};
 
 // Router configuration
-export const Visitor = (component) => (auth) => Authorization(component,['visitor', 'partner', 'admin'], auth)
-export const Partner = (component) => (auth) => Authorization(component,['partner', 'admin'], auth)
-export const Admin = (component) => (auth) => Authorization(component, ['admin'], auth)
+export const Visitor = (component) => (auth) => Authorization(component,['visitor', 'partner', 'admin'], auth);
+export const Partner = (component) => (auth) => Authorization(component,['partner', 'admin'], auth);
+export const Admin = (component) => (auth) => Authorization(component, ['admin'], auth);
 
 const PrivateRoute = ({ component: ComponentFactory, auth, ...rest }) => {
     const Component = ComponentFactory(auth);
@@ -25,7 +25,9 @@ const PrivateRoute = ({ component: ComponentFactory, auth, ...rest }) => {
             <Route
                 {...rest}
                 render = { props =>
-                    auth.isAuthenticated ? <Component {...props} /> : <Redirect to="/signin" />
+                    auth.isAuthenticated ? <Component {...props} />
+                    :
+                    <Redirect to={{pathname: "/signin", state: { from: props.location }}} />
                 }
             />
         )
