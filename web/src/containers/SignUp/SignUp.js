@@ -102,7 +102,7 @@ const SignUp = ({ setAlert, signUpUser, isAuthenticated  }) => {
                                            value={password}
                                            onChange={event => onChange(event)}
                                            autoComplete="new-password"
-                                           minlength="8" required
+                                           minLength="8" required
                                        />
                                    </div>
                                    <div className="form-group">
@@ -114,7 +114,7 @@ const SignUp = ({ setAlert, signUpUser, isAuthenticated  }) => {
                                            value={password2}
                                            onChange={event => onChange(event)}
                                            autoComplete="new-password"
-                                           minlength="8" required
+                                           minLength="8" required
                                        />
                                    </div>
                                    <button className="btn btn-primary btn-block btn-rounded mt-3" type="submit">Sign Up</button>
