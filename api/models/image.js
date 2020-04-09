@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       },
       references: {
-        model: 'Post',
+        model: 'posts',
         key: 'id',
       },
     }

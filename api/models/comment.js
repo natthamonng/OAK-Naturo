@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       },
       references: {
-        model: 'User',
+        model: 'users',
         key: 'id',
       },
     },
@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       },
       references: {
-        model: 'Post',
+        model: 'posts',
         key: 'id',
       },
     },
