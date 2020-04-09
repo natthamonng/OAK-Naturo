@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import {setAlert} from '../actions/alert.actions';
-import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import Alert from "./Alert";
+import { useLocation } from 'react-router-dom';
+import { addNewPost } from '../actions/post.actions';
+import { setAlert } from '../actions/alert.actions';
+import Alert from './Alert';
 
-const AddPostForm = ({user, setAlert}) => {
+const AddPostForm = ({ setAlert, addNewPost, user }) => {
     let location = useLocation();
-
     const [formData, setFormData] = useState({
         user_id: user.id,
         filter: 'general',
@@ -16,7 +15,6 @@ const AddPostForm = ({user, setAlert}) => {
 
     const [imagesData, setImagesData] = useState([]);
     const [previews, setPreviews] = useState([]);
-
 
     const { user_id, content, filter} = formData;
     const onChange = event => {
@@ -43,17 +41,6 @@ const AddPostForm = ({user, setAlert}) => {
     let thumbnails =  previews.map(url => {
         return <img key={url} alt="preview image" src={url} className="avatar-lg mb-3 rounded mr-2" />
     });
-
-    const maxSelectedFile = event => {
-        let files = event.target.files;
-        if (files.length > 10) {
-            const message ='Maximum 10 images.';
-            setAlert(message, 'secondary');
-            event.target.value = null;
-            return false;
-        }
-        return true;
-    };
 
     const checkMimeType = event =>{
         let files = event.target.files;
@@ -92,7 +79,7 @@ const AddPostForm = ({user, setAlert}) => {
             data.append('file', image)
         }
 
-        // addNewPost(data);
+        addNewPost(data);
 
         setFormData((previousState) => {
             return {
@@ -179,16 +166,10 @@ const AddPostForm = ({user, setAlert}) => {
             </div>
         </div>
     )
-}
-
-// AddPostForm.propTypes = {
-//     user: PropTypes.object.isRequired,
-//     setAlert: PropTypes.func.isRequired,
-//     // addNewPost: PropTypes.func.isRequired
-// };
+};
 
 const mapStateToProps = state => ({
     user: state.auth.user,
 });
 
-export default connect( mapStateToProps, { setAlert })(AddPostForm);
+export default connect( mapStateToProps, { setAlert, addNewPost })(AddPostForm);

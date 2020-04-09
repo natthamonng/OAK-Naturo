@@ -12,7 +12,7 @@ const Home = ({ getPosts, posts }) => {
     const filters = ['general', 'witness', 'protocol'];
     useEffect(() => {
         getPosts(filters)
-    }, [getPosts]);
+    }, []);
 
     return (
         <div className="main-content">

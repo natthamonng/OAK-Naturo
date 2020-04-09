@@ -28,9 +28,9 @@ export const addPostBegin = () => {
     }
 };
 
-export const addPostSuccess = ( posts ) => ({
+export const addPostSuccess = ( post ) => ({
     type: ADD_POST_SUCCESS,
-    payload: { posts }
+    payload: { post }
 });
 
 export const addPostFailure = error => ({
@@ -62,7 +62,17 @@ export const addNewPost = (data) => async dispatch => {
     };
     const body = data;
     await axios.post(`${BASE_URL}/api/posts`, body, config)
-    // TODO
+        .then(res => {
+            dispatch(addPostSuccess(res.data))
+        })
+        .catch(err => {
+            console.log(err)
+            // const errors = err.response.data.errors;
+            // if (errors) {
+            //     errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+            // }
+            dispatch(addPostFailure(err))
+        })
 };
 
 export const setVisibilityFilter = filter => ({
