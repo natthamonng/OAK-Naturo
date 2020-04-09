@@ -103,7 +103,7 @@ exports.getPostsByFilters = async (req, res) => {
             }, {
                 model: Comment,
                 as: 'comments',
-                attributes: ['id', 'comment'],
+                attributes: ['id', 'comment', 'createdAt'],
                 include: [
                     {
                         model: User,
