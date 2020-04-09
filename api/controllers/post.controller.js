@@ -31,9 +31,15 @@ exports.addNewPost = async (req, res, next) => {
 };
 
 exports.getPostById = async (req, res) => {
+    let postId;
+    if (req.post) {
+        postId = req.post.id
+    } else if (req.comment) {
+        postId = req.comment.dataValues.post_id;
+    }
     await Post.findOne({
         where: {
-            id: req.post.id
+            id: postId
         },
         order: [
             ['createdAt', 'DESC'],
@@ -47,6 +53,13 @@ exports.getPostById = async (req, res) => {
                 model: Comment,
                 as: 'comments',
                 attributes: ['id', 'comment'],
+                include: [
+                    {
+                        model: User,
+                        as: 'author',
+                        attributes: ['username'],
+                    }
+                ]
             },
             {
                 model: Image,
@@ -91,6 +104,13 @@ exports.getPostsByFilters = async (req, res) => {
                 model: Comment,
                 as: 'comments',
                 attributes: ['id', 'comment'],
+                include: [
+                    {
+                        model: User,
+                        as: 'author',
+                        attributes: ['username'],
+                    }
+                ]
             },
             {
                 model: Image,

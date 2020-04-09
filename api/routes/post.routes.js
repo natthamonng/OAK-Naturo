@@ -3,7 +3,7 @@ const commentController = require('../controllers/comment.controller');
 const { passportJwt } = require('../middlewares');
 
 const multer = require('multer');
-const upload = multer({dest: 'uploads/'})
+const upload = multer({dest: 'uploads/'});
 
 module.exports = app => {
 
@@ -14,6 +14,6 @@ module.exports = app => {
     app.post('/api/posts', [passportJwt.authenticateJwt], upload.array('file', 10),
         postController.addNewPost, postController.getPostById);
 
-    app.post('/api/comment', commentController.addNewComment);
+    app.post('/api/comment', [passportJwt.authenticateJwt], commentController.addNewComment, postController.getPostById);
 
 };

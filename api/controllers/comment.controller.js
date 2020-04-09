@@ -32,10 +32,9 @@ exports.addNewComment = (req, res, next) => {
         user_id: req.body.user_id,
         post_id: req.body.post_id,
         comment: req.body.comment,
-    }).then(data => {
-        res.status(200).json({
-            success: [{ message: 'Nouveau commentaire créé avec succès.' }]
-        });
+    }).then(comment => {
+        req.comment = comment;
+        next();
     }).catch(err => {
         console.error(err);
         res.status(500).json({
