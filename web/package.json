@@ -9,6 +9,7 @@
     "axios": "^0.19.2",
     "dotenv": "^8.2.0",
     "has-value": "^2.0.2",
+    "immer": "^6.0.3",
     "install": "^0.13.0",
     "jwt-decode": "^2.2.0",
     "moment": "^2.24.0",
