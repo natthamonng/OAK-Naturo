@@ -53,20 +53,20 @@ export const getPosts = (filters) => async dispatch => {
         })
 };
 
-export const addNewPost = (data) => async dispatch => {
+export const addNewPost = (post) => async dispatch => {
     dispatch(addPostBegin());
     const config = {
         headers: {
             'content-type': 'multipart/form-data'
         }
     };
-    const body = data;
+    const body = post;
     await axios.post(`${BASE_URL}/api/posts`, body, config)
         .then(res => {
             dispatch(addPostSuccess(res.data))
         })
         .catch(err => {
-            console.log(err)
+            console.log(err);
             // const errors = err.response.data.errors;
             // if (errors) {
             //     errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
