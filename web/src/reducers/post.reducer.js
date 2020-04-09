@@ -19,6 +19,7 @@ export default (state = initialState, action) =>
                 draft.loading =  false;
                 break;
             case actionsType.ADD_POST_BEGIN:
+            case actionsType.ADD_COMMENT_BEGIN:
                 draft.loading = true;
                 draft.error =  null;
                 break;
@@ -31,6 +32,19 @@ export default (state = initialState, action) =>
                     post,
                     ...state.posts
                 ];
+                break;
+            case actionsType.ADD_COMMENT_SUCCESS:
+                draft.loading =  false;
+                let newPostComment = action.payload.post;
+                draft.posts.forEach((element, index) => {
+                    if (element.id === newPostComment.id) {
+                        draft.posts[index] = newPostComment
+                    }
+                });
+                break;
+            case actionsType.ADD_COMMENT_FAILURE:
+                draft.error =  action.payload.error;
+                draft.loading =  false;
                 break;
             case actionsType.GET_POSTS_FAILURE:
                 draft.error =  action.payload.error;
