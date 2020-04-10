@@ -136,10 +136,10 @@ const AddPostForm = ({ setAlert, addNewPost, user }) => {
                                             <option value="general">Général</option>
                                             <option value="witness">Témoignage</option>
                                             <option value="protocol">Protocole</option>
-                                            }
                                         </>
                                     }
                                     { location.pathname === '/pro' &&
+                                    // TODO: fix defaultVavue to pro when location.pathname === 'pro'
                                     <option value="pro">Pro</option>
                                     }
                                 </select>

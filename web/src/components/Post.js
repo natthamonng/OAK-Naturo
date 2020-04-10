@@ -1,16 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React  from 'react';
 import Moment from 'react-moment';
-
 import Avatar from './Avatar';
 import CommentForm from './CommentForm';
+import CommentList from './CommentList';
 import Comment from './Comment';
 
-const BASE_URL = 'http://localhost:8080';
-
 const Post = ({post, user}) => {
-    // const [comments, setComments] = useState([]);
-
     const postId = post.id;
     const images = post.images;
     const comments = post.comments;
@@ -29,32 +24,6 @@ const Post = ({post, user}) => {
             <Comment key={comment.id} comment={comment} />
         )
     });
-
-    // useEffect(() => {
-    //     getComments();
-    // }, []);
-    //
-    // const getComments = () => {
-    //     axios.get(`${BASE_URL}/api/posts/${postId}/comments`)
-    //         .then( res => {
-    //             setComments(res.data);
-    //         }).catch(error => {
-    //         console.log(error)
-    //     })
-    // }
-
-    const addNewComment = (data) => {
-        console.log(data);
-        // const body = data;
-        // axios.post(`${BASE_URL}/api/comment`, body)
-        //     .then(res => {
-        //         console.log(res);
-        //         getComments();
-        //     })
-        //     .catch(err => {
-        //         console.log(err);
-        //     })
-    };
 
     return (
         <div className="card mb-2 p-2">
@@ -87,10 +56,10 @@ const Post = ({post, user}) => {
                 </div>
 
                 <div className="pt-2">
-                    <CommentForm postId={postId} user={user} addNewComment={addNewComment}/>
-
+                    <CommentForm postId={postId} />
                     <div>
                         { commentsList }
+                        {/*<CommentList />*/}
                     </div>
 
                 </div>
