@@ -32,7 +32,7 @@ const Home = ({ getPosts, posts }) => {
                             <AddPostForm />
                             <div className="mt-4"></div>
 
-                            {posts.length > 0 ?
+                            {posts != [] ?
                                 <>
                                 <div className="separator-breadcrumb border-top"></div>
                                 <div className="breadcrumb d-flex justify-content-end">
