@@ -1,8 +1,11 @@
 import React, {useState} from 'react';
+import {connect, useSelector} from 'react-redux';
+import { addNewComment} from '../actions/comment.actions';
 
-const CommentForm = ({user, postId, addNewComment}) => {
+const CommentForm = ({ postId, addNewComment}) => {
+    const userId = useSelector(state => state.auth.user.id);
     const [formData, setFormData] = useState({
-        user_id: user.id,
+        user_id: userId,
         post_id: postId,
         comment: ''
     });
@@ -10,12 +13,11 @@ const CommentForm = ({user, postId, addNewComment}) => {
     const { user_id, post_id, comment } = formData;
 
     const onChange = event => {
-        setFormData({...formData, [event.target.id]: event.target.value });
+        setFormData({...formData, [event.target.name]: event.target.value });
     }
 
     const onSubmit = event => {
         event.preventDefault();
-        event.stopPropagation();
         if (comment.length === 0 ){
             return;
         }
@@ -26,13 +28,13 @@ const CommentForm = ({user, postId, addNewComment}) => {
                 comment: ''
             }
         })
-    }
+    };
 
     return (
         <form className="inputForm" onSubmit={event => onSubmit(event)}>
             <div className="form-group d-flex flex-row">
-                {/*<img className="avatar-sm rounded-circle mr-2" src={face} alt="alt"/>*/}
                 <input className="form-control form-control-rounded" type="text"
+                       name="comment"
                        placeholder="Votre commentaire ..."
                        onChange={event => onChange(event)}
                        value={comment}
@@ -43,6 +45,6 @@ const CommentForm = ({user, postId, addNewComment}) => {
             </div>
         </form>
     )
-}
+};
 
-export default CommentForm;
+export default connect( null, { addNewComment })(CommentForm);

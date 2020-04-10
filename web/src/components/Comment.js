@@ -8,7 +8,6 @@ const Comment = ({ comment }) => {
             <div className="float-left mr-2">
                 <Avatar username={comment.author.username}/>
             </div>
-            {/*<img className="avatar-sm rounded-circle mr-3" src="" alt=""/>*/}
             <div className="message">
                 <div>
                     <span className="mb-1 text-title font-weight-bold">{comment.author.username}</span>
@@ -19,6 +18,6 @@ const Comment = ({ comment }) => {
             <span className="text-small text-muted"><Moment fromNow>{ comment.createdAt }</Moment></span>
         </div>
     )
-}
+};
 
 export default Comment;
