@@ -41,6 +41,15 @@ export default (state = initialState, action) =>
                         draft.posts[index] = newPostComment
                     }
                 });
+                // draft.posts.forEach((element, index) => {
+                //     if (element.id === newPostComment.id) {
+                //         const lastComment = newPostComment.comments[newPostComment.comments.length -1];
+                //         element.comments = [
+                //             ...element.comments,
+                //             lastComment
+                //         ];
+                //     }
+                // });
                 break;
             case actionsType.ADD_COMMENT_FAILURE:
                 draft.error =  action.payload.error;

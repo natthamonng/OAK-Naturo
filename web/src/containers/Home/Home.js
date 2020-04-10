@@ -17,7 +17,7 @@ const Home = ({ getPosts, posts }) => {
     return (
         <div className="main-content">
             <section className="widget-app">
-                { posts.loading ?
+                { posts.loading && posts.length < 0 ?
                     <div className="row">
                         <div className="col-12 d-flex justify-content-center mt-4">
                             <Spinner/>
@@ -26,10 +26,10 @@ const Home = ({ getPosts, posts }) => {
                 :
                     <div className="row">
                         <div className="col-12 col-lg-4  mb-4">
-                            {/*<RecentPostList />*/}
+                            <RecentPostList />
                         </div>
                         <div className="col-12 col-lg-8  mb-4">
-                            <AddPostForm />
+                            <AddPostForm deFaultFilter={'general'}/>
                             <div className="mt-4"></div>
 
                             {posts != [] ?
