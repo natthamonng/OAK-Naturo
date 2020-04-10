@@ -37,13 +37,10 @@ exports.getPostById = async (req, res) => {
         postId = req.post.id
     } else if (req.comment) {
         postId = req.comment.dataValues.post_id;
-    } else if (req.params.postId) {
-        console.log('hello')
     }
     await Post.findOne({
         where: {
-            id: postId,
-            status: 'published'
+            id: postId
         },
         order: [
             ['createdAt', 'DESC'],
@@ -111,9 +108,10 @@ exports.getPostsByFilters = async (req, res) => {
             }, {
                 model: Comment,
                 as: 'comments',
-                where: {
-                    status: 'published'
-                },
+                // TODO problem with status
+                // where: {
+                //     status: 'published'
+                // },
                 attributes: ['id', 'comment', 'createdAt'],
                 include: [
                     {
