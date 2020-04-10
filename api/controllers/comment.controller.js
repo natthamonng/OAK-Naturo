@@ -42,3 +42,17 @@ exports.addNewComment = (req, res, next) => {
         });
     });
 };
+
+exports.unPublishComment = (req, res) => {
+    Comment.update(
+        {status: 'unpublished'} ,
+        {where: {id: req.params.commentId}}
+    ).then(comment => {
+        res.status(200).json({success: true})
+    }).catch(err => {
+        console.error(err);
+        res.status(500).json({
+            errors: [{ message: 'Une erreur s\'est produite lors de la suppression du commentaire.' }]
+        });
+    });
+};

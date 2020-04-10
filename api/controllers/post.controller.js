@@ -4,6 +4,7 @@ const Post = db.posts;
 const User = db.users;
 const Comment = db.comments;
 const Image = db.images;
+//TODO: response success/error message
 
 exports.addNewPost = async (req, res, next) => {
     await Post.create({
@@ -36,10 +37,13 @@ exports.getPostById = async (req, res) => {
         postId = req.post.id
     } else if (req.comment) {
         postId = req.comment.dataValues.post_id;
+    } else if (req.params.postId) {
+        console.log('hello')
     }
     await Post.findOne({
         where: {
-            id: postId
+            id: postId,
+            status: 'published'
         },
         order: [
             ['createdAt', 'DESC'],
@@ -52,6 +56,9 @@ exports.getPostById = async (req, res) => {
             }, {
                 model: Comment,
                 as: 'comments',
+                where: {
+                    status: 'published'
+                },
                 attributes: ['id', 'comment'],
                 include: [
                     {
@@ -90,7 +97,8 @@ exports.getPostsByFilters = async (req, res) => {
 
     await Post.findAll({
         where: {
-            filter: filters
+            filter: filters,
+            status: 'published'
         },
         order: [
             ['createdAt', 'DESC'],
@@ -103,6 +111,9 @@ exports.getPostsByFilters = async (req, res) => {
             }, {
                 model: Comment,
                 as: 'comments',
+                where: {
+                    status: 'published'
+                },
                 attributes: ['id', 'comment', 'createdAt'],
                 include: [
                     {
@@ -126,4 +137,18 @@ exports.getPostsByFilters = async (req, res) => {
             res.status(500).json(err);
             console.log(err);
         })
+};
+
+exports.unPublishPost = (req, res) => {
+    Post.update(
+        {status: 'unpublished'} ,
+        {where: {id: req.params.postId}}
+    ).then(() => {
+       res.status(200).json({success: true})
+    }).catch(err => {
+        console.error(err);
+        res.status(500).json({
+            errors: [{ message: 'Une erreur s\'est produite lors de la suppression de la publication.' }]
+        });
+    });
 };

@@ -45,7 +45,7 @@ db.sequelize.sync({ force: false })
 // Requiring routes
 require('./routes/auth.routes')(app);
 require('./routes/user.routes')(app);
-require('./routes/post.routes')(app);
+require('./routes/postComment.routes')(app);
 
 // Initial Route
 app.get('/', (req,res) => {
