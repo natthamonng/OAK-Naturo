@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'general',
       allowNull: false,
     },
-    content: DataTypes.STRING,
+    content: DataTypes.TEXT,
     user_id: {
       type: DataTypes.INTEGER,
       validate: {
