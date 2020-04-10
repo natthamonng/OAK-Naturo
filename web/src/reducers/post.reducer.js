@@ -19,6 +19,7 @@ export default (state = initialState, action) =>
                 draft.loading =  false;
                 break;
             case actionsType.ADD_POST_BEGIN:
+            case actionsType.REMOVE_POST_BEGIN:
             case actionsType.ADD_COMMENT_BEGIN:
                 draft.loading = true;
                 draft.error =  null;
@@ -41,17 +42,17 @@ export default (state = initialState, action) =>
                         draft.posts[index] = newPostComment
                     }
                 });
-                // draft.posts.forEach((element, index) => {
-                //     if (element.id === newPostComment.id) {
-                //         const lastComment = newPostComment.comments[newPostComment.comments.length -1];
-                //         element.comments = [
-                //             ...element.comments,
-                //             lastComment
-                //         ];
-                //     }
-                // });
+                break;
+            case actionsType.REMOVE_POST_SUCCESS:
+                draft.loading = false;
+                let removedPostId = action.payload.postId;
+                let currentPostList = state.posts;
+                draft.posts = currentPostList .filter(function(element) {
+                    return element.id !== removedPostId;
+                });
                 break;
             case actionsType.ADD_COMMENT_FAILURE:
+            case actionsType.REMOVE_POST_FAILURE:
                 draft.error =  action.payload.error;
                 draft.loading =  false;
                 break;

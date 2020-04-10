@@ -1,40 +1,54 @@
 import axios from 'axios';
 import { setAlert } from "./alert.actions";
-import  {   POSTS_LOADING, GET_POSTS_SUCCESS, GET_POSTS_FAILURE, SET_VISIBILITY_FILTER,
-            ADD_POST_BEGIN, ADD_POST_SUCCESS, ADD_POST_FAILURE
-        } from '../constants/ActionTypes';
+import  * as actionsType from '../constants/ActionTypes';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
 export const setPostsLoading = () => {
     return {
-        type: POSTS_LOADING
+        type: actionsType.POSTS_LOADING
     }
 };
 
 export const getPostsSuccess = posts => ({
-    type: GET_POSTS_SUCCESS,
+    type: actionsType.GET_POSTS_SUCCESS,
     payload: { posts }
 });
 
 export const getPostsFailure = error => ({
-    type: GET_POSTS_FAILURE,
+    type: actionsType.GET_POSTS_FAILURE,
     payload: { error }
 });
 
 export const addPostBegin = () => {
     return {
-        type: ADD_POST_BEGIN
+        type: actionsType.ADD_POST_BEGIN
     }
 };
 
 export const addPostSuccess = ( post ) => ({
-    type: ADD_POST_SUCCESS,
+    type: actionsType.ADD_POST_SUCCESS,
     payload: { post }
 });
 
 export const addPostFailure = error => ({
-    type: ADD_POST_FAILURE,
+    type: actionsType.ADD_POST_FAILURE,
+    payload: { error }
+});
+
+export const removePostBegin = () => {
+    return {
+        type: actionsType.REMOVE_POST_BEGIN
+    }
+};
+
+export const removePostSuccess = ( postId ) => ({
+    type: actionsType.REMOVE_POST_SUCCESS,
+    payload: { postId }
+});
+
+export const removePostFailure = error => ({
+    type: actionsType.REMOVE_POST_FAILURE,
     payload: { error }
 });
 
@@ -75,8 +89,22 @@ export const addNewPost = (post) => async dispatch => {
         })
 };
 
+export const removePost = (postId) => async dispatch => {
+    dispatch(removePostBegin());
+    await axios.put(`${BASE_URL}/api/post/${postId}`)
+        .then(res => {
+            if (res.data.success === true) {
+                dispatch(removePostSuccess(postId))
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            dispatch(removePostFailure(err))
+        })
+};
+
 export const setVisibilityFilter = filter => ({
-    type: SET_VISIBILITY_FILTER,
+    type: actionsType.SET_VISIBILITY_FILTER,
     filter
 });
 
