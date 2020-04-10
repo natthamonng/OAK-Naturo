@@ -1,27 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {connect} from "react-redux";
 import { useLocation } from 'react-router-dom';
 import { addNewPost } from '../actions/post.actions';
 import { setAlert } from '../actions/alert.actions';
 import Alert from './Alert';
 
-const AddPostForm = ({ setAlert, addNewPost, user }) => {
-    let location = useLocation();
-    const [formData, setFormData] = useState({
-        user_id: user.id,
-        filter: 'general',
-        content: ''
-    });
-
+const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter }) => {
+    const location = useLocation();
+    const userId = user.id;
+    const [postFilter, setPostFilter] = useState(deFaultFilter);
+    const postContentRef = useRef(null);
     const [imagesData, setImagesData] = useState([]);
     const [previews, setPreviews] = useState([]);
 
-    const { user_id, content, filter} = formData;
-    const onChange = event => {
-        setFormData({
-                ...formData,
-                [event.target.id]: event.target.value,
-        })
+    const onFilterChange = event => {
+        setPostFilter(event.target.value)
     };
 
     const onImageChange = event => {
@@ -69,25 +62,19 @@ const AddPostForm = ({ setAlert, addNewPost, user }) => {
     const onSubmit = event => {
         event.preventDefault();
 
-        if (formData.content === '' || imagesData === [] ) return;
-
+        if (postContentRef.length < 0 || imagesData === [] ) return;
         const data = new FormData();
-        data.append('user_id', user_id);
-        data.append('filter', filter);
-        data.append('content', content);
+        data.append('user_id', userId);
+        data.append('filter', postFilter);
+        data.append('content', postContentRef.current.value);
         for (const image of imagesData) {
             data.append('file', image)
         }
 
         addNewPost(data);
 
-        setFormData((previousState) => {
-            return {
-                ...previousState,
-                content: '',
-                filter: 'general'
-            }
-        });
+        postContentRef.current.value = '';
+        setPostFilter(deFaultFilter);
         setImagesData( []);
         setPreviews( []);
     };
@@ -120,31 +107,24 @@ const AddPostForm = ({ setAlert, addNewPost, user }) => {
                             id="content" name="content"
                             placeholder={ 'Que voulez-vous dire, ' + user.username + ' ?'}
                             cols="30" rows="3"
-                            onChange={event => onChange(event)}
-                            value={content}
+                            ref = {postContentRef}
                         />
                     </div>
                     <div className="d-flex">
+                    { location.pathname === '/home' &&
                         <div className="form-group">
                             <div className="input-group input-group-sm">
                                 <div className="input-group-prepend">
                                     <span className="input-group-text i-Tag-3" id="basic-addon1"></span>
                                 </div>
-                                <select onChange={event => onChange(event)} id="filter" defaultValue={'general'} className="form-control">
-                                    { location.pathname === '/home' &&
-                                        <>
-                                            <option value="general">Général</option>
-                                            <option value="witness">Témoignage</option>
-                                            <option value="protocol">Protocole</option>
-                                        </>
-                                    }
-                                    { location.pathname === '/pro' &&
-                                    // TODO: fix defaultVavue to pro when location.pathname === 'pro'
-                                    <option value="pro">Pro</option>
-                                    }
-                                </select>
+                                    <select onChange={event => onFilterChange(event)} id="filter" className="form-control">
+                                        <option value="general">Général</option>
+                                        <option value="witness">Témoignage</option>
+                                        <option value="protocol">Protocole</option>
+                                    </select>
                             </div>
                         </div>
+                    }
 
                         <div className="flex-grow-1"></div>
 
