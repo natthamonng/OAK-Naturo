@@ -9,6 +9,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     content: DataTypes.TEXT,
+    status: {
+      type: DataTypes.ENUM,
+      values: ['published', 'unpublished'],
+      defaultValue: 'published',
+      allowNull: false,
+    },
     user_id: {
       type: DataTypes.INTEGER,
       validate: {

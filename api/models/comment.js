@@ -12,6 +12,12 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
+    status: {
+      type: DataTypes.ENUM,
+      values: ['published', 'unpublished'],
+      defaultValue: 'published',
+      allowNull: false,
+    },
     post_id: {
       type: DataTypes.INTEGER,
       validate: {
