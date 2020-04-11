@@ -2,12 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const Link = ({ active, children, onClick }) => (
-    <button className="btn btn-raised ripple btn-raised-secondary m-1"
+    <button className="btn btn-raised ripple btn-raised-secondary m-1 ml-2"
         onClick={onClick}
         disabled={active}
-        style={{
-            marginLeft: '4px',
-        }}
     >
         {children}
     </button>
