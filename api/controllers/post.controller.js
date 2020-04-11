@@ -12,7 +12,6 @@ exports.addNewPost = async (req, res, next) => {
         content: req.body.content,
         filter: req.body.filter
     }).then(async post => {
-        req.post = post;
         // TODO: resize uploaded image to 1200px width
         for (const file of req.files) {
             await Image.create({
@@ -21,9 +20,10 @@ exports.addNewPost = async (req, res, next) => {
                 image: fs.readFileSync(file.path),
             });
         }
-    }).then(() => {
+        req.post = post;
         next();
-    }).catch(err => {
+    })
+    .catch(err => {
         console.error(err);
         res.status(500).json({
             errors: [{ message: 'Une erreur s\'est produite lors de la création de la publication.' }]
@@ -31,16 +31,18 @@ exports.addNewPost = async (req, res, next) => {
     })
 };
 
-exports.getPostById = async (req, res) => {
+exports.getPostById = (req, res) => {
     let postId;
     if (req.post) {
         postId = req.post.id
     } else if (req.comment) {
         postId = req.comment.dataValues.post_id;
     }
-    await Post.findOne({
+
+    Post.findOne({
         where: {
-            id: postId
+            id: postId,
+            status: 'published'
         },
         order: [
             ['createdAt', 'DESC'],
@@ -50,9 +52,11 @@ exports.getPostById = async (req, res) => {
                 model: User,
                 as: 'author',
                 attributes: ['username'],
-            }, {
+            },
+            {
                 model: Comment,
                 as: 'comments',
+                required: false,
                 where: {
                     status: 'published'
                 },
@@ -71,14 +75,14 @@ exports.getPostById = async (req, res) => {
                 attributes: ['id', 'image', 'name']
             }
         ]
-    }).then(result => {
-        res.status(200).json(result)
+    }).then((result) => {
+        res.status(200).json(result);
     }).catch(err => {
-        res.status(500).json(err)
+        res.status(500).json(err);
     })
 };
 
-exports.getPostsByFilters = async (req, res) => {
+exports.getPostsByFilters = (req, res) => {
     const AVAILABLE_FILTERS = {"general": true, "witness": true, "protocol": true, "pro": true };
     let filters = (req.params.filters || "")
         .split(",")
@@ -92,7 +96,7 @@ exports.getPostsByFilters = async (req, res) => {
     }
     console.log('VERIFIED FILTERS:' + filters);
 
-    await Post.findAll({
+    Post.findAll({
         where: {
             filter: filters,
             status: 'published'
@@ -105,13 +109,14 @@ exports.getPostsByFilters = async (req, res) => {
                 model: User,
                 as: 'author',
                 attributes: ['username'],
-            }, {
+            },
+            {
                 model: Comment,
                 as: 'comments',
-                // TODO problem with status
-                // where: {
-                //     status: 'published'
-                // },
+                required: false,
+                where: {
+                    status: 'published'
+                },
                 attributes: ['id', 'comment', 'createdAt'],
                 include: [
                     {
@@ -128,13 +133,13 @@ exports.getPostsByFilters = async (req, res) => {
             }
         ]
     })
-        .then((result) => {
-            res.status(200).json(result)
-        })
-        .catch((err) => {
-            res.status(500).json(err);
-            console.log(err);
-        })
+    .then((result) => {
+        res.status(200).json(result)
+    })
+    .catch((err) => {
+        res.status(500).json(err);
+        console.log(err);
+    })
 };
 
 exports.unPublishPost = (req, res) => {

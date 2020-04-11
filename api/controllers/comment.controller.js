@@ -8,7 +8,8 @@ exports.getPostComments = (req, res, next) => {
 
     Comment.findAll({
         where: {
-            post_id: id
+            post_id: id,
+            status: 'published'
         },
         include: [
             {
@@ -27,8 +28,8 @@ exports.getPostComments = (req, res, next) => {
         })
 };
 
-exports.addNewComment = (req, res, next) => {
-    Comment.create({
+exports.addNewComment = async (req, res, next) => {
+    await Comment.create({
         user_id: req.body.user_id,
         post_id: req.body.post_id,
         comment: req.body.comment,
