@@ -1,11 +1,15 @@
-import React  from 'react';
+import React, {useState} from 'react';
+import {connect, useSelector} from 'react-redux';
+import { removePost } from '../actions/post.actions';
 import Moment from 'react-moment';
 import Avatar from './Avatar';
 import CommentForm from './CommentForm';
-import CommentList from './CommentList';
 import Comment from './Comment';
 
-const Post = ({post, user}) => {
+const Post = ({ post, removePost }) => {
+    const user = useSelector(state => state.auth.user);
+    const [showDeleteMenu, setShowDeleteMenu] = useState(false);
+
     const postId = post.id;
     const images = post.images;
     const comments = post.comments;
@@ -21,7 +25,7 @@ const Post = ({post, user}) => {
 
     let commentsList  = comments.map(comment => {
         return (
-            <Comment key={comment.id} comment={comment} />
+            <Comment key={comment.id} comment={comment} postId={postId} />
         )
     });
 
@@ -36,6 +40,21 @@ const Post = ({post, user}) => {
                         <p className="text-muted text-small"><Moment fromNow>{ post.createdAt }</Moment></p>
                     </div>
                     <div className="flex-grow-1"></div>
+                    { (user.role === 'admin' || user.id === post.user_id) &&
+                    <div className={`dropdown ${showDeleteMenu? 'show' : ''}`}
+                         onClick={()=> {setShowDeleteMenu(!showDeleteMenu)}} style={{cursor: 'pointer'}} >
+                        <i className="i-Arrow-Down header-icon" id="dropdownMenuButton"
+                           role="button" data-toggle="dropdown" aria-haspopup="true"
+                           aria-expanded={`${showDeleteMenu? 'true' : 'false'}`}>
+                        </i>
+                        <div className={`dropdown-menu dropdown-menu-right ${showDeleteMenu? 'show' : ''}`}
+                             aria-labelledby="dropdownMenuButton">
+                            <div className="dropdown-item" onClick={() => removePost(postId)}>
+                                Supprimer
+                            </div>
+                        </div>
+                    </div>
+                    }
                 </div>
 
                 <div className="border-bottom">
@@ -47,19 +66,18 @@ const Post = ({post, user}) => {
                             { album }
                         </div>
                     }
-                    <a className="badge badge-light text-white m-2" href="#">
+                    <div className="badge badge-light text-white m-2">
                         { post.filter === 'general' && <><i className="i-Globe"></i> Général</> }
                         { post.filter === 'witness' && <><i className="i-Business-ManWoman"></i> Témoignage</> }
                         { post.filter === 'protocol' && <><i className="i-Conference"></i> Protocole</> }
                         { post.filter === 'pro' && <><i className="i-Bar-Chart"></i> Pro</> }
-                    </a>
+                    </div>
                 </div>
 
                 <div className="pt-2">
                     <CommentForm postId={postId} />
                     <div>
                         { commentsList }
-                        {/*<CommentList />*/}
                     </div>
 
                 </div>
@@ -68,4 +86,4 @@ const Post = ({post, user}) => {
     )
 };
 
-export default Post;
+export default connect( null, { removePost })(Post);

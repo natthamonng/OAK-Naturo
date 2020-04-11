@@ -31,7 +31,7 @@ const Home = ({ getPosts, posts }) => {
                         <div className="col-12 col-lg-8  mb-4">
                             <AddPostForm deFaultFilter={'general'}/>
                             <div className="mt-4"></div>
-
+                            {/*TODO: unclear condition*/}
                             {posts != [] ?
                                 <>
                                 <div className="separator-breadcrumb border-top"></div>

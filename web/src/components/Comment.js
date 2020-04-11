@@ -1,13 +1,33 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {connect, useSelector} from 'react-redux';
+import { removeComment } from '../actions/comment.actions';
 import Avatar from "./Avatar";
 import Moment from "react-moment";
 
-const Comment = ({ comment }) => {
+const Comment = ({ comment, postId, removeComment }) => {
+    const user = useSelector(state => state.auth.user);
+    const [showAdminMenu, setShowAdminMenu] = useState(false);
+
     return (
         <div className="p-2 mb-2 user border-top">
             <div className="float-left mr-2">
                 <Avatar username={comment.author.username}/>
             </div>
+            { (user.role === 'admin' || user.id === comment.user_id) &&
+            <div className={`dropdown ${showAdminMenu? 'show' : ''} float-right ml-1`}
+                 onClick={()=> {setShowAdminMenu(!showAdminMenu)}} style={{cursor: 'pointer'}} >
+                <i className="i-Remove header-icon" id="dropdownMenuButton"
+                   role="button" data-toggle="dropdown" aria-haspopup="true"
+                   aria-expanded={`${showAdminMenu? 'true' : 'false'}`}>
+                </i>
+                <div className={`dropdown-menu dropdown-menu-right ${showAdminMenu? 'show' : ''}`}
+                     aria-labelledby="dropdownMenuButton">
+                    <div className="dropdown-item" onClick={() => removeComment(postId, comment.id)}>
+                        Supprimer
+                    </div>
+                </div>
+            </div>
+            }
             <div className="message">
                 <div>
                     <span className="mb-1 text-title font-weight-bold">{comment.author.username}</span>
@@ -20,4 +40,4 @@ const Comment = ({ comment }) => {
     )
 };
 
-export default Comment;
+export default connect( null, { removeComment })(Comment);
