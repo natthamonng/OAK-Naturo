@@ -47,7 +47,10 @@ exports.addNewComment = async (req, res, next) => {
 exports.unPublishComment = (req, res) => {
     Comment.update(
         {status: 'unpublished'} ,
-        {where: {id: req.params.commentId}}
+        { where: {
+            id: req.params.commentId,
+            post_id: req.params.postId
+        }}
     ).then(comment => {
         res.status(200).json({success: true})
     }).catch(err => {

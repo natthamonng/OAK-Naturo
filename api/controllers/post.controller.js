@@ -60,7 +60,7 @@ exports.getPostById = (req, res) => {
                 where: {
                     status: 'published'
                 },
-                attributes: ['id', 'comment'],
+                attributes: ['id', 'comment', 'createdAt', 'user_id'],
                 include: [
                     {
                         model: User,
@@ -117,7 +117,7 @@ exports.getPostsByFilters = (req, res) => {
                 where: {
                     status: 'published'
                 },
-                attributes: ['id', 'comment', 'createdAt'],
+                attributes: ['id', 'comment', 'createdAt', 'user_id'],
                 include: [
                     {
                         model: User,

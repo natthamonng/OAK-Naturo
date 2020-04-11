@@ -16,6 +16,6 @@ module.exports = app => {
 
     app.post('/api/comment', [passportJwt.authenticateJwt], commentController.addNewComment, postController.getPostById);
 
-    app.put('/api/comment/:commentId', [passportJwt.authenticateJwt], commentController.unPublishComment);
+    app.put('/api/comment/:postId/:commentId', [passportJwt.authenticateJwt], commentController.unPublishComment);
 
 };
