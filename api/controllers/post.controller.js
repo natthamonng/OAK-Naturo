@@ -155,3 +155,21 @@ exports.unPublishPost = (req, res) => {
         });
     });
 };
+
+exports.changeFilterPost = (req, res) => {
+    if (req.user.role === 'admin') {
+        Post.update(
+            {filter: req.params.filter} ,
+            {where: {id: req.params.postId}}
+        ).then(() => {
+            res.status(200).json({success: true})
+        }).catch(err => {
+            console.error(err);
+            res.status(500).json({
+                errors: [{ message: 'Une erreur s\'est produite lors de la modification d\'un filtre.' }]
+            });
+        });
+    } else {
+        res.status(401).json({ error: 'Unauthorized'})
+    }
+};
