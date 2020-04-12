@@ -3,7 +3,7 @@ import {connect, useSelector} from 'react-redux';
 import { removePost } from '../actions/post.actions';
 import Moment from 'react-moment';
 import Avatar from './Avatar';
-import CommentForm from './CommentForm';
+import AddCommentForm from './AddCommentForm';
 import Comment from './Comment';
 import ChangeFilterModal from "./ChangeFilterModal";
 
@@ -77,7 +77,7 @@ const Post = ({ post, removePost }) => {
                 </div>
 
                 <div className="pt-2">
-                    <CommentForm postId={postId} />
+                    <AddCommentForm postId={postId} />
                     <div>
                         { commentsList }
                     </div>
