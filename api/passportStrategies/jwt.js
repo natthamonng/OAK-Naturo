@@ -46,9 +46,9 @@ class JwtStrategy {
 
     static createNewJwt(user) {
         const expiresIn = '365d';
-        const audience = config.audience;
-        const issuer = config.issuer;
-        const secret = config.secret;
+        const audience = process.env.JWT_AUDIENCE;
+        const issuer = process.env.JWT_ISSUER;
+        const secret = process.env.JWT_SECRET;
 
         return jwt.sign({user}, secret, {
             expiresIn: expiresIn,
