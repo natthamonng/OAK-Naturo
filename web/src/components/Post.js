@@ -5,6 +5,7 @@ import Moment from 'react-moment';
 import Avatar from './Avatar';
 import CommentForm from './CommentForm';
 import Comment from './Comment';
+import ChangeFilterModal from "./ChangeFilterModal";
 
 const Post = ({ post, removePost }) => {
     const user = useSelector(state => state.auth.user);
@@ -72,6 +73,7 @@ const Post = ({ post, removePost }) => {
                         { post.filter === 'protocol' && <><i className="i-Conference"></i> Protocole</> }
                         { post.filter === 'pro' && <><i className="i-Bar-Chart"></i> Pro</> }
                     </div>
+                    { user.role === "admin" && <ChangeFilterModal post={post}/> }
                 </div>
 
                 <div className="pt-2">
@@ -79,7 +81,6 @@ const Post = ({ post, removePost }) => {
                     <div>
                         { commentsList }
                     </div>
-
                 </div>
             </div>
         </div>
