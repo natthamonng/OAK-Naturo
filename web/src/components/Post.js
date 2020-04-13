@@ -1,13 +1,16 @@
 import React, {useState} from 'react';
 import {connect, useSelector} from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { removePost } from '../actions/post.actions';
 import Moment from 'react-moment';
 import Avatar from './Avatar';
 import AddCommentForm from './AddCommentForm';
 import Comment from './Comment';
 import ChangeFilterModal from "./ChangeFilterModal";
+import ModalImage from 'react-modal-image';
 
 const Post = ({ post, removePost }) => {
+    let location = useLocation();
     const user = useSelector(state => state.auth.user);
     const [showDeleteMenu, setShowDeleteMenu] = useState(false);
 
@@ -18,8 +21,14 @@ const Post = ({ post, removePost }) => {
     let album  = images.map(image => {
         const url = 'data:image/png;base64,' + new Buffer(image.image.data, 'binary').toString('base64');
         return (
-            <div key={image.id} className="col-12 col-md-6 col-lg-4">
-                <img key={image.id} src={ url } className="rounded mb-3" alt={image.name} />
+            <div key={image.id} className="col-12 col-md-6" style={{cursor: 'pointer'}}>
+                <ModalImage
+                    key={image.id}
+                    className="rounded mb-3"
+                    small={url}
+                    large={url}
+                    alt={image.name}
+                />
             </div>
         )
     });
@@ -31,6 +40,7 @@ const Post = ({ post, removePost }) => {
     });
 
     return (
+
         <div className="card mb-2 p-2">
             <div className="card-body pb-0">
                 <div className="d-flex align-items-start">
@@ -62,18 +72,20 @@ const Post = ({ post, removePost }) => {
                     <p className="card-text pb-2">
                         { post.content }
                     </p>
+
                     { album !== undefined &&
                         <div className="row">
-                            { album }
+                                { album }
                         </div>
                     }
+
                     <div className="badge badge-light text-white m-2">
                         { post.filter === 'general' && <><i className="i-Globe"></i> Général</> }
                         { post.filter === 'witness' && <><i className="i-Business-ManWoman"></i> Témoignage</> }
                         { post.filter === 'protocol' && <><i className="i-Conference"></i> Protocole</> }
                         { post.filter === 'pro' && <><i className="i-Bar-Chart"></i> Pro</> }
                     </div>
-                    { user.role === "admin" && <ChangeFilterModal post={post}/> }
+                    { (user.role === "admin" && location.pathname === '/home') && <ChangeFilterModal post={post}/> }
                 </div>
 
                 <div className="pt-2">
@@ -84,6 +96,7 @@ const Post = ({ post, removePost }) => {
                 </div>
             </div>
         </div>
+
     )
 };
 
