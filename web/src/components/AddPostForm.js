@@ -5,7 +5,7 @@ import { addNewPost } from '../actions/post.actions';
 import { setAlert } from '../actions/alert.actions';
 import Alert from './Alert';
 
-const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter }) => {
+const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter, addPostLoading }) => {
     const location = useLocation();
     const userId = user.id;
     const [postFilter, setPostFilter] = useState(deFaultFilter);
@@ -138,9 +138,13 @@ const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter }) => {
                             />
                         </button>
 
-                        <button className="btn btn-icon btn-rounded btn-primary">
-                            <i className="i-Paper-Plane"></i>
-                        </button>
+                        { addPostLoading ?
+                            <div className="spinner spinner-primary mr-3"></div>
+                            :
+                            <button className="btn btn-icon btn-rounded btn-primary">
+                                <i className="i-Paper-Plane"></i>
+                            </button>
+                        }
                     </div>
                 </form>
             </div>
@@ -150,6 +154,7 @@ const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter }) => {
 
 const mapStateToProps = state => ({
     user: state.auth.user,
+    addPostLoading: state.posts.addPostLoading
 });
 
 export default connect( mapStateToProps, { setAlert, addNewPost })(AddPostForm);

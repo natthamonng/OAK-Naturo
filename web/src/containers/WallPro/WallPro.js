@@ -23,19 +23,19 @@ const WallPro = ({getPosts, loading}) => {
             </div>
             <div className="separator-breadcrumb border-top"></div>
             <div className="col-12 col-md-8 offset-md-2">
-                {/*{loading ?*/}
-                {/*    <div className="row">*/}
-                {/*        <div className="col-12 d-flex justify-content-center mt-4">*/}
-                {/*            <Spinner/>*/}
-                {/*        </div>*/}
-                {/*    </div>*/}
-                {/*    :*/}
+                {loading ?
+                    <div className="row">
+                        <div className="col-12 d-flex justify-content-center mt-4">
+                            <Spinner/>
+                        </div>
+                    </div>
+                    :
                     <div>
                         <AddPostForm deFaultFilter={'pro'}/>
                         <div className="mt-2"></div>
                         <VisiblePostList/>
                     </div>
-                {/*}*/}
+                }
             </div>
         </div>
 

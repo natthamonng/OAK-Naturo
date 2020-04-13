@@ -17,7 +17,7 @@ const Home = ({ getPosts, posts }) => {
     return (
         <div className="main-content">
             <section className="widget-app">
-                { posts.loading && posts.length < 0 ?
+                { posts.loading ?
                     <div className="row">
                         <div className="col-12 d-flex justify-content-center mt-4">
                             <Spinner/>

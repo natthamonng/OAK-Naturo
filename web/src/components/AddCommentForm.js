@@ -2,8 +2,9 @@ import React, {useState} from 'react';
 import {connect, useSelector} from 'react-redux';
 import { addNewComment} from '../actions/comment.actions';
 
-const CommentForm = ({ postId, addNewComment}) => {
+const AddCommentForm = ({ postId, addNewComment}) => {
     const userId = useSelector(state => state.auth.user.id);
+    const commentLoading = useSelector(state => state.posts.commentLoading);
     const [formData, setFormData] = useState({
         user_id: userId,
         post_id: postId,
@@ -39,12 +40,17 @@ const CommentForm = ({ postId, addNewComment}) => {
                        onChange={event => onChange(event)}
                        value={comment}
                 />
-                <button className="btn btn-icon btn-rounded btn-primary ml-2">
-                    <i className="i-Paper-Plane"></i>
-                </button>
+
+                { commentLoading ?
+                    <div className="spinner spinner-primary mr-3"></div>
+                    :
+                    <button className="btn btn-icon btn-rounded btn-primary ml-2">
+                        <i className="i-Paper-Plane"></i>
+                    </button>
+                }
             </div>
         </form>
     )
 };
 
-export default connect( null, { addNewComment })(CommentForm);
+export default connect( null, { addNewComment })(AddCommentForm);
