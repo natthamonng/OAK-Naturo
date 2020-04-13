@@ -45,12 +45,8 @@ export default (state = initialState, action) =>
                 break;
             case actionsType.CHANGE_FILTER_POST_SUCCESS:
                 draft.loading = false;
-                let objIndex = state.posts.findIndex((post => post.id === action.payload.postId));
-
-                draft.posts[objIndex].filter = action.payload.filter;
-
-                //TODO WIP
-
+                let objPostIndex = state.posts.findIndex((post => post.id === action.payload.postId));
+                draft.posts[objPostIndex].filter = action.payload.filter;
                 break;
             case actionsType.ADD_COMMENT_SUCCESS:
                 draft.loading =  false;
@@ -64,7 +60,12 @@ export default (state = initialState, action) =>
             case actionsType.REMOVE_COMMENT_SUCCESS:
                 draft.loading = false;
                 let removedCommentId = action.payload.commentId;
-                let postId = action.payload.postId;
+                let objIndex = state.posts.findIndex((post => post.id === action.payload.postId));
+                let copyPostsArray = [...draft.posts];
+                copyPostsArray[objIndex].comments = copyPostsArray[objIndex].comments.filter(function(comment) {
+                    return comment.id !== removedCommentId
+                });
+                draft.posts = copyPostsArray;
                 //TODO WIP
                 break;
             case actionsType.ADD_POST_FAILURE:

@@ -52,6 +52,22 @@ export const removePostFailure = error => ({
     payload: { error }
 });
 
+export const changeFilterPostBegin = () => {
+    return {
+        type: actionsType.CHANGE_FILTER_POST_BEGIN
+    }
+};
+
+export const changeFilterPostSuccess = ( postId, filter ) => ({
+    type: actionsType.CHANGE_FILTER_POST_SUCCESS,
+    payload: { postId, filter }
+});
+
+export const changeFilterPostFailure = error => ({
+    type: actionsType.CHANGE_FILTER_POST_FAILURE,
+    payload: { error }
+});
+
 export const getPosts = (filters) => async dispatch => {
     dispatch(setPostsLoading());
     await axios.get(`${BASE_URL}/api/posts/${filters}`)
@@ -63,7 +79,7 @@ export const getPosts = (filters) => async dispatch => {
             if (errors) {
                 errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
             }
-            dispatch(getPostsFailure(err))
+            dispatch(getPostsFailure(err.response.data.errors))
         })
 };
 
@@ -80,12 +96,12 @@ export const addNewPost = (post) => async dispatch => {
             dispatch(addPostSuccess(res.data))
         })
         .catch(err => {
-            console.log(err);
+            console.log(err.response.data.errors);
             // const errors = err.response.data.errors;
             // if (errors) {
             //     errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
             // }
-            dispatch(addPostFailure(err))
+            dispatch(addPostFailure(err.response.data.errors))
         })
 };
 
@@ -98,8 +114,22 @@ export const removePost = (postId) => async dispatch => {
             }
         })
         .catch(err => {
-            console.log(err);
-            dispatch(removePostFailure(err))
+            console.log(err.response.data.errors);
+            dispatch(removePostFailure(err.response.data.errors))
+        })
+};
+
+export const changeFilterPost = (postId, filter) => async dispatch => {
+    dispatch(changeFilterPostBegin());
+    await axios.put(`${BASE_URL}/api/post/${postId}/${filter}`)
+        .then(res => {
+            if (res.data.success === true) {
+                dispatch(changeFilterPostSuccess(postId, filter))
+            }
+        })
+        .catch(err => {
+            console.log(err.response.data.errors);
+            dispatch(changeFilterPostFailure(err.response.data.errors))
         })
 };
 
