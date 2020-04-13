@@ -83,7 +83,7 @@ const Navbar = ({ auth: { user }, signOutUser }) => {
                                 <i className="i-Lock-User mr-1"></i>
                                 {(user.username).toUpperCase()}
                             </div>
-                            <a className="dropdown-item disabled">Paramètres du compte</a>
+                            <Link to="/profile" className="dropdown-item disabled">Paramètres du compte</Link>
                             <div className="dropdown-item" onClick={signOutUser} >Déconnexion</div>
                         </div>
                     </div>
