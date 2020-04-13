@@ -1,10 +1,10 @@
 const fs = require('fs');
+const sharp = require('sharp');
 const db = require('../models');
 const Post = db.posts;
 const User = db.users;
 const Comment = db.comments;
 const Image = db.images;
-//TODO: response success/error message
 
 exports.addNewPost = async (req, res, next) => {
     await Post.create({
@@ -12,8 +12,13 @@ exports.addNewPost = async (req, res, next) => {
         content: req.body.content,
         filter: req.body.filter
     }).then(async post => {
-        // TODO: resize uploaded image to 1200px width
         for (const file of req.files) {
+            const imagePath = fs.readFileSync(file.path);
+            await sharp(imagePath).resize({ width: 1200 }).toBuffer()
+                .then(buf => {
+                    fs.writeFileSync(file.path, buf);
+                });
+
             await Image.create({
                 post_id: post.id,
                 name: file.originalname.toLowerCase().split(' ').join('-'),
@@ -170,6 +175,6 @@ exports.changeFilterPost = (req, res) => {
             });
         });
     } else {
-        res.status(401).json({ error: 'Unauthorized'})
+        res.status(401).json({ error: 'Non autorisé.'})
     }
 };
