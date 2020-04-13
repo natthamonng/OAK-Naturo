@@ -5,9 +5,9 @@ import axios from 'axios';
 import { setAlert } from '../../actions/alert.actions';
 import Alert from '../../components/Alert';
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = process.env.REACT_APP_API_URL;
 
-const AddUser = ({ setAlert, isAuthenticated }) => {
+const AddUser = ({ setAlert }) => {
     const [formData, setFormData] = useState({
         username:'',
         email: '',
@@ -112,18 +112,10 @@ const AddUser = ({ setAlert, isAuthenticated }) => {
             </div>
         </div>
     )
-}
-
-AddUser.propTypes = {
-    setAlert: PropTypes.func.isRequired,
-    isAuthenticated: PropTypes.bool
 };
 
-const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated
-});
+AddUser.propTypes = {
+    setAlert: PropTypes.func.isRequired
+};
 
-export default connect(
-    mapStateToProps,
-    { setAlert }
-)(AddUser);
+export default connect( null, { setAlert })(AddUser);
