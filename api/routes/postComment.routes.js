@@ -9,7 +9,7 @@ module.exports = app => {
 
     app.get('/api/posts/:filters', [passportJwt.authenticateJwt], postController.getPostsByFilters);
 
-    app.post('/api/posts', [passportJwt.authenticateJwt], upload.array('file', 10),
+    app.post('/api/posts', [passportJwt.authenticateJwt], upload.array('file'),
         postController.addNewPost, postController.getPostById);
 
     app.put('/api/post/:postId', [passportJwt.authenticateJwt], postController.unPublishPost);

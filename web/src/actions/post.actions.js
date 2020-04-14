@@ -15,6 +15,12 @@ export const getPostsSuccess = posts => ({
     payload: { posts }
 });
 
+export const setNumberHomePage = () => {
+    return {
+        type: actionsType.SET_NUMBER_HOME_PAGE
+    }
+};
+
 export const getPostsFailure = error => ({
     type: actionsType.GET_POSTS_FAILURE,
     payload: { error }
@@ -68,11 +74,11 @@ export const changeFilterPostFailure = error => ({
     payload: { error }
 });
 
-export const getPosts = (filters) => async dispatch => {
+export const getPosts = (filters, page) => async dispatch => {
     dispatch(setPostsLoading());
-    await axios.get(`${BASE_URL}/api/posts/${filters}`)
+    await axios.get(`${BASE_URL}/api/posts/${filters}?page=${page}&pageSize=5`)
         .then( res => {
-            dispatch(getPostsSuccess(res.data))
+            dispatch(getPostsSuccess(res.data, page))
         })
         .catch(err => {
             const errors = err.response.data.errors;

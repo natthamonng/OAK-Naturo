@@ -100,8 +100,14 @@ exports.getPostsByFilters = (req, res) => {
         }
     }
     console.log('VERIFIED FILTERS:' + filters);
+    const page = parseInt(req.query.page);
+    const pageSize = parseInt(req.query.pageSize);
+    const offset = page * pageSize;
+    const limit = pageSize;
 
     Post.findAll({
+        limit,
+        offset,
         where: {
             filter: filters,
             status: 'published'

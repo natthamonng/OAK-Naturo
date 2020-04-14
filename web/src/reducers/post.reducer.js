@@ -4,6 +4,7 @@ import  * as actionsType from '../constants/ActionTypes';
 const initialState = {
     posts: [],
     loading: false,
+    page: 0,
     addPostLoading: false,
     removePostLoading: false,
     changeFilterLoading: false,
@@ -20,8 +21,12 @@ export default (state = initialState, action) =>
                 draft.error = null;
                 break;
             case actionsType.GET_POSTS_SUCCESS:
-                draft.posts = action.payload.posts;
+                // TODO fix reordering posts LIFO (bug sometime)
+                draft.posts = state.posts.concat(action.payload.posts);
                 draft.loading =  false;
+                break;
+            case actionsType.SET_NUMBER_HOME_PAGE:
+                draft.page = state.page + 1;
                 break;
             case actionsType.ADD_POST_BEGIN:
                 draft.addPostLoading = true;
