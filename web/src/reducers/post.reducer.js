@@ -16,16 +16,20 @@ const initialState = {
 export default (state = initialState, action) =>
     produce(state, draft => {
         switch (action.type) {
+            // TODO reinitialize state when changing location
+            case actionsType.REINITIALIZE_STATE:
+                draft.posts = [];
+                draft.page = 0;
+                break;
             case actionsType.POSTS_LOADING:
                 draft.loading = true;
                 draft.error = null;
                 break;
             case actionsType.GET_POSTS_SUCCESS:
-                // TODO fix reordering posts LIFO (bug sometime)
                 draft.posts = state.posts.concat(action.payload.posts);
                 draft.loading =  false;
                 break;
-            case actionsType.SET_NUMBER_HOME_PAGE:
+            case actionsType.SET_GET_POST_PAGE:
                 draft.page = state.page + 1;
                 break;
             case actionsType.ADD_POST_BEGIN:

@@ -15,9 +15,9 @@ export const getPostsSuccess = posts => ({
     payload: { posts }
 });
 
-export const setNumberHomePage = () => {
+export const setGetPostsPage = () => {
     return {
-        type: actionsType.SET_NUMBER_HOME_PAGE
+        type: actionsType.SET_GET_POST_PAGE
     }
 };
 
@@ -150,4 +150,10 @@ export const VisibilityFilters = {
     WITNESS: 'WITNESS',
     PROTOCOL: 'PROTOCOL',
     PRO: 'PRO'
+};
+
+export const reinitializeState = () => {
+    return {
+        type:'REINITIALIZE_STATE'
+    }
 };
