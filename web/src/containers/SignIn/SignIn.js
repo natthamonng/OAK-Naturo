@@ -6,6 +6,7 @@ import { signInUser } from "../../actions/auth.actions";
 import Alert from '../../components/Alert';
 import logo from '../../assets/images/acorn.png';
 import photoWide from '../../assets/images/photo-wide-6.jpg';
+import '../../assets/scss/welcome-text.scss';
 
 function SignIn({ signInUser, isAuthenticated }) {
     let location = useLocation();
@@ -38,7 +39,24 @@ function SignIn({ signInUser, isAuthenticated }) {
                 <Alert/>
                 <div className="card o-hidden">
                     <div className="row">
-                        <div className="col-12">
+                        <div className="col-md-6 text-center"
+                             style={{ backgroundSize: 'cover', backgroundColor: '#663399' }}>
+                            <div className="pl-3 auth-right">
+                                <div className="box-container m-2">
+                                    <div className="box">
+                                        <div className="title">
+                                            <span className="block"></span>
+                                            <h1>Oak Naturo<span></span></h1>
+                                        </div>
+                                        <div className="role">
+                                            <div className="block"></div>
+                                            <p>bienvenue</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-6">
                             <div className="p-4">
                                 <div className="auth-logo text-center mb-4"><img src={logo} alt="logo"/></div>
                                 <h1 className="mb-3 text-18">Se connecter</h1>
@@ -67,7 +85,9 @@ function SignIn({ signInUser, isAuthenticated }) {
                                             autoComplete="current-password"
                                         />
                                     </div>
-                                    <button className="btn btn-rounded btn-primary btn-block mt-2" type="submit">Se connecter</button>
+                                    <button className="btn btn-rounded btn-primary btn-block mt-2" type="submit">
+                                        Se connecter
+                                    </button>
                                 </form>
                                 <div className="mt-3 text-center">
                                     <Link to="/forgot-password" className="text-muted">
@@ -92,7 +112,4 @@ const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated
 });
 
-export default connect(
-    mapStateToProps,
-    { signInUser }
-)(SignIn);
+export default connect(mapStateToProps, {signInUser})(SignIn);
