@@ -10,11 +10,14 @@ import Spinner from '../../components/Spinner';
 
 const Wall = ({ getPosts, loading, page, setGetPostsPage, reinitializeState }) => {
     let location = useLocation();
-    let filters;
+    let filters, defaultFilter;
     if (location.pathname === '/home') {
         filters  = ['general', 'witness', 'protocol'];
+        defaultFilter = 'general';
     } else if (location.pathname === '/pro') {
         filters = ['pro']
+        defaultFilter = 'pro';
+
     }
 
     useEffect(() => {
@@ -52,7 +55,7 @@ const Wall = ({ getPosts, loading, page, setGetPostsPage, reinitializeState }) =
             <section className="widget-app">
                 <div className="row">
                     <div className="col-12 col-lg-8  offset-md-2 mb-4">
-                        <AddPostForm deFaultFilter={'general'}/>
+                        <AddPostForm deFaultFilter={defaultFilter} />
                         <div className="mt-4"></div>
                         { location.pathname === '/home' &&
                             <>

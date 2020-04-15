@@ -4,7 +4,7 @@ import { addNewComment} from '../actions/comment.actions';
 
 const AddCommentForm = ({ postId, addNewComment}) => {
     const userId = useSelector(state => state.auth.user.id);
-    const commentLoading = useSelector(state => state.posts.commentLoading);
+    const addCommentLoading = useSelector(state => state.posts.addCommentLoading);
     const [formData, setFormData] = useState({
         user_id: userId,
         post_id: postId,
@@ -41,7 +41,7 @@ const AddCommentForm = ({ postId, addNewComment}) => {
                        value={comment}
                 />
 
-                { commentLoading ?
+                { addCommentLoading ?
                     <div className="spinner spinner-primary mr-3"></div>
                     :
                     <button className="btn btn-icon btn-rounded btn-primary ml-2">

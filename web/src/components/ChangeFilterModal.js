@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import { connect } from 'react-redux';
 import { changeFilterPost } from '../actions/post.actions';
-import {addNewComment} from "../actions/comment.actions";
 
 const ChangeFilterModal = ({post, changeFilterPost }) => {
     const [showModal, setShowModal] = useState(false);

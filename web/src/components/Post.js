@@ -73,7 +73,7 @@ const Post = ({ post, removePost }) => {
                         { post.content }
                     </p>
 
-                    { album !== undefined &&
+                    { album &&
                         <div className="row">
                                 { album }
                         </div>

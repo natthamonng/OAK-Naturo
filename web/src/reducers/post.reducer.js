@@ -26,7 +26,10 @@ export default (state = initialState, action) =>
                 draft.error = null;
                 break;
             case actionsType.GET_POSTS_SUCCESS:
-                draft.posts = state.posts.concat(action.payload.posts);
+                let ids = new Set(state.posts.map(post => post.id));
+                let merged = [...draft.posts, ...action.payload.posts.filter(post => !ids.has(post.id))];
+                draft.posts = merged;
+                // draft.posts = state.posts.concat(action.payload.posts);
                 draft.loading =  false;
                 break;
             case actionsType.SET_GET_POST_PAGE:

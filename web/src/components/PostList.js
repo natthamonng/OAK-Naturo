@@ -1,11 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import Post from './Post';
 
 const PostList = ({ posts }) => {
-    const postList = posts.map(post => {
-        return <Post key={post.id} post={post} />
+    const postList = posts.map((post, index) => {
+        return <Post key={`${post.id}-${index}`} post={post} />
     });
     return (
         <div>
@@ -14,13 +12,4 @@ const PostList = ({ posts }) => {
     )
 };
 
-// PostList.propTypes = {
-//     auth: PropTypes.object.isRequired
-// };
-//
-// const mapStateToProps = state => ({
-//     auth: state.auth
-// });
-//
-// export default connect(mapStateToProps)(PostList);
 export default PostList;
