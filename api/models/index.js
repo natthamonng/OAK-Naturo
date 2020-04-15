@@ -25,6 +25,6 @@ db.posts.associate(db.users, db.comments, db.images);
 db.comments.associate(db.users, db.posts);
 db.images.associate(db.posts);
 db.categories.associate(db.files);
-db.files.associate(db.categories, db.user);
+db.files.associate(db.users, db.categories);
 
 module.exports = db;
