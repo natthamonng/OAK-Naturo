@@ -33,6 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       sourceKey: 'id',
       as: 'comments'
     });
+
     Post.hasMany(Image, {
       foreignKey: 'post_id',
       sourceKey: 'id',

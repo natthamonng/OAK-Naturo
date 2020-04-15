@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     }, {});
 
-    User.associate = function(Post, Comment) {
+    User.associate = function(Post, Comment, File) {
 
         User.hasMany(Post, {
             foreignKey: 'user_id',
@@ -41,6 +41,12 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: 'user_id',
             sourceKey: 'id',
             as: 'comments'
+        });
+
+        User.hasMany(File, {
+            foreignKey: 'user_id',
+            sourceKey: 'id',
+            as: 'files'
         });
     };
 
