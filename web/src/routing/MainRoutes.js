@@ -3,6 +3,11 @@ import { Route, Switch } from 'react-router-dom';
 import PrivateRoute, { Admin, Partner, Visitor } from './PrivateRoute';
 
 import Wall from '../containers/Wall/Wall';
+import Documentation from '../containers/Documentation/Docmentation';
+import Category from '../containers/Documentation/Category';
+import File from '../containers/Documentation/File';
+import CreateFile from '../containers/Documentation/CreateFile';
+import AddCategory from '../containers/Documentation/AddCategory';
 import AddUser from '../containers/Settings/AddUser';
 import ProfileSettings from '../containers/Settings/ProfileSettings';
 import _404 from '../components/_404';
@@ -13,12 +18,17 @@ const Routes = () => {
             <Switch>
                 <PrivateRoute exact path='/home' component={Visitor(Wall)} />
                 <PrivateRoute exact path='/pro' component={Partner(Wall)} />
+                <PrivateRoute exact path='/documentation' component={Partner(Documentation)} />
+                <PrivateRoute exact path='/documentation/category/:categoryId' component={Partner(Category)} />
+                <PrivateRoute exact path='/documentation/file/:fileId' component={Partner(File)} />
+                <PrivateRoute exact path='/documentation/create-file' component={Partner(CreateFile)} />
+                <PrivateRoute exact path='/documentation/add-category' component={Admin(AddCategory)} />
                 <PrivateRoute exact path='/settings/add-user' component={Admin(AddUser)} />
                 <PrivateRoute exact path='/profile' component={Visitor(ProfileSettings)} />
                 <Route component={_404} />
             </Switch>
         </section>
     );
-}
+};
 
 export default Routes;
