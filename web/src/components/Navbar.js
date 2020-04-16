@@ -120,6 +120,41 @@ const Navbar = ({ auth: { user }, signOutUser }) => {
                                     </div>
                                 </li>
                             }
+                            { role !== 'visitor' &&
+                            <li>
+                                <div>
+                                    <div>
+                                        <label className="toggle" htmlFor="drop-2">Documentation</label>
+                                        <Link to="/documentation">
+                                            <i className="nav-icon mr-2 i-Library"></i>Documentation
+                                        </Link>
+                                        <input id="drop-2" type="checkbox"/>
+                                        <ul>
+                                            <li>
+                                                <Link to="/documentation">
+                                                    <i className="nav-icon mr-2 i-Letter-Open"></i>
+                                                    <span className="item-name">Tous les Documents</span>
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link to="/documentation/create-file">
+                                                    <i className="nav-icon mr-2 i-File-Edit"></i>
+                                                    <span className="item-name">Créer un fichier</span>
+                                                </Link>
+                                            </li>
+                                            { role === "admin" &&
+                                            <li>
+                                                <Link to="/documentation/add-category">
+                                                    <i className="nav-icon mr-2 i-Folder-Add-"></i>
+                                                    <span className="item-name">Ajouter une catégorie</span>
+                                                </Link>
+                                            </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            }
                         </ul>
                     </div>
                 </div>
