@@ -1,6 +1,4 @@
 const passport = require('passport');
-const db = require('../models');
-const User = db.users;
 
 authenticateJwt = (req, res, next) => {
     return passport.authenticate('jwt', {session: false}, (err, user) => {
@@ -15,7 +13,7 @@ authenticateJwt = (req, res, next) => {
 };
 
 const passportJwt = {
-    authenticateJwt: authenticateJwt
+    authenticateJwt: authenticateJwt,
 };
 
 module.exports = passportJwt;
