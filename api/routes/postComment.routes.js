@@ -1,6 +1,6 @@
 const postController = require('../controllers/post.controller');
 const commentController = require('../controllers/comment.controller');
-const { passportJwt } = require('../middlewares');
+const { passportJwt, verifyAuthority } = require('../middlewares');
 
 const multer = require('multer');
 const upload = multer({dest: 'uploads/'});
@@ -14,7 +14,7 @@ module.exports = app => {
 
     app.put('/api/post/:postId', [passportJwt.authenticateJwt], postController.unPublishPost);
 
-    app.put('/api/post/:postId/:filter', [passportJwt.authenticateJwt], postController.changeFilterPost);
+    app.put('/api/post/:postId/:filter', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin], postController.changeFilterPost);
 
     app.post('/api/comment', [passportJwt.authenticateJwt], commentController.addNewComment, postController.getPostById);
 

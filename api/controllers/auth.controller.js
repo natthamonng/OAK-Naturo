@@ -58,10 +58,10 @@ exports.signInCredentials = (req, res) => {
     })(req, res);
 };
 
-exports.getProfile = async (req, res) => {
+exports.getProfile = (req, res) => {
     const userId = req.user.id;
     console.log('getProfile with ID: ' + userId);
-    await User.findByPk(
+    User.findByPk(
         userId,
         { attributes: {
             exclude: [
