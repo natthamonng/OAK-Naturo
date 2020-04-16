@@ -46,9 +46,10 @@ db.sequelize.sync({ force: false })
 require('./routes/auth.routes')(app);
 require('./routes/user.routes')(app);
 require('./routes/postComment.routes')(app);
+require('./routes/documentation.routes')(app);
 
 // Initial Route
-app.get('/', (req,res) => {
+app.get('/', (req, res) => {
     res.send('Nothing here... Please use API at /api endpoint.');
 });
 
