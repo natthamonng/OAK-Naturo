@@ -2,17 +2,15 @@ import React from 'react';
 
 const SearchBar = () => {
     return (
-        <form className="inputForm px-2">
-            <div className="form-group d-flex flex-row">
-                <input className="form-control form-control-rounded" type="text"
-                       name="search"
-                       placeholder="Rechercher ..."
-                />
-                <button className="btn btn-icon btn-rounded btn-primary ml-2">
+        <div className="input-group mb-3">
+            <div className="input-group-prepend">
+                <span className="input-group-text bg-transparent" id="basic-addon1">
                     <i className="i-Magnifi-Glass1"></i>
-                </button>
+                </span>
             </div>
-        </form>
+            <input className="form-control" type="text" placeholder="rechercher..."
+                   aria-label="Username" aria-describedby="basic-addon1"/>
+        </div>
     )
 };
 
