@@ -1,8 +1,8 @@
 const documentationController = require('../controllers/documentation.controller');
-const { passportJwt, verifyAuthority } = require('../middlewares');
+const { passportJwt, verifyAuthority, verifyDocumentationData } = require('../middlewares');
 
 module.exports = app => {
-    app.get('/api/categories', [passportJwt.authenticateJwt],
+    app.get('/api/documentation', [passportJwt.authenticateJwt],
         [verifyAuthority.isPartnerOrAdmin], documentationController.getCategoriesWithTheirsFiles);
 
     app.get('/api/files/:categoryId', [passportJwt.authenticateJwt],
@@ -11,7 +11,7 @@ module.exports = app => {
     app.post('/api/files', [passportJwt.authenticateJwt],
         [verifyAuthority.isPartnerOrAdmin], documentationController.createFile);
 
-    app.post('/api/categories', [passportJwt.authenticateJwt],
-        [verifyAuthority.isAdmin], documentationController.addCategory);
-
+    app.post('/api/documentation/categories', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin],
+        [verifyDocumentationData.checkDuplicatedCategory], documentationController.addCategory,
+        documentationController.getCategoryById);
 };

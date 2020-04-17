@@ -1,5 +1,26 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+
 const CategoryListTable = () => {
+    const categories = useSelector(state => state.documentation.categories);
+    const categoryList = categories.map((category, index) => {
+        return (
+            <tr key={`${category.id}-${index}`}>
+                <th scope="row">{index +1}</th>
+                <td>{ category.categoryName }</td>
+                <td><span className="badge badge-outline-primary">Activé</span></td>
+                <td>
+                    <a className="text-primary mr-2" href="#">
+                        <i className="nav-icon i-Pen-2 font-weight-bold"></i>
+                    </a>
+                    <a className="text-danger mr-2" href="#">
+                        <i className="nav-icon i-Close-Window font-weight-bold"></i>
+                    </a>
+                </td>
+            </tr>
+        )
+    });
+
     return (
         <div className="card mb-4">
             <div className="card-header d-flex align-items-center">
@@ -12,50 +33,14 @@ const CategoryListTable = () => {
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Nom de catégorie</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Action</th>
+                            <th scope="col">Status(WIP)</th>
+                            <th scope="col">Action(WIP)</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Head</td>
-                            <td><span className="badge badge-outline-primary">Activé</span></td>
-                            <td>
-                                <a className="text-primary mr-2" href="#">
-                                    <i className="nav-icon i-Pen-2 font-weight-bold"></i>
-                                </a>
-                                <a className="text-danger mr-2" href="#">
-                                    <i className="nav-icon i-Close-Window font-weight-bold"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Hand</td>
-                            <td><span className="badge badge-outline-primary">Activé</span></td>
-                            <td>
-                                <a className="text-primary mr-2" href="#">
-                                    <i className="nav-icon i-Pen-2 font-weight-bold"></i>
-                                </a>
-                                <a className="text-danger mr-2" href="#">
-                                    <i className="nav-icon i-Close-Window font-weight-bold"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Foot</td>
-                            <td><span className="badge badge-light">Non activé</span></td>
-                            <td>
-                                <a className="text-primary mr-2" href="#">
-                                    <i className="nav-icon i-Pen-2 font-weight-bold"></i>
-                                </a>
-                                <a className="text-danger mr-2" href="#">
-                                    <i className="nav-icon i-Close-Window font-weight-bold"></i>
-                                </a>
-                            </td>
-                        </tr>
+
+                        { categoryList }
+
                         </tbody>
                     </table>
                 </div>
