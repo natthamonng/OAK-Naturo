@@ -15,9 +15,8 @@ const Wall = ({ getPosts, loading, page, setGetPostsPage, reinitializeState }) =
         filters  = ['general', 'witness', 'protocol'];
         defaultFilter = 'general';
     } else if (location.pathname === '/pro') {
-        filters = ['pro']
+        filters = ['pro'];
         defaultFilter = 'pro';
-
     }
 
     useEffect(() => {
@@ -55,7 +54,9 @@ const Wall = ({ getPosts, loading, page, setGetPostsPage, reinitializeState }) =
             <section className="widget-app">
                 <div className="row">
                     <div className="col-12 col-lg-8  offset-md-2 mb-4">
+
                         <AddPostForm deFaultFilter={defaultFilter} />
+
                         <div className="mt-4"></div>
                         { location.pathname === '/home' &&
                             <>
@@ -78,7 +79,9 @@ const Wall = ({ getPosts, loading, page, setGetPostsPage, reinitializeState }) =
                     </div>
                 </div>
             </section>
+
             <div id="page-bottom-boundary" ref={bottomBoundaryRef}></div>
+
         </div>
     )
 };

@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {connect, useSelector} from 'react-redux';
-import { addNewComment} from '../actions/comment.actions';
+import {addNewComment} from '../actions/comment.actions';
 
-const AddCommentForm = ({ postId, addNewComment}) => {
+const AddCommentForm = ({postId, addNewComment}) => {
     const userId = useSelector(state => state.auth.user.id);
     const addCommentLoading = useSelector(state => state.posts.addCommentLoading);
     const [formData, setFormData] = useState({

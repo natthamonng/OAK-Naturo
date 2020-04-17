@@ -1,10 +1,13 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 const BreadCrumb = (props) => {
     return (
         <>
         <div className="breadcrumb">
-            <h1>{props.sectionName}</h1>
+            <NavLink to="/documentation">
+                <h1>{props.sectionName}</h1>
+            </NavLink>
             <ul>
                 <li>Oak-Naturo</li>
                 <li>{props.pageName}</li>

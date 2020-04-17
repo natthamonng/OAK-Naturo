@@ -8,7 +8,7 @@ const DocumentButtonMenu = () => {
     return (
         <div className="row">
         { role === "admin" &&
-        <div className="col-12 col-md-6">
+        <div className="col-12 col-sm-6">
             <div className="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
                 <NavLink to="/documentation/add-category" className="card-body text-center">
                     <i className="i-Folder-Add-"></i>
@@ -19,7 +19,7 @@ const DocumentButtonMenu = () => {
             </div>
         </div>
         }
-        <div className="col-12 col-md-6">
+        <div className="col-12 col-sm-6">
             <div className="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
                 <NavLink to="/documentation/create-file" className="card-body text-center">
                     <i className="i-File-Edit"></i>

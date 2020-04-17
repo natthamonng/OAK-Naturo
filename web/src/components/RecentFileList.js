@@ -13,7 +13,7 @@ const RecentFileList = () => {
     // }
 
     return (
-        <div className="card">
+        <div className="card mb-4">
             <div className="card-body">
                 <div className="card-title">Derniers Documents</div>
                 <div className="ul-widget-app__recent-messages">
