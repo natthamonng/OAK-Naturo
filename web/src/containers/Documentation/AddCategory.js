@@ -1,5 +1,7 @@
 import React from 'react';
 import BreadCrumb from '../../components/Breadcrumb';
+import AddCategoryForm from '../../components/AddCategoryForm';
+import CategoryListTable from "../../components/CategoryListTable";
 
 const AddCategory = () => {
     return (
@@ -12,8 +14,11 @@ const AddCategory = () => {
             <div className="separator-breadcrumb border-top"></div>
             <section className="widget-app">
                 <div className="row">
-                    <div className="col">
-
+                    <div className="col-md-4">
+                        <AddCategoryForm/>
+                    </div>
+                    <div className="col-md-8">
+                        <CategoryListTable/>
                     </div>
                 </div>
             </section>
