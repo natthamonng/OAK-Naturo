@@ -43,17 +43,21 @@ db.sequelize.sync({ force: false })
     });
 
 // Requiring routes
-require('./routes/auth.routes')(app);
-require('./routes/user.routes')(app);
-require('./routes/postComment.routes')(app);
-require('./routes/documentation.routes')(app);
+app.use('/api/auth', require('./routes/auth.routes'));
+app.use('/api/users', require('./routes/user.routes'));
+app.use('/api/posts', require('./routes/post.routes'));
+app.use('/api/comments', require('./routes/comment.routes'));
+app.use('/api/documentation', require('./routes/documentation.routes'));
+//use this to show the image in node js server to client
+//https://stackoverflow.com/questions/48914987/send-image-path-from-node-js-express-server-to-react-client
+app.use('/uploads/files', express.static('uploads/files'));
 
 // Initial Route
 app.get('/', (req, res) => {
     res.send('Nothing here... Please use API at /api endpoint.');
 });
 
-// set port, listen for requests
+// Set port, listen for requests
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`Server listening on port http://localhost:${PORT}`);

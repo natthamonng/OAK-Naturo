@@ -1,19 +1,19 @@
-const { verifyRegistration, passportJwt } = require('../middlewares');
-const authController = require('../controllers/auth.controller');
+const express = require("express");
+const router = express.Router();
+const { verifyRegistration, passportJwt } = require("../middlewares");
+const authController = require("../controllers/auth.controller");
 
-module.exports = app => {
+router.post('/signup', [ verifyRegistration.checkDuplicatedData ], authController.signUpCredentials);
 
-    app.post('/api/auth/signup', [ verifyRegistration.checkDuplicatedData ], authController.signUpCredentials);
+router.post('/signin', authController.signInCredentials);
 
-    app.post('/api/auth/signin', authController.signInCredentials);
+router.get('/me', [ passportJwt.authenticateJwt], authController.getProfile);
 
-    app.get('/api/auth/me', [ passportJwt.authenticateJwt], authController.getProfile);
+router.post('/forgot-password', authController.forgotPassword);
 
-    app.post('/api/auth/forgot-password', authController.forgotPassword);
+router.get('/reset-password', authController.resetPassword);
 
-    app.get('/api/auth/reset-password', authController.resetPassword);
+router.put('/update-password', authController.upDatePasswordViaEmail);
 
-    app.put('/api/auth/update-password', authController.upDatePasswordViaEmail);
-
-};
+module.exports = router;
 

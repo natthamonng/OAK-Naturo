@@ -1,17 +1,25 @@
-const documentationController = require('../controllers/documentation.controller');
-const { passportJwt, verifyAuthority, verifyDocumentationData } = require('../middlewares');
+const express = require("express");
+const router = express.Router();
+const fileController = require("../controllers/file.controller");
+const categoryController = require("../controllers/category.controller");
+const { passportJwt, verifyAuthority, verifyDocumentationData } = require("../middlewares");
 
-module.exports = app => {
-    app.get('/api/documentation', [passportJwt.authenticateJwt],
-        [verifyAuthority.isPartnerOrAdmin], documentationController.getCategoriesWithTheirsFiles);
+router.get('/', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
+    categoryController.getCategoriesWithTheirsFiles);
 
-    app.get('/api/files/:categoryId', [passportJwt.authenticateJwt],
-        [verifyAuthority.isPartnerOrAdmin], documentationController.getFilesByCategory);
+router.get('/categories', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
+    categoryController.getCategoryList);
 
-    app.post('/api/files', [passportJwt.authenticateJwt],
-        [verifyAuthority.isPartnerOrAdmin], documentationController.createFile);
+router.post('/categories', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin],
+    [verifyDocumentationData.checkDuplicatedCategory], categoryController.addCategory);
 
-    app.post('/api/documentation/categories', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin],
-        [verifyDocumentationData.checkDuplicatedCategory], documentationController.addCategory,
-        documentationController.getCategoryById);
-};
+router.get('/files/:categoryId', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
+    fileController.getFilesByCategory);
+
+router.post("/upload-files", [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
+    fileController.uploadFiles);
+
+router.post('/files', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
+    fileController.createFile);
+
+module.exports = router;

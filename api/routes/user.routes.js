@@ -1,10 +1,9 @@
-const userController = require('../controllers/user.controller');
-const { verifyRegistration } = require('../middlewares');
+const express = require("express");
+const router = express.Router();const userController = require("../controllers/user.controller");
+const { verifyRegistration } = require("../middlewares");
 
-module.exports = app => {
+router.get('/:id', userController.getUser);
 
-    app.get('/api/users/:id', userController.getUser);
+router.post('/', [ verifyRegistration.checkDuplicatedData ], userController.addProfile);
 
-    app.post('/api/users', [ verifyRegistration.checkDuplicatedData ], userController.addProfile);
-
-};
+module.exports = router;
