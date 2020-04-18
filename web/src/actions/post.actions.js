@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { setAlert } from "./alert.actions";
+import { setAlert } from './alert.actions';
 import  * as actionsType from '../constants/ActionTypes';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
@@ -103,17 +103,13 @@ export const addNewPost = (post) => async dispatch => {
         })
         .catch(err => {
             console.log(err.response.data.errors);
-            // const errors = err.response.data.errors;
-            // if (errors) {
-            //     errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
-            // }
             dispatch(addPostFailure(err.response.data.errors))
         })
 };
 
 export const removePost = (postId) => async dispatch => {
     dispatch(removePostBegin());
-    await axios.put(`${BASE_URL}/api/post/${postId}`)
+    await axios.put(`${BASE_URL}/api/posts/${postId}`)
         .then(res => {
             if (res.data.success === true) {
                 dispatch(removePostSuccess(postId))
@@ -127,7 +123,7 @@ export const removePost = (postId) => async dispatch => {
 
 export const changeFilterPost = (postId, filter) => async dispatch => {
     dispatch(changeFilterPostBegin());
-    await axios.put(`${BASE_URL}/api/post/${postId}/${filter}`)
+    await axios.put(`${BASE_URL}/api/posts/${postId}/${filter}`)
         .then(res => {
             if (res.data.success === true) {
                 dispatch(changeFilterPostSuccess(postId, filter))

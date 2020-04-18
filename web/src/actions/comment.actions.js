@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { setAlert } from './alert.actions';
 import * as actionsType from '../constants/ActionTypes';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
@@ -39,7 +38,7 @@ export const removeCommentFailure = error => ({
 export const addNewComment = (comment) => async dispatch => {
     dispatch(addCommentBegin());
     const body = comment;
-    await axios.post(`${BASE_URL}/api/comment`, body)
+    await axios.post(`${BASE_URL}/api/comments`, body)
         .then(res => {
                 dispatch(addCommentSuccess(res.data))
         })
@@ -51,7 +50,7 @@ export const addNewComment = (comment) => async dispatch => {
 
 export const removeComment = (postId, commentId) => async dispatch => {
     dispatch(removeCommentBegin());
-    await axios.put(`${BASE_URL}/api/comment/${postId}/${commentId}`)
+    await axios.put(`${BASE_URL}/api/comments/${postId}/${commentId}`)
         .then(res => {
             if (res.data.success === true) {
                 dispatch(removeCommentSuccess(postId, commentId))
