@@ -1,9 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import FilterLink from '../containers/FilterLink/FilterLink';
 import { VisibilityFilters } from '../actions/post.actions';
 
-const Filter = ({role}) => {
+const Filter = () => {
    return (
        <div>
            <span>Filtre: </span>
@@ -19,19 +18,8 @@ const Filter = ({role}) => {
            <FilterLink filter={VisibilityFilters.PROTOCOL}>
                <i className="i-Conference"></i> Protocole
            </FilterLink>
-           {/*{ role !== 'visitor' &&*/}
-           {/*    <FilterLink filter={VisibilityFilters.PRO}>*/}
-           {/*        Pro*/}
-           {/*    </FilterLink>*/}
-           {/*}*/}
        </div>
    )
 };
 
-const mapStateToProps = state => ({
-    role: state.auth.user.role
-});
-
-export default connect(
-    mapStateToProps
-)(Filter)
+export default Filter;

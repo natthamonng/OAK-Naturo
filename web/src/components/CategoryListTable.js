@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 const CategoryListTable = () => {
-    const categories = useSelector(state => state.documentation.categories);
+    const categories = useSelector(state => state.documentation.categoryList);
     const categoryList = categories.map((category, index) => {
         return (
             <tr key={`${category.id}-${index}`}>

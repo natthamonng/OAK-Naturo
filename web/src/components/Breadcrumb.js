@@ -3,20 +3,16 @@ import { NavLink } from 'react-router-dom';
 
 const BreadCrumb = (props) => {
     return (
-        <>
         <div className="breadcrumb">
-            <NavLink to="/documentation">
-                <h1>{props.sectionName}</h1>
-            </NavLink>
+            <h1>{props.pageName}</h1>
             <ul>
-                <li>Oak-Naturo</li>
+                <li><NavLink to={'/documentation'}>{props.sectionName}</NavLink></li>
                 <li>{props.pageName}</li>
                 { props.pageDetail &&
                 <li>{props.pageDetail}</li>
                 }
             </ul>
         </div>
-        </>
     )
 };
 

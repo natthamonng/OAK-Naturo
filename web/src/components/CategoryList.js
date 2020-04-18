@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 const CategoryList = () => {
     const role = useSelector(state => state.auth.user.role);
-    const categories = useSelector(state => state.documentation.categories);
+    const categories = useSelector(state => state.documentation.documentation);
 
     const categoryList = categories.map(category => {
         return (
