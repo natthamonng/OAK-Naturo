@@ -1,9 +1,10 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getFile } from '../../actions/documentation.actions';
 import BreadCrumb from '../../components/Breadcrumb';
 import Spinner from '../../components/Spinner';
+import Moment from 'react-moment';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 
@@ -17,13 +18,13 @@ const File = () => {
         dispatch(getFile(categoryId, fileId));
     }, [categoryId, fileId]);
 
-    let file;
-    let pageName;
-    let body;
+    let {file, pageName, body, author, date} = {};
     if (fileList && isLoading === false){
         file = fileList.files.find(element => element.id == fileId);
         pageName = file.title;
         body = file.content;
+        author = file.author.username;
+        date = file.updatedAt;
     }
 
     return (
@@ -50,6 +51,13 @@ const File = () => {
                                     theme={"bubble"}
                                 />
                                 {/*<div dangerouslySetInnerHTML={{ __html: body }} />*/}
+                                <div className="separator-breadcrumb border-top"></div>
+                                <div className="d-flex align-items-start">
+                                    <div className="ml-2">
+                                        <p className="m-0 text-title text-16 flex-grow-1">Auteur: { author }</p>
+                                        <p className="text-muted text-small">Modifié: <Moment format="DD/MM/YYYY">{ date }</Moment></p>
+                                    </div>
+                                </div>
                             </div>
                         }
                     </div>
