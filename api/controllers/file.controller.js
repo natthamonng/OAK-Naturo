@@ -65,7 +65,7 @@ exports.getFiles = (req, res) => {
 };
 
 exports.getFileById = (req, res) => {
-    const fileId = req.params.id;
+    const fileId = req.params.fileId;
     File.findOne({
         where: {
             id: fileId,

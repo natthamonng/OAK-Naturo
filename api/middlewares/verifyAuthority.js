@@ -7,7 +7,7 @@ isAdmin = (req, res, next) => {
 };
 
 isPartnerOrAdmin = (req, res, next) => {
-    if ( req.user.role === 'admin' || req.user.role === 'admin') {
+    if ( req.user.role === 'admin' || req.user.role === 'partner') {
         next()
     } else {
         res.status(401).json({ error: 'Non autorisé.'})

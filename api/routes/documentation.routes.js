@@ -13,8 +13,11 @@ router.get('/categories', [passportJwt.authenticateJwt], [verifyAuthority.isPart
 router.post('/categories', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin],
     [verifyDocumentationData.checkDuplicatedCategory], categoryController.addCategory);
 
-router.get('/files/:categoryId', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
-    fileController.getFilesByCategory);
+router.get('/categories/:categoryId', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
+    categoryController.getCategoryFileListById);
+
+router.get('/categories/:categoryId/files/:fileId', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
+    categoryController.getCategoryFileById);
 
 router.post("/upload-files", [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
     fileController.uploadFiles);
