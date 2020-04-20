@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getDocuments } from '../../actions/documentation.actions';
+import { getCategoryList } from '../../actions/documentation.actions';
 import BreadCrumb from '../../components/Breadcrumb';
 import SearchBar from '../../components/SearchBar';
 import DocumentCardMenu from '../../components/DocumentCardMenu';
@@ -13,14 +13,14 @@ const Documentation = () => {
     const dispatch = useDispatch();
     const isLoading = useSelector(state => state.documentation.loading);
     useEffect(() => {
-        dispatch(getDocuments());
+        dispatch(getCategoryList());
     }, []);
 
     return (
         <div className="main-content">
             <div className="row">
                 <div className="col-md-8">
-                    <BreadCrumb sectionName={"Documentation"} pageName={"Tous les documents"} url={'/documentation'}/>
+                    <BreadCrumb mainName={"Documentation"} mainPath={"/documentation"} pageName={"Tous les documents"} />
                 </div>
                 <div className="col-md-4">
                     <SearchBar/>

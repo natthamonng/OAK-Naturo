@@ -19,8 +19,8 @@ const Routes = () => {
                 <PrivateRoute exact path='/home' component={Visitor(Wall)} />
                 <PrivateRoute exact path='/pro' component={Partner(Wall)} />
                 <PrivateRoute exact path='/documentation' component={Partner(Documentation)} />
-                <PrivateRoute exact path='/documentation/category/:categoryId' component={Partner(Category)} />
-                <PrivateRoute exact path='/documentation/file/:fileId' component={Partner(File)} />
+                <PrivateRoute exact path='/documentation/categories/:categoryId' component={Partner(Category)} />
+                <PrivateRoute exact path='/documentation/categories/:categoryId/files/:fileId' component={Partner(File)} />
                 <PrivateRoute exact path='/documentation/create-file' component={Partner(CreateFile)} />
                 <PrivateRoute exact path='/documentation/add-category' component={Admin(AddCategory)} />
                 <PrivateRoute exact path='/settings/add-user' component={Admin(AddUser)} />

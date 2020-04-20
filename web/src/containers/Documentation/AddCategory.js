@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
-import { connect, useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import { getCategoryList } from '../../actions/documentation.actions';
 import BreadCrumb from '../../components/Breadcrumb';
 import AddCategoryForm from '../../components/AddCategoryForm';
@@ -17,7 +16,7 @@ const AddCategory = () => {
         <div className="main-content">
             <div className="row">
                 <div className="col">
-                    <BreadCrumb sectionName={"Documentation"} pageName={"Ajouter une catégorie"}/>
+                    <BreadCrumb mainName={"Documentation"} mainPath={"/documentation"}  pageName={"Ajouter une catégorie"} />
                 </div>
             </div>
             <div className="separator-breadcrumb border-top"></div>

@@ -1,0 +1,21 @@
+.ql-editor {
+  min-height: 150px;
+}
+
+.ql-editor iframe, .ql-editor video {
+  height: 340px;
+  width: 560px;
+}
+
+.ql-editor img {
+  max-height: 630px;
+  object-fit: contain;
+}
+ #toolbar {
+   display: flex;
+   flex-wrap: wrap;
+ }
+
+#toolbar button{
+  margin: 3px;
+}
