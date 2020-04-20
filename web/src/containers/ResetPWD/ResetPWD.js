@@ -97,7 +97,7 @@ const ResetPWD = ({ setAlert , match}) => {
                         updated: true,
                         error: false
                     }
-                })
+                });
                 const success = res.data.success;
                 success.forEach(msg => setAlert(msg.message, 'primary'));
             })
