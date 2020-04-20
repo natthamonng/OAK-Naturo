@@ -1,8 +1,11 @@
 import React, {useEffect} from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import BreadCrumb from '../../components/Breadcrumb';
 import { getFile } from '../../actions/documentation.actions';
+import BreadCrumb from '../../components/Breadcrumb';
+import Spinner from '../../components/Spinner';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.bubble.css';
 
 const File = () => {
     const { categoryId, fileId } = useParams();
@@ -21,7 +24,6 @@ const File = () => {
         file = fileList.files.find(element => element.id == fileId);
         pageName = file.title;
         body = file.content;
-        console.log(body)
     }
 
     return (
@@ -37,10 +39,17 @@ const File = () => {
                 <div className="row">
                     <div className="col-md-6 col-lg-10 offset-lg-1">
                         {isLoading ?
-                            <p>Loading...</p>
+                            <div className="d-flex justify-content-center mt-5">
+                                <Spinner/>
+                            </div>
                             :
                             <div>
-                                <div dangerouslySetInnerHTML={{ __html: body }} />
+                                <ReactQuill
+                                    value={body}
+                                    readOnly={true}
+                                    theme={"bubble"}
+                                />
+                                {/*<div dangerouslySetInnerHTML={{ __html: body }} />*/}
                             </div>
                         }
                     </div>
