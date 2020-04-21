@@ -27,6 +27,9 @@ exports.getCategoryFileListById = (req, res) => {
         where: {
             id: categoryId
         },
+        order: [
+            [{model: File, as: 'files'}, 'updatedAt', 'DESC']
+        ],
         include: [
             {
                 model: File,
@@ -74,7 +77,7 @@ exports.getCategoryFileById = (req, res) => {
             {
                 model: File,
                 as: 'files',
-                required: true,
+                required: false,
                 where: {
                     status: 'published',
                     id: fileId,
