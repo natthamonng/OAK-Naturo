@@ -198,12 +198,20 @@ class QuillEditor extends React.Component {
             <div>
                 <div id="toolbar">
                     <select className="ql-header" defaultValue={""} onChange={e => e.persist()}>
+                        <option value="" disabled>Header</option>
                         <option value="1" />
                         <option value="2" />
                         <option value="3" />
                         <option value="4" />
                         <option value="5" />
                         <option value="6" />
+                        <option value="" />
+                    </select>
+                    <select className="ql-size" defaultValue={""} onChange={e => e.persist()}>
+                        <option value="" disabled>Size</option>
+                        <option value="small" />
+                        <option value="large" />
+                        <option value="huge" />
                         <option value="" />
                     </select>
                     <select className="ql-color" defaultValue={"black"} onChange={e => e.persist()}>
@@ -267,7 +275,7 @@ class QuillEditor extends React.Component {
     };
 
     formats = [
-        'header', 'color',
+        'header', 'size', 'color',
         'bold', 'italic', 'underline', 'strike', 'script',
         'code-block', 'blockquote',
         'align', 'list', 'bullet', 'indent',

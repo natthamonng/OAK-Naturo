@@ -1,5 +1,5 @@
 import produce from 'immer';
-import  * as actionsType from '../constants/ActionTypes';
+import * as actionsType from '../constants/ActionTypes';
 
 const initialState = {
     categoryList: [],
@@ -33,8 +33,10 @@ export default (state = initialState, action) =>
                 draft.error = null;
                 break;
             case actionsType.GET_CATEGORY_LIST_SUCCESS:
+                let categoryList = action.payload.categoryList;
+                categoryList.forEach(list => { list.files = [] });
                 let ids = new Set(state.categoryList.map(list => list.id));
-                let mergedCategoryList = [...draft.categoryList, ...action.payload.categoryList.filter(list => !ids.has(list.id))];
+                let mergedCategoryList = [...draft.categoryList, ...categoryList.filter(list => !ids.has(list.id))];
                 draft.categoryList = mergedCategoryList.sort((objectA, objectB) => {
                     return objectA.categoryName.localeCompare(objectB.categoryName)
                 });
@@ -47,8 +49,13 @@ export default (state = initialState, action) =>
                     // Object not exists
                     draft.categoryList.push(files);
                 } else {
+                    // TODO Testing
                     // Object already exists
-                    draft.categoryList[fileListIndex] = files;
+                    let ids = new Set(state.categoryList[fileListIndex].files.map(list => list.id));
+                    draft.categoryList[fileListIndex].files = [
+                        ...draft.categoryList[fileListIndex].files,
+                        ...files.files.filter(list => !ids.has(list.id))
+                    ];
                 }
                 draft.loading =  false;
                 break;
@@ -66,7 +73,6 @@ export default (state = initialState, action) =>
                         // Object not exists
                         copyCategoriesArray[categoryIndex].files.push(file.files[0]);
                     } else {
-                        // TODO Fix replace exist content data
                         // Object already exists
                         copyCategoriesArray[categoryIndex].files[fileIndex] = file.files[0];
                     }
@@ -82,17 +88,12 @@ export default (state = initialState, action) =>
                     return objectA.categoryName.localeCompare(objectB.categoryName)
                 });
                 break;
-
-            //TODO WIP
             case actionsType.CREATE_FILE_SUCCESS:
                 let newFile = action.payload.file;
-                draft.documentation.forEach((element, index) => {
-                    if (element.id === newFile.category_id) {
-                        debugger;
-                        //TODO WIP
-                        draft.documentation[index].unshift(newFile)
-                    }
-                });
+                let targetCategoryIndex = draft.categoryList.findIndex(category => category.id === newFile.category_id);
+                if (targetCategoryIndex !== -1) {
+                    draft.categoryList[targetCategoryIndex].files.push(newFile);
+                }
                 break;
             case actionsType.ADD_CATEGORY_FAILURE:
                 draft.error =  action.payload.error;

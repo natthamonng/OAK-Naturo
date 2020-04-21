@@ -1,15 +1,16 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import BreadCrumb from '../../components/Breadcrumb';
 import AddFileForm from '../../components/AddFileForm';
-import { useDispatch } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { getCategoryList } from "../../actions/documentation.actions";
 import Alert from '../../components/Alert';
 
 const CreateFile = () => {
+    const categoryList = useSelector(state => state.documentation.categoryList);
     const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(getCategoryList());
-    }, []);
+    if (categoryList.length === 0) {
+        dispatch(getCategoryList())
+    }
 
     return (
         <div className="main-content">
@@ -22,8 +23,8 @@ const CreateFile = () => {
             <section className="widget-app">
                 <div className="row">
                     <div className="col-md-10 offset-md-1">
-                        <Alert/>
                         <AddFileForm />
+                        <Alert/>
                     </div>
                 </div>
             </section>

@@ -26,6 +26,9 @@ const FileList = (props) => {
                 <div className="list-group">
                     { fileList }
                 </div>
+                <Link to="/documentation/create-file" className="text-small text-muted font-italic float-right mt-4">
+                    <i className="i-File-Edit"></i> Créer un fichier
+                </Link>
             </div>
         </div>
     )

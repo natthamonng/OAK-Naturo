@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {getCategoryFileList} from '../../actions/documentation.actions';
 import BreadCrumb from '../../components/Breadcrumb';
@@ -8,8 +8,10 @@ import Spinner from '../../components/Spinner';
 
 const Category = () => {
     const { categoryId } = useParams();
+    const history = useHistory();
     const dispatch = useDispatch();
     const isLoading = useSelector(state => state.documentation.loading);
+    const error = useSelector(state => state.documentation.error);
     const fileList = useSelector(state => state.documentation.categoryList.find(element => element.id == categoryId));
 
     useEffect(() => {
@@ -22,6 +24,12 @@ const Category = () => {
         pageName = fileList.categoryName;
         files = fileList.files;
     }
+
+    // Warning: Cannot update during an existing state transition (such as within `render`). Render methods should be
+    // a pure function of props and state.
+    // if (error) {
+    //     history.push('/page-not-found')
+    // }
 
     return (
         <div className="main-content">

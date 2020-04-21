@@ -12,6 +12,11 @@ import Spinner from '../../components/Spinner';
 const Documentation = () => {
     const dispatch = useDispatch();
     const isLoading = useSelector(state => state.documentation.loading);
+    // const documentation = useSelector(state => state.documentation.categoryList);
+
+    // if (documentation.length === 0) {
+    //     dispatch(getCategoryList());
+    // }
     useEffect(() => {
         dispatch(getCategoryList());
     }, []);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 import QuillEditor from './editor/QuillEditor';
 import { createNewFile } from '../actions/documentation.actions';
 
@@ -42,10 +42,11 @@ const AddFileForm = () => {
             userId: userId,
             title: title,
             content: content,
-            categoryId: categoryId
+            categoryId: Number(categoryId)
         };
 
         dispatch(createNewFile(body));
+
         setTimeout(() => {
             history.push(`/documentation/categories/${categoryId}`);
         }, 2000)

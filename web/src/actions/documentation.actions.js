@@ -115,8 +115,9 @@ export const getFile = (categoryId, fileId) => async dispatch => {
             dispatch(getFileSuccess(res.data))
         })
         .catch(err => {
-            console.log(err.response.data.errors);
-            dispatch(getFileFailure(err.response.data.errors))
+            const errors = err.response.data.errors;
+            console.log(errors);
+            dispatch(getFileFailure(errors))
         })
 };
 
@@ -133,7 +134,7 @@ export const addNewCategory = (categoryName) => async dispatch => {
             if (errors) {
                 errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
             }
-            dispatch(addCategoryFailure(err.response.data.errors))
+            dispatch(addCategoryFailure(errors))
         })
 };
 
@@ -142,10 +143,6 @@ export const createNewFile = (file) => async dispatch => {
     await axios.post(`${BASE_URL}/api/documentation/files`, file)
         .then(res => {
             dispatch(setAlert('Nouveau fichier créé avec succès.', 'primary'));
-            setTimeout(() => {
-                debugger;
-                history.push('/documentation')
-            }, 2000);
             dispatch(createFileSuccess(res.data));
         })
         .catch(err => {

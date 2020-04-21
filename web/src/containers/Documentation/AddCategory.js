@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import { useDispatch } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { getCategoryList } from '../../actions/documentation.actions';
 import BreadCrumb from '../../components/Breadcrumb';
 import AddCategoryForm from '../../components/AddCategoryForm';
@@ -7,10 +7,11 @@ import CategoryListTable from '../../components/CategoryListTable';
 import Alert from '../../components/Alert';
 
 const AddCategory = () => {
+    const categoryList = useSelector(state => state.documentation.categoryList);
     const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(getCategoryList());
-    }, []);
+    if (categoryList.length === 0) {
+        dispatch(getCategoryList())
+    }
 
     return (
         <div className="main-content">
