@@ -25,4 +25,10 @@ router.post("/upload-files", [passportJwt.authenticateJwt], [verifyAuthority.isP
 router.post('/files', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
     fileController.createFile);
 
+router.put('/categories/:categoryId/files/:fileId/edit', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
+    fileController.getTargetFile, fileController.editFile);
+
+router.put('/categories/:categoryId/files/:fileId/update-status', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin],
+    fileController.updateStatusFile);
+
 module.exports = router;

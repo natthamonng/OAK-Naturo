@@ -140,14 +140,58 @@ exports.createFile = async (req, res) => {
         content: req.body.content,
         user_id: req.body.userId,
         category_id: req.body.categoryId
-    })
-        .then(file => {
+    }).then(file => {
             res.status(200).json(file)
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({ errors: [
-                    { message: 'Une erreur s\'est produite lors de la création du fichier.' }
-                ]})
-        })
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({ errors: [
+            { message: 'Une erreur s\'est produite lors de la création du fichier.' }
+        ]})
+    })
+};
+
+exports.getTargetFile = (req, res, next) => {
+    File.findOne({
+        where: {id: req.params.fileId}
+    }).then((file) => {
+            req.file = file;
+            next()
+        }
+    );
+};
+
+exports.editFile = (req, res) => {
+   if ( req.file.user_id !== req.user.id && req.user.role !== 'admin') {
+       res.status(401).json({ error: 'Non autorisé.'})
+   } else {
+       File.update(
+           {
+               title: req.body.title,
+               content: req.body.content,
+               category_id: req.body.categoryId
+           } ,
+           {where: {id: req.params.fileId}}
+       ).then(() => {
+           res.status(200).json({success: true})
+       }).catch(err => {
+           console.error(err);
+           res.status(500).json({
+               errors: [{ message: 'Une erreur s\'est produite lors de la modification du fichier.' }]
+           });
+       });
+   }
+};
+
+exports.updateStatusFile = (req, res) => {
+    File.update(
+        {status: req.query.status} ,
+        {where: {id: req.params.fileId}}
+    ).then(() => {
+        res.status(200).json({success: true})
+    }).catch(err => {
+        console.error(err);
+        res.status(500).json({
+            errors: [{ message: 'Une erreur s\'est produite lors de la suppression du fichier.' }]
+        });
+    });
 };

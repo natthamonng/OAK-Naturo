@@ -35,7 +35,7 @@ exports.getCategoryFileListById = (req, res) => {
                 where: {
                     status: 'published'
                 },
-                attributes: ['id', 'title', 'user_id', 'category_id'],
+                attributes: ['id', 'title', 'user_id', 'category_id', 'updatedAt'],
                 include: [
                     {
                         model: User,
@@ -47,7 +47,13 @@ exports.getCategoryFileListById = (req, res) => {
         ]
     })
         .then(result => {
-            res.status(200).json(result)
+            if(result === null) {
+                res.status(404).json({ errors: [
+                        { message: 'Catégorie introuvable.' }
+                    ]});
+            } else {
+                res.status(200).json(result);
+            }
         })
         .catch(err => {
             console.log(err);
@@ -68,12 +74,12 @@ exports.getCategoryFileById = (req, res) => {
             {
                 model: File,
                 as: 'files',
-                required: false,
+                required: true,
                 where: {
                     status: 'published',
                     id: fileId,
                 },
-                attributes: ['id', 'title','content', 'status', 'user_id', 'category_id'],
+                attributes: ['id', 'title','content', 'status', 'user_id', 'category_id', 'updatedAt'],
                 include: [
                     {
                         model: User,
@@ -85,7 +91,13 @@ exports.getCategoryFileById = (req, res) => {
         ]
     })
         .then(result => {
-            res.status(200).json(result)
+            if(result === null) {
+                res.status(404).json({ errors: [
+                        { message: 'Fichier introuvable.' }
+                    ]});
+            } else {
+                res.status(200).json(result);
+            }
         })
         .catch(err => {
             console.log(err);
