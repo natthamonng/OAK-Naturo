@@ -24,6 +24,12 @@ const DocumentCardMenu = () => {
                     <i className="i-Folder-Add-"></i> Ajouter une catégorie
                 </Link>
                 }
+                {role === 'admin' &&
+                <Link to="/documentation/recycle-bin" className="list-group-item">
+                    <i className="nav-icon mr-2 i-Empty-Box"></i>
+                    <span className="item-name">Corbeille</span>
+                </Link>
+                }
             </ul>
         </div>
     )

@@ -142,11 +142,19 @@ const Navbar = ({ auth: { user }, signOutUser }) => {
                                                     <span className="item-name">Créer un fichier</span>
                                                 </Link>
                                             </li>
-                                            { role === "admin" &&
+                                            {role === "admin" &&
                                             <li>
                                                 <Link to="/documentation/add-category">
                                                     <i className="nav-icon mr-2 i-Folder-Add-"></i>
                                                     <span className="item-name">Ajouter une catégorie</span>
+                                                </Link>
+                                            </li>
+                                            }
+                                            { role === "admin" &&
+                                            <li>
+                                                <Link to="/documentation/recycle-bin">
+                                                    <i className="nav-icon mr-2 i-Empty-Box"></i>
+                                                    <span className="item-name">Corbeille</span>
                                                 </Link>
                                             </li>
                                             }
