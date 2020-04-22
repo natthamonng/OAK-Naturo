@@ -14,7 +14,7 @@ class Mailer {
     sendEmail = (user, subject, body) => {
         return new Promise((resolve, reject) => {
             const mailOptions = {
-                from: 'oakproject2020@gmail.com',
+                from: '"Oak Naturo" <oakproject2020@gmail.com>',
                 to: `${user.email}`,
                 subject: subject,
                 text: body
