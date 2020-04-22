@@ -41,10 +41,16 @@ exports.getFiles = (req, res) => {
     File.findAll({
         limit,
         offset,
+        where: {'status': 'published'},
+        order: [
+            ['updatedAt', 'DESC']
+        ],
+        attributes: ['title'],
         include: [
             {
                 model: Category,
-                as: 'category'
+                as: 'category',
+                attributes: ['id', 'categoryName']
             },
             {
                 model: User,
@@ -65,7 +71,7 @@ exports.getFiles = (req, res) => {
 };
 
 exports.getFileById = (req, res) => {
-    const fileId = req.params.fileId;
+    const fileId = req.file.dataValues.id;
     File.findOne({
         where: {
             id: fileId,
@@ -74,7 +80,8 @@ exports.getFileById = (req, res) => {
         include: [
             {
                 model: Category,
-                as: 'category'
+                as: 'category',
+                attributes: ['categoryName']
             },
             {
                 model: User,
@@ -134,14 +141,15 @@ exports.getFilesByCategory = (req, res) => {
         })
 };
 
-exports.createFile = async (req, res) => {
+exports.createFile = async (req, res, next) => {
     await File.create({
         title: req.body.title,
         content: req.body.content,
         user_id: req.body.userId,
         category_id: req.body.categoryId
     }).then(file => {
-            res.status(200).json(file)
+            req.file = file;
+            next();
     }).catch(err => {
         console.log(err);
         res.status(500).json({ errors: [

@@ -7,6 +7,9 @@ const { passportJwt, verifyAuthority, verifyDocumentationData } = require("../mi
 router.get('/', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
     categoryController.getCategoriesWithTheirsFiles);
 
+router.get('/recent-files', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
+    fileController.getFiles);
+
 router.get('/categories', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
     categoryController.getCategoryList);
 
@@ -19,11 +22,11 @@ router.get('/categories/:categoryId', [passportJwt.authenticateJwt], [verifyAuth
 router.get('/categories/:categoryId/files/:fileId', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
     categoryController.getCategoryFileById);
 
-router.post("/upload-files", [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
+router.post('/upload-files', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
     fileController.uploadFiles);
 
 router.post('/files', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
-    fileController.createFile);
+    fileController.createFile, fileController.getFileById);
 
 router.put('/categories/:categoryId/files/:fileId/edit', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
     fileController.getTargetFile, fileController.editFile);
