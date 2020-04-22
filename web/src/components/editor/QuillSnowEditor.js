@@ -63,7 +63,7 @@ VideoBlot.blotName = 'video';
 VideoBlot.tagName = 'video';
 Quill.register(VideoBlot);
 
-class QuillEditor extends React.Component {
+class QuillSnowEditor extends React.Component {
 
     bandId;
     placeholder;
@@ -93,7 +93,7 @@ class QuillEditor extends React.Component {
     }
 
     handleChange = (html) => {
-        console.log('html', html);
+        // console.log('html', html);
 
         this.setState({
             editorHtml: html
@@ -283,4 +283,4 @@ class QuillEditor extends React.Component {
     ];
 }
 
-export default QuillEditor;
+export default QuillSnowEditor;

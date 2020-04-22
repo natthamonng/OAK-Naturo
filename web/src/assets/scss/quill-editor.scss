@@ -2,13 +2,18 @@
   min-height: 150px;
 }
 
+.edit-file-modal .ql-editor {
+  max-height: 300px;
+}
+
 .ql-editor iframe, .ql-editor video {
-  height: 340px;
-  width: 560px;
+  width: 100%;
+  height: auto;
 }
 
 .ql-editor img {
-  max-height: 630px;
+  width: 80%;
+  height: auto;
   object-fit: contain;
 }
  #toolbar {

@@ -87,14 +87,14 @@ exports.getCategoryFileById = (req, res) => {
                     {
                         model: User,
                         as: 'author',
-                        attributes: ['username'],
+                        attributes: ['id', 'username'],
                     }
                 ]
             }
         ]
     })
         .then(result => {
-            if(result === null) {
+            if(result.files.length === 0) {
                 res.status(404).json({ errors: [
                         { message: 'Fichier introuvable.' }
                     ]});

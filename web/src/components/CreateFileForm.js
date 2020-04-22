@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import QuillEditor from './editor/QuillEditor';
+import QuillSnowEditor from './editor/QuillSnowEditor';
 import { createNewFile } from '../actions/documentation.actions';
 
-const AddFileForm = () => {
+const CreateFileForm = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const userId = useSelector(state => state.auth.user.id);
     const [ categoryId, setCategoryId ] = useState(1);
     const [ title, setTitle ] = useState('');
     const [ content, setContent ] = useState('');
-    const [files, setFiles] = useState([]);
+    const [ files, setFiles ] = useState([]);
 
     const categories = useSelector(state => state.documentation.categoryList);
     const categoryList = categories.map(category => {
@@ -60,22 +60,25 @@ const AddFileForm = () => {
                         <div className="form-group mb-3">
                             <label htmlFor="title">Titre</label>
                             <input className="form-control" id="title" type="text" placeholder="titre..."
-                                   onChange={event => onTitleChange(event)} value={title}/>
+                                   onChange={event => onTitleChange(event)} value={title} required />
                         </div>
                     </div>
                     <div className="form-group">
                         <div className="form-group mb-3">
                             <label htmlFor="picker1">Catégorie</label>
-                            <select className="form-control" onChange={event => onCategoryChange(event)}>
-                                { categoryList}
+                            <select className="form-control" defaultValue="" required
+                                    onChange={event => onCategoryChange(event)}>
+                                <option value="" disabled>choissir une catégorie</option>
+                                { categoryList }
                             </select>
                         </div>
                     </div>
                     <div className="form-group">
-                        <QuillEditor
+                        <QuillSnowEditor
                             placeholder={"Contenu..."}
                             onEditorChange={onEditorChange}
                             onFilesChange={onFilesChange}
+                            required
                         />
                     </div>
                     <div>
@@ -89,4 +92,4 @@ const AddFileForm = () => {
     )
 };
 
-export default AddFileForm;
+export default CreateFileForm;

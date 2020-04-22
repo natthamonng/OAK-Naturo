@@ -92,7 +92,7 @@ export default (state = initialState, action) =>
                 let newFile = action.payload.file;
                 let targetCategoryIndex = draft.categoryList.findIndex(category => category.id === newFile.category_id);
                 if (targetCategoryIndex !== -1) {
-                    draft.categoryList[targetCategoryIndex].files.push(newFile);
+                    draft.categoryList[targetCategoryIndex].files.unshift(newFile);
                 }
                 break;
             case actionsType.ADD_CATEGORY_FAILURE:

@@ -9,7 +9,7 @@ import Alert from '../../components/Alert';
 const AddCategory = () => {
     const categoryList = useSelector(state => state.documentation.categoryList);
     const dispatch = useDispatch();
-    if (categoryList.length === 0) {
+    if (categoryList.length <= 1) {
         dispatch(getCategoryList())
     }
 
