@@ -102,7 +102,7 @@ exports.getPostsByFilters = (req, res) => {
     const offset = page * pageSize;
     const limit = pageSize;
 
-    Post.findAll({
+    Post.findAndCountAll({
         limit,
         offset,
         where: {

@@ -64,7 +64,7 @@ const File = () => {
                                         </p>
                                     </div>
                                     <div className="flex-grow-1"></div>
-                                    { (user.role === 'admin' || file.user_id === user.id) &&
+                                    { ( file.content && ( user.role === 'admin' || file.user_id === user.id)) &&
                                     <EditFileModal file={file} />
                                     }
                                 </div>

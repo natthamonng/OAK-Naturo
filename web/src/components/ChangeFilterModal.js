@@ -15,7 +15,6 @@ const ChangeFilterModal = ({post, changeFilterPost }) => {
         setFilter(event.target.value);
     };
 
-
     const onSubmit = (event) => {
         event.preventDefault();
         changeFilterPost(post.id, filter)
@@ -73,16 +72,6 @@ const ChangeFilterModal = ({post, changeFilterPost }) => {
                                                 Protocole
                                             </label>
                                         </div>
-                                        {/*<div className="form-check">*/}
-                                        {/*    <input className="form-check-input"*/}
-                                        {/*           id={`pro-${post.id}`} type="radio"*/}
-                                        {/*           name="filters" value="pro"*/}
-                                        {/*           onChange={event => onChange(event)}*/}
-                                        {/*           checked={filter === 'pro'} />*/}
-                                        {/*    <label className="form-check-label ml-3" htmlFor={`pro-${post.id}`}>*/}
-                                        {/*        Pro*/}
-                                        {/*    </label>*/}
-                                        {/*</div>*/}
                                     </div>
                                 </div>
                             </fieldset>

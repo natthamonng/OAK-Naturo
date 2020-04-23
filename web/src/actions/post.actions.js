@@ -10,9 +10,9 @@ export const setPostsLoading = () => {
     }
 };
 
-export const getPostsSuccess = posts => ({
+export const getPostsSuccess = (posts, count) => ({
     type: actionsType.GET_POSTS_SUCCESS,
-    payload: { posts }
+    payload: { posts, count }
 });
 
 export const setGetPostsPage = () => {
@@ -76,9 +76,9 @@ export const changeFilterPostFailure = error => ({
 
 export const getPosts = (filters, page) => async dispatch => {
     dispatch(setPostsLoading());
-    await axios.get(`${BASE_URL}/api/posts/${filters}?page=${page}&pageSize=5`)
+    await axios.get(`${BASE_URL}/api/posts/${filters}?page=${page}&pageSize=1`)
         .then( res => {
-            dispatch(getPostsSuccess(res.data, page))
+            dispatch(getPostsSuccess(res.data.rows, res.data.count))
         })
         .catch(err => {
             const errors = err.response.data.errors;

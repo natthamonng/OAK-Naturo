@@ -3,8 +3,10 @@ import  * as actionsType from '../constants/ActionTypes';
 
 const initialState = {
     posts: [],
-    loading: false,
+    postCount: 0,
     page: 0,
+    hasMore: true,
+    loading: false,
     addPostLoading: false,
     removePostLoading: false,
     changeFilterLoading: false,
@@ -20,6 +22,8 @@ export default (state = initialState, action) =>
             case actionsType.REINITIALIZE_STATE:
                 draft.posts = [];
                 draft.page = 0;
+                draft.postCount = 0;
+                draft.hasMore = true;
                 break;
             case actionsType.POSTS_LOADING:
                 draft.loading = true;
@@ -29,11 +33,15 @@ export default (state = initialState, action) =>
                 let ids = new Set(state.posts.map(post => post.id));
                 let merged = [...draft.posts, ...action.payload.posts.filter(post => !ids.has(post.id))];
                 draft.posts = merged;
+                draft.postCount = action.payload.count;
+                draft.hasMore = !(draft.postCount <= draft.posts.length);
                 // draft.posts = state.posts.concat(action.payload.posts);
                 draft.loading =  false;
                 break;
             case actionsType.SET_GET_POST_PAGE:
-                draft.page = state.page + 1;
+                if (draft.hasMore) {
+                    draft.page = state.page + 1;
+                }
                 break;
             case actionsType.ADD_POST_BEGIN:
                 draft.addPostLoading = true;

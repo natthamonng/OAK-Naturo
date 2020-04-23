@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import PrivateRoute, { Admin, Partner, Visitor } from './PrivateRoute';
 
 import Wall from '../containers/Wall/Wall';
-import Documentation from '../containers/Documentation/Docmentation';
+import Documentation from '../containers/Documentation/Documentation';
 import Category from '../containers/Documentation/Category';
 import File from '../containers/Documentation/File';
 import CreateFile from '../containers/Documentation/CreateFile';

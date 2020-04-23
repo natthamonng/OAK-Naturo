@@ -8,7 +8,7 @@ import VisiblePostList from '../VisiblePostList/VisiblePostList';
 import AddPostForm from '../../components/AddPostForm';
 import Spinner from '../../components/Spinner';
 
-const Wall = ({ getPosts, loading, page, setGetPostsPage, reinitializeState }) => {
+const Wall = ({ getPosts, loading, page, hasMore, setGetPostsPage, reinitializeState }) => {
     let location = useLocation();
     let filters, defaultFilter;
     if (location.pathname === '/home') {
@@ -24,23 +24,26 @@ const Wall = ({ getPosts, loading, page, setGetPostsPage, reinitializeState }) =
     }, []);
 
     useEffect(() => {
-        getPosts(filters, page);
+        if(hasMore) {
+            getPosts(filters, page);
+        }
     }, [getPosts, page]);
 
-    // implement infinite scrolling with intersection observer
+    //implement infinite scrolling with intersection observer
     let bottomBoundaryRef = useRef(null);
 
     const scrollObserver = useCallback(
         node => {
+            if (loading) return;
             new IntersectionObserver(entries => {
                 entries.forEach(en => {
-                    if (en.intersectionRatio > 0) {
+                    if (en.intersectionRatio > 0 && hasMore) {
                         setGetPostsPage()
                     }
                 });
             }).observe(node);
         },
-        [setGetPostsPage]
+        [loading, hasMore]
     );
 
     useEffect(() => {
@@ -96,7 +99,8 @@ Wall.propTypes = {
 
 const mapStateToProps = state => ({
     loading: state.posts.loading,
-    page: state.posts.page
+    page: state.posts.page,
+    hasMore: state.posts.hasMore
 });
 
 export default connect(mapStateToProps,{ getPosts, setGetPostsPage, reinitializeState })(Wall);
