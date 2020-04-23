@@ -1,59 +1,64 @@
 import React, { useEffect, useRef, useCallback } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import {getPosts, reinitializeState, setGetPostsPage} from '../../actions/post.actions';
+import BreadCrumb from '../../components/Breadcrumb';
 import Filter from '../../components/Filter';
 import VisiblePostList from '../VisiblePostList/VisiblePostList';
 import AddPostForm from '../../components/AddPostForm';
 import Spinner from '../../components/Spinner';
 
-const Wall = ({ getPosts, loading, page, hasMore, setGetPostsPage, reinitializeState }) => {
+const Wall = () => {
+    const dispatch = useDispatch();
+    const loading = useSelector(state => state.posts.loading);
+    const page = useSelector(state => state.posts.page);
+    const hasMore = useSelector(state => state.posts.hasMore);
+
     let location = useLocation();
-    let filters, defaultFilter;
-    if (location.pathname === '/home') {
+    let filters, defaultFilter, pageName;
+    if (location.pathname === '/forum') {
         filters  = ['general', 'witness', 'protocol'];
         defaultFilter = 'general';
+        pageName = 'Forum de discussions';
     } else if (location.pathname === '/pro') {
         filters = ['pro'];
         defaultFilter = 'pro';
+        pageName = 'Espace Pro';
     }
 
     useEffect(() => {
-        reinitializeState();
+        dispatch(reinitializeState());
     }, []);
 
     useEffect(() => {
-        if(hasMore) {
-            getPosts(filters, page);
-        }
-    }, [getPosts, page]);
+        if(hasMore){
+            dispatch(getPosts(filters, page));
+        }          
+    }, [page, hasMore]);
+    
+    const observer = useRef()
+    const bottomBoundaryRef = useCallback(node => {
+        if (loading) return;
+        if (observer.current) observer.current.disconnect();
 
-    //implement infinite scrolling with intersection observer
-    let bottomBoundaryRef = useRef(null);
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && hasMore) {
+                dispatch(setGetPostsPage());
+            }
+        });
 
-    const scrollObserver = useCallback(
-        node => {
-            if (loading) return;
-            new IntersectionObserver(entries => {
-                entries.forEach(en => {
-                    if (en.intersectionRatio > 0 && hasMore) {
-                        setGetPostsPage()
-                    }
-                });
-            }).observe(node);
-        },
-        [loading, hasMore]
-    );
+        if (node) observer.current.observe(node);
 
-    useEffect(() => {
-        if (bottomBoundaryRef.current) {
-            scrollObserver(bottomBoundaryRef.current);
-        }
-    }, [scrollObserver, bottomBoundaryRef]);
+    }, [loading, hasMore])
 
     return (
         <div className="main-content">
+            <div className="row">
+                <div className="col">
+                    <BreadCrumb mainName={"Oak-Naturo"} mainPath={"/"} pageName={pageName} />
+                </div>
+            </div>
+            <div className="separator-breadcrumb border-top"></div>
             <section className="widget-app">
                 <div className="row">
                     <div className="col-12 col-lg-8  offset-md-2 mb-4">
@@ -61,7 +66,7 @@ const Wall = ({ getPosts, loading, page, hasMore, setGetPostsPage, reinitializeS
                         <AddPostForm deFaultFilter={defaultFilter} />
 
                         <div className="mt-4"></div>
-                        { location.pathname === '/home' &&
+                        { location.pathname === '/forum' &&
                             <>
                                 <div className="separator-breadcrumb border-top"></div>
                                 <div className="breadcrumb d-flex justify-content-end">
@@ -89,18 +94,4 @@ const Wall = ({ getPosts, loading, page, hasMore, setGetPostsPage, reinitializeS
     )
 };
 
-Wall.propTypes = {
-    loading: PropTypes.bool.isRequired,
-    page: PropTypes.number.isRequired,
-    getPosts: PropTypes.func.isRequired,
-    setGetPostsPage: PropTypes.func.isRequired,
-    reinitializeState: PropTypes.func.isRequired
-};
-
-const mapStateToProps = state => ({
-    loading: state.posts.loading,
-    page: state.posts.page,
-    hasMore: state.posts.hasMore
-});
-
-export default connect(mapStateToProps,{ getPosts, setGetPostsPage, reinitializeState })(Wall);
+export default Wall;

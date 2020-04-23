@@ -1,0 +1,33 @@
+div.welcome-text-block  {
+  color: #663399;
+  min-height: 60vh;
+  overflow: hidden;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+div.welcome-text {
+  background: 50% 100% / 50% 50% no-repeat
+              radial-gradient(ellipse at bottom, #663399, transparent, transparent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: 10vw;
+  animation: reveal 3000ms ease-in-out forwards 200ms,
+             glow 2500ms linear infinite 2000ms;
+
+  @keyframes reveal {
+    80%{
+      letter-spacing: 8px;
+    }
+    100% {
+      background-size: 300% 300%;
+    }
+  }
+  @keyframes glow {
+    40% {
+      text-shadow: 0 0 8px #663399;
+    }
+  }
+}  

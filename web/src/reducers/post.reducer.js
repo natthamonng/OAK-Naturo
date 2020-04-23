@@ -4,7 +4,7 @@ import  * as actionsType from '../constants/ActionTypes';
 const initialState = {
     posts: [],
     postCount: 0,
-    page: 0,
+    page: 1,
     hasMore: true,
     loading: false,
     addPostLoading: false,
@@ -21,7 +21,7 @@ export default (state = initialState, action) =>
             // TODO reinitialize state when changing location
             case actionsType.REINITIALIZE_STATE:
                 draft.posts = [];
-                draft.page = 0;
+                draft.page = 1;
                 draft.postCount = 0;
                 draft.hasMore = true;
                 break;
@@ -30,10 +30,10 @@ export default (state = initialState, action) =>
                 draft.error = null;
                 break;
             case actionsType.GET_POSTS_SUCCESS:
+                draft.postCount = action.payload.count;
                 let ids = new Set(state.posts.map(post => post.id));
                 let merged = [...draft.posts, ...action.payload.posts.filter(post => !ids.has(post.id))];
                 draft.posts = merged;
-                draft.postCount = action.payload.count;
                 draft.hasMore = !(draft.postCount <= draft.posts.length);
                 // draft.posts = state.posts.concat(action.payload.posts);
                 draft.loading =  false;
