@@ -3,7 +3,6 @@ import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import '../../assets/scss/quill-editor.scss';
 
-
 import axios from 'axios';
 const __ISMSIE__ = !!navigator.userAgent.match(/Trident/i);
 const BASE_URL = process.env.REACT_APP_API_URL;

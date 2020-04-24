@@ -43,8 +43,6 @@ const EditFileForm = (props) => {
             categoryId: Number(categoryId)
         };
 
-        console.log(body);
-
         dispatch(editFile(body));
 
         setTimeout(() => {

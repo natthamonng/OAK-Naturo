@@ -6,19 +6,20 @@
   max-height: 300px;
 }
 
-.ql-editor iframe, .ql-editor video {
+.ql-editor iframe, .ql-editor video, iframe, video {
   max-width: 560px;
   min-height: 315px;
 }
 
-.ql-editor img {
-  max-height: 630px;
+.ql-editor img, .content-body img {
+  max-height: 460px;
   object-fit: contain;
 }
- #toolbar {
-   display: flex;
-   flex-wrap: wrap;
- }
+
+#toolbar {
+ display: flex;
+ flex-wrap: wrap;
+}
 
 #toolbar button{
   margin: 3px;
