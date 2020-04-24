@@ -107,29 +107,29 @@ const Navbar = ({ auth: { user }, signOutUser }) => {
                                     </div>
                                 </div>
                             </li>
+                            {/*<li>*/}
+                            {/*    <div>*/}
+                            {/*        <div>*/}
+                            {/*            <label className="toggle" htmlFor="drop-2">Forum de discussions</label>*/}
+                            {/*            <Link to="/forum">*/}
+                            {/*                <i className="nav-icon mr-2 i-Speach-Bubble-Asking"></i> Forum de discussions*/}
+                            {/*            </Link>*/}
+                            {/*            <input id="drop-2" type="checkbox"/>*/}
+                            {/*        </div>*/}
+                            {/*    </div>*/}
+                            {/*</li>*/}
+                            { role !== 'visitor' &&
                             <li>
                                 <div>
                                     <div>
-                                        <label className="toggle" htmlFor="drop-2">Forum de discussions</label>
-                                        <Link to="/forum">
-                                            <i className="nav-icon mr-2 i-Speach-Bubble-Asking"></i> Forum de discussions
+                                        <label className="toggle" htmlFor="drop-2">Espace Pro</label>
+                                        <Link to="/pro">
+                                            <i className="nav-icon mr-2 i-Bar-Chart"></i>Espace Pro
                                         </Link>
                                         <input id="drop-2" type="checkbox"/>
                                     </div>
                                 </div>
                             </li>
-                            { role !== 'visitor' &&
-                                <li>
-                                    <div>
-                                        <div>
-                                            <label className="toggle" htmlFor="drop-2">Espace Pro</label>
-                                            <Link to="/pro">
-                                                <i className="nav-icon mr-2 i-Bar-Chart"></i>Espace Pro
-                                            </Link>
-                                            <input id="drop-2" type="checkbox"/>
-                                        </div>
-                                    </div>
-                                </li>
                             }
                             { role !== 'visitor' &&
                             <li>

@@ -16,7 +16,7 @@ const Wall = () => {
 
     let location = useLocation();
     let filters, defaultFilter, pageName;
-    if (location.pathname === '/forum') {
+    if (location.pathname === '/home') {
         filters  = ['general', 'witness', 'protocol'];
         defaultFilter = 'general';
         pageName = 'Forum de discussions';
@@ -36,7 +36,7 @@ const Wall = () => {
         }          
     }, [page, hasMore]);
     
-    const observer = useRef()
+    const observer = useRef();
     const bottomBoundaryRef = useCallback(node => {
         if (loading) return;
         if (observer.current) observer.current.disconnect();
@@ -49,13 +49,15 @@ const Wall = () => {
 
         if (node) observer.current.observe(node);
 
-    }, [loading, hasMore])
+    }, [loading, hasMore]);
+
+
 
     return (
         <div className="main-content">
             <div className="row">
                 <div className="col">
-                    <BreadCrumb mainName={"Oak-Naturo"} mainPath={"/"} pageName={pageName} />
+                    <BreadCrumb mainName={"Oak-Naturo"} mainPath={"#"} pageName={pageName} />
                 </div>
             </div>
             <div className="separator-breadcrumb border-top"></div>
@@ -66,7 +68,7 @@ const Wall = () => {
                         <AddPostForm deFaultFilter={defaultFilter} />
 
                         <div className="mt-4"></div>
-                        { location.pathname === '/forum' &&
+                        { location.pathname === '/home' &&
                             <>
                                 <div className="separator-breadcrumb border-top"></div>
                                 <div className="breadcrumb d-flex justify-content-end">
