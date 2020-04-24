@@ -12,7 +12,6 @@ import Alert from '../../components/Alert';
 // import ReactQuill from 'react-quill';
 import '../../assets/scss/quill-editor.scss';
 
-
 // const selectCategory = createSelector(
 //     state => state.documentation.categoryList,
 //     categoryList => categoryList.filter(category => category)
@@ -22,7 +21,7 @@ const File = () => {
     const { categoryId, fileId } = useParams();
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
-    const error = useSelector(state => state.documentation.error);
+    const notFound = useSelector(state => state.documentation.notFound);
     // const categoryList = useSelector(selectCategory);
     const categoryList = useSelector(state => state.documentation.categoryList);
     if (categoryList.length <= 1) {
@@ -30,6 +29,7 @@ const File = () => {
     }
 
     const [isEditMode, setIsEditMode] = useState(false);
+    const [showAdminMenu, setShowAdminMenu] = useState(false);
 
     useEffect(() => {
         dispatch(getFile(categoryId, fileId));
@@ -41,7 +41,7 @@ const File = () => {
         file = categoryTarget.files.find(element => element.id === Number(fileId));
     }
 
-    if (file && !error) {
+    if (file && !notFound) {
         return (
             <div className="main-content">
                 <div className="row">
@@ -59,21 +59,48 @@ const File = () => {
                                 <EditFileForm
                                     file={file}
                                     categoryList={categoryList }
-                                    setIsEditMode={setIsEditMode}
+                                    // setIsEditMode={setIsEditMode}
                                 />
+                                <button className="btn  btn-block btn-secondary mr-4 mb-4" type="button"
+                                        onClick={()=> setIsEditMode(false)}>
+                                    Annuler
+                                </button>
                                 <Alert />
                                 </>
 
                                 :
 
                                 <div>
+                                    <div className="d-flex align-items-start">
                                     <h1 className="mb-4">{file.title}</h1>
+                                        <div className="flex-grow-1"></div>
+                                        { ( file.content && ( user.role === 'admin' || file.user_id === user.id)) &&
+                                        <div className={`dropdown ${showAdminMenu? 'show' : ''}`}
+                                             onClick={()=> {setShowAdminMenu(!showAdminMenu)}} style={{cursor: 'pointer'}} >
+                                            <i className="i-Arrow-Down header-icon" id="dropdownMenuButton"
+                                               role="button" data-toggle="dropdown" aria-haspopup="true"
+                                               aria-expanded={`${showAdminMenu? 'true' : 'false'}`}>
+                                            </i>
+                                            <div className={`dropdown-menu dropdown-menu-right ${showAdminMenu? 'show' : ''}`}
+                                                 aria-labelledby="dropdownMenuButton">
+                                                <div className="dropdown-item" onClick={()=> setIsEditMode(true)}>
+                                                    <i className="i-Pen-3" ></i> Modifier le fichier
+                                                </div>
+                                                <div className="dropdown-item" onClick={()=> setIsEditMode(true)}>
+                                                    <i className="i-Close" ></i> Supprimer le fichier
+                                                </div>
+                                            </div>
+                                        </div>
+                                        }
+                                    </div>
+
                                     {/*<ReactQuill*/}
                                     {/*    value={file.content}*/}
                                     {/*    readOnly={true}*/}
                                     {/*    theme={"bubble"}*/}
                                     {/*/>*/}
                                     <div className="content-body" dangerouslySetInnerHTML={{ __html: file.content }} />
+
                                     <div className="separator-breadcrumb border-top"></div>
                                     <div className="d-flex align-items-start">
                                         <div className="ml-2">
@@ -82,13 +109,6 @@ const File = () => {
                                                 <Moment format="DD/MM/YYYY">{ file.updatedAt }</Moment>
                                             </p>
                                         </div>
-                                        <div className="flex-grow-1"></div>
-                                        { ( file.content && ( user.role === 'admin' || file.user_id === user.id)) &&
-                                            <button className="btn btn-outline-primary m-1"
-                                                onClick={()=> setIsEditMode(true)}>
-                                                <i className="i-Pen-3" ></i> Modifier le fichier
-                                            </button>
-                                        }
                                     </div>
                                 </div>
                             }
@@ -97,7 +117,7 @@ const File = () => {
                 </section>
             </div>
         )
-    } else if (error) {
+    } else if (notFound) {
         return <_404/>
     } else {
         return (

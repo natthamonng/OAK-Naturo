@@ -11,9 +11,12 @@ const FileList = (props) => {
                       className="list-group-item list-group-item-action flex-column align-items-start" >
                     <div className="d-flex w-100 justify-content-between">
                         <h5 className="mb-1">{file.title}</h5>
+                    </div>
+                    <div className="d-flex">
+                        <small>Auteur: {file.author.username}</small>
+                        <div className="mx-2"></div>
                         <small>Modifié: <Moment format="DD/MM/YYYY">{file.updatedAt}</Moment></small>
                     </div>
-                    <small>Auteur: {file.author.username}</small>
                 </Link>
             )
         });

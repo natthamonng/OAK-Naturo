@@ -10,7 +10,7 @@ import _404 from "../../components/_404";
 const Category = () => {
     const { categoryId } = useParams();
     const dispatch = useDispatch();
-    const error = useSelector(state => state.documentation.error);
+    const notFound = useSelector(state => state.documentation.notFound);
     const categoryList = useSelector(state => state.documentation.categoryList);
 
     useEffect(() => {
@@ -22,7 +22,7 @@ const Category = () => {
         fileList = categoryList.find(element => element.id === Number(categoryId))
     }
 
-    if (fileList && !error) {
+    if (fileList && !notFound) {
         return (
             <div className="main-content">
                 <div className="row">
@@ -43,7 +43,7 @@ const Category = () => {
                 </section>
             </div>
         )
-    } else if (error) {
+    } else if (notFound) {
         return <_404/>
     } else {
         return (

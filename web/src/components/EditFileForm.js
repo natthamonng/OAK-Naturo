@@ -70,7 +70,6 @@ const EditFileForm = (props) => {
                             <label htmlFor="picker1">Catégorie</label>
                             <select className="form-control" defaultValue={categoryId} required
                                     onChange={event => onCategoryChange(event)}>
-                                {/*<option value="" disabled>choissir une catégorie</option>*/}
                                 { categoryList }
                             </select>
                         </div>
@@ -80,19 +79,15 @@ const EditFileForm = (props) => {
                             defaultValue={content}
                             onEditorChange={onEditorChange}
                             onFilesChange={onFilesChange}
+                            required
                         />
                     </div>
                     <div className="d-flex">
                         <div className="flex-grow-1"></div>
-                        <button className="btn btn-secondary" type="button" data-dismiss="modal"
-                                onClick={()=>{props.setIsEditMode(false)}}>
-                            Annuler
-                        </button>
-
                         { editFileLoading ?
-                            <div className="spinner spinner-primary mr-3"></div>
+                            <div className="spinner spinner-primary m-2"></div>
                             :
-                            <button className="btn btn-primary ml-2" type="submit">
+                            <button className="btn  btn-block btn-primary" type="submit">
                                 Modifier
                             </button>
                         }

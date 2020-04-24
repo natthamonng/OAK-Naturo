@@ -7,6 +7,7 @@ const initialState = {
     addCategoryLoading: false,
     createFileLoading: false,
     editFileLoading: false,
+    notFound: false,
     error: null
 };
 
@@ -124,7 +125,8 @@ export default (state = initialState, action) =>
                 break;
             case actionsType.GET_CATEGORY_FILE_LIST_FAILURE:
             case actionsType.GET_FILE_FAILURE:
-                draft.error =  action.payload.error;
+                // draft.error =  action.payload.error;
+                draft.notFound = true;
                 draft.loading =  false;
                 break;
         }
