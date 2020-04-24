@@ -99,7 +99,7 @@ exports.getPostsByFilters = (req, res) => {
     console.log('VERIFIED FILTERS:' + filters);
     const page = parseInt(req.query.page) || 0;
     const pageSize = parseInt(req.query.pageSize) || 30;
-    const offset = page * pageSize;
+    const offset = (page -1) * pageSize;
     const limit = pageSize;
 
     Post.findAndCountAll({
@@ -137,9 +137,11 @@ exports.getPostsByFilters = (req, res) => {
             {
                 model: Image,
                 as: 'images',
-                attributes: ['id', 'image', 'name']
+                attributes: ['id', 'image', 'name'],
+                required: false,
             }
-        ]
+        ],
+        distinct: true
     })
     .then((result) => {
         res.status(200).json(result)

@@ -5,20 +5,19 @@ const User = db.users;
 
 exports.getCategoryList = (req, res) => {
     Category.findAll({
-        attributes: ['id', 'categoryName'],
         order: [
             ['categoryName', 'ASC']
         ]
     })
-    .then(categoryList => {
-        res.status(200).json(categoryList)
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json({ errors: [
-            { message: 'Une erreur s\'est produite lors de la récupération de la liste des catégories.' }
-        ]})
-    })
+        .then(categoryList => {
+            res.status(200).json(categoryList)
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ errors: [
+                    { message: 'Une erreur s\'est produite lors de la récupération de la liste des catégories.' }
+                ]})
+        })
 };
 
 exports.getCategoryFileListById = (req, res) => {

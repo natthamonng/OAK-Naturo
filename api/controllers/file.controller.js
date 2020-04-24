@@ -176,7 +176,7 @@ exports.editFile = (req, res) => {
            {
                title: req.body.title,
                content: req.body.content,
-               category_id: req.body.categoryId
+               category_id: req.params.categoryId
            } ,
            {where: {id: req.params.fileId}}
        ).then(() => {
