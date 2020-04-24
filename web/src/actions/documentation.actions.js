@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { setAlert } from './alert.actions';
 import  * as actionsType from '../constants/ActionTypes';
+import {changeFilterPostFailure, changeFilterPostSuccess} from "./post.actions";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -84,6 +85,22 @@ export const createFileFailure = error => ({
     payload: { error }
 });
 
+export const editFileBegin = () => {
+    return {
+        type: actionsType.EDIT_FILE_BEGIN
+    }
+};
+
+export const editFileSuccess = ( file ) => ({
+    type: actionsType.EDIT_FILE_SUCCESS,
+    payload: { file }
+});
+
+export const editFileFailure = error => ({
+    type: actionsType.EDIT_FILE_FAILURE,
+    payload: { error }
+});
+
 export const getCategoryList = () => async dispatch => {
     dispatch(getCategoryListBegin());
     await axios.get(`${BASE_URL}/api/documentation/categories`)
@@ -153,6 +170,24 @@ export const createNewFile = (file) => async dispatch => {
             dispatch(createFileFailure(err.response.data.errors))
         })
 };
+
+export const editFile = (file) => async dispatch => {
+    dispatch(editFileBegin());
+    await axios.put(`${BASE_URL}/api/documentation/categories/${file.categoryId}/files/${file.fileId}/edit`, file)
+        .then(res => {
+            if (res.data.success === true) {
+                dispatch(setAlert('Fichier mis à jour.', 'primary'));
+                dispatch(editFileSuccess(file));
+            }
+        })
+        .catch(err => {
+            const errors = err.response.data.errors;
+            if (errors) {
+                errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+            }
+            dispatch(editFileFailure(err.response.data.errors))
+        })
+}
 
 
 

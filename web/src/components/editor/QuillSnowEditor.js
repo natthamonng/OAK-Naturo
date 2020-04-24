@@ -5,7 +5,7 @@ import '../../assets/scss/quill-editor.scss';
 
 
 import axios from 'axios';
-const __ISMSIE__ = navigator.userAgent.match(/Trident/i) ? true : false;
+const __ISMSIE__ = !!navigator.userAgent.match(/Trident/i);
 const BASE_URL = process.env.REACT_APP_API_URL;
 
 const BlockEmbed = Quill.import('blots/block/embed');
@@ -72,8 +72,8 @@ class QuillSnowEditor extends React.Component {
 
     constructor(props) {
         super(props);
-
         this.state = {
+            defaultValue: props.defaultValue ? props.defaultValue : "",
             editorHtml: __ISMSIE__ ? "<p>&nbsp;</p>" : "",
             files: [],
         };
@@ -249,12 +249,14 @@ class QuillSnowEditor extends React.Component {
                     <button className="ql-clean" />
                 </div>
                 <ReactQuill
+                    className="editor-edit"
                     ref={(el) => { this.reactQuillRef = el }}
                     theme={'snow'}
                     onChange={this.handleChange}
                     modules={this.modules}
                     formats={this.formats}
-                    value={this.state.editorHtml}
+                    defaultValue={this.state.defaultValue}
+                    // value={this.state.editorHtml}
                     placeholder={this.props.placeholder}
                 />
                 <input type="file" accept="image/*" ref={this.inputOpenImageRef} style={{ display: "none" }} onChange={this.insertImage} />

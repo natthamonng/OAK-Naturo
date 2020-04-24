@@ -111,7 +111,7 @@ const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter, addPostLoading
                         />
                     </div>
                     <div className="d-flex">
-                    { location.pathname === '/forum' &&
+                    { location.pathname === '/home' &&
                         <div className="form-group">
                             <div className="input-group input-group-sm">
                                 <div className="input-group-prepend">

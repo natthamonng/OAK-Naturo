@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 // import { createSelector } from 'reselect';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getFile } from '../../actions/documentation.actions';
+import {getCategoryList, getFile} from '../../actions/documentation.actions';
 import BreadCrumb from '../../components/Breadcrumb';
 import Moment from 'react-moment';
-import EditFileModal from "../../components/EditFileModal";
 import Spinner from '../../components/Spinner';
 import _404 from "../../components/_404";
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.bubble.css';
+import EditFileForm from '../../components/EditFileForm';
+import Alert from '../../components/Alert';
 
 // const selectCategory = createSelector(
 //     state => state.documentation.categoryList,
@@ -23,6 +23,11 @@ const File = () => {
     const error = useSelector(state => state.documentation.error);
     // const categoryList = useSelector(selectCategory);
     const categoryList = useSelector(state => state.documentation.categoryList);
+    if (categoryList.length <= 1) {
+        dispatch(getCategoryList())
+    }
+
+    const [isEditMode, setIsEditMode] = useState(false);
 
     useEffect(() => {
         dispatch(getFile(categoryId, fileId));
@@ -47,28 +52,45 @@ const File = () => {
                 <section className="widget-app">
                     <div className="row">
                         <div className="col-md-6 col-lg-10 offset-lg-1">
-                            <div>
-                                <h1>{file.title}</h1>
-                                <ReactQuill
-                                    value={file.content}
-                                    readOnly={true}
-                                    theme={"bubble"}
+                            { isEditMode ?
+                                <>
+                                <EditFileForm
+                                    file={file}
+                                    categoryList={categoryList }
+                                    setIsEditMode={setIsEditMode}
                                 />
-                                {/*<div dangerouslySetInnerHTML={{ __html: body }} />*/}
-                                <div className="separator-breadcrumb border-top"></div>
-                                <div className="d-flex align-items-start">
-                                    <div className="ml-2">
-                                        <p className="m-0 text-title text-16 flex-grow-1">Auteur: { file.author.username }</p>
-                                        <p className="text-muted text-small">Modifié:
-                                            <Moment format="DD/MM/YYYY">{ file.updatedAt }</Moment>
-                                        </p>
+                                <Alert />
+                                </>
+
+                                :
+
+                                <div>
+                                    <h1>{file.title}</h1>
+                                    <ReactQuill
+                                        value={file.content}
+                                        readOnly={true}
+                                        theme={"bubble"}
+                                    />
+                                    {/*<div dangerouslySetInnerHTML={{ __html: body }} />*/}
+                                    <div className="separator-breadcrumb border-top"></div>
+                                    <div className="d-flex align-items-start">
+                                        <div className="ml-2">
+                                            <p className="m-0 text-title text-16 flex-grow-1">Auteur: { file.author.username }</p>
+                                            <p className="text-muted text-small">Modifié:
+                                                <Moment format="DD/MM/YYYY">{ file.updatedAt }</Moment>
+                                            </p>
+                                        </div>
+                                        <div className="flex-grow-1"></div>
+                                        { ( file.content && ( user.role === 'admin' || file.user_id === user.id)) &&
+                                            <button className="btn btn-outline-primary m-1"  data-toggle="modal" data-target="#editFile"
+                                                data-weather="@getbootstrap" style={{cursor: 'pointer'}}
+                                                onClick={()=> setIsEditMode(true)}>
+                                                <i className="i-Pen-3" ></i> Modifier le fichier
+                                            </button>
+                                        }
                                     </div>
-                                    <div className="flex-grow-1"></div>
-                                    { ( file.content && ( user.role === 'admin' || file.user_id === user.id)) &&
-                                    <EditFileModal file={file} />
-                                    }
                                 </div>
-                            </div>
+                            }
                         </div>
                     </div>
                 </section>

@@ -6,6 +6,7 @@ const initialState = {
     loading: false,
     addCategoryLoading: false,
     createFileLoading: false,
+    editFileLoading: false,
     error: null
 };
 
@@ -30,6 +31,10 @@ export default (state = initialState, action) =>
                 break;
             case actionsType.CREATE_FILE_BEGIN:
                 draft.createFileLoading = true;
+                draft.error = null;
+                break;
+            case actionsType.EDIT_FILE_BEGIN:
+                draft.editFileLoading = true;
                 draft.error = null;
                 break;
             case actionsType.GET_CATEGORY_LIST_SUCCESS:
@@ -83,6 +88,7 @@ export default (state = initialState, action) =>
             case actionsType.ADD_CATEGORY_SUCCESS:
                 draft.addCategoryLoading = false;
                 let newCategory = action.payload.category;
+                newCategory.files = [];
                 let newCategoryList = state.categoryList.concat(newCategory);
                 draft.categoryList = newCategoryList.sort((objectA, objectB) => {
                     return objectA.categoryName.localeCompare(objectB.categoryName)
@@ -95,9 +101,21 @@ export default (state = initialState, action) =>
                     draft.categoryList[targetCategoryIndex].files.unshift(newFile);
                 }
                 break;
+            case actionsType.EDIT_FILE_SUCCESS:
+                draft.editFileLoading =  false;
+                // console.log(action.payload.file);
+                break;
             case actionsType.ADD_CATEGORY_FAILURE:
                 draft.error =  action.payload.error;
                 draft.addCategoryLoading =  false;
+                break;
+            case actionsType.CREATE_FILE_FAILURE:
+                draft.error =  action.payload.error;
+                draft.createFileLoading =  false;
+                break;
+            case actionsType.EDIT_FILE_FAILURE:
+                draft.error =  action.payload.error;
+                draft.editFileLoading =  false;
                 break;
             case actionsType.GET_CATEGORY_LIST_FAILURE:
                 draft.error =  action.payload.error;

@@ -1,22 +1,19 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import {useHistory} from 'react-router-dom';
+import { editFile } from '../actions/documentation.actions';
 import QuillSnowEditor from './editor/QuillSnowEditor';
-import { createNewFile } from '../actions/documentation.actions';
+import 'react-quill/dist/quill.bubble.css';
 
-const CreateFileForm = () => {
+const EditFileForm = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const userId = useSelector(state => state.auth.user.id);
-    const [ categoryId, setCategoryId ] = useState(1);
-    const [ title, setTitle ] = useState('');
-    const [ content, setContent ] = useState('');
+    const fileId = props.file.id;
+    const editFileLoading = useSelector(state => state.documentation.editFileLoading);
+    const [ categoryId, setCategoryId ] = useState(props.file.category_id);
+    const [ title, setTitle ] = useState(props.file.title);
+    const [ content, setContent ] = useState(props.file.content);
     const [ files, setFiles ] = useState([]);
-
-    const categories = useSelector(state => state.documentation.categoryList);
-    const categoryList = categories.map(category => {
-        return <option key={category.id} value={category.id}>{category.categoryName}</option>
-    });
 
     const onCategoryChange = (event) => {
         setCategoryId(event.target.value);
@@ -36,56 +33,71 @@ const CreateFileForm = () => {
 
     const onSubmit = (event) => {
         event.preventDefault();
+
         if (title === '' || content === '') return;
 
         const body = {
-            userId: userId,
+            fileId: fileId,
             title: title,
             content: content,
             categoryId: Number(categoryId)
         };
 
-        dispatch(createNewFile(body));
+        console.log(body);
+
+        dispatch(editFile(body));
 
         setTimeout(() => {
-            history.push(`/documentation/categories/${categoryId}`);
+            history.push(`/documentation/categories/${categoryId}/files/${fileId}`);
         }, 2000)
     };
 
+    const categoryList = props.categoryList.map(category => {
+        return <option key={category.id} value={category.id}>{category.categoryName}</option>
+    });
+
     return (
-        <div className="card">
+        <div className="card mb-3">
             <form className="card-body" onSubmit={(event => onSubmit(event))}>
                 <div className="d-flex flex-column">
                     <div className="form-group">
                         <div className="form-group mb-3">
                             <label htmlFor="title">Titre</label>
-                            <input className="form-control" id="title" type="text" placeholder="titre..."
+                            <input className="form-control" id="title" type="text"
                                    onChange={event => onTitleChange(event)} value={title} required />
                         </div>
                     </div>
                     <div className="form-group">
                         <div className="form-group mb-3">
                             <label htmlFor="picker1">Catégorie</label>
-                            <select className="form-control" defaultValue="" required
+                            <select className="form-control" defaultValue={categoryId} required
                                     onChange={event => onCategoryChange(event)}>
-                                <option value="" disabled>choissir une catégorie</option>
+                                {/*<option value="" disabled>choissir une catégorie</option>*/}
                                 { categoryList }
                             </select>
                         </div>
                     </div>
                     <div className="form-group">
                         <QuillSnowEditor
-                            placeholder={"Contenu..."}
-                            value={content}
+                            defaultValue={content}
                             onEditorChange={onEditorChange}
                             onFilesChange={onFilesChange}
-                            required
                         />
                     </div>
-                    <div>
-                        <button className="btn btn-primary btn-block mb-3" type="submit">
-                            Enregistrer
+                    <div className="d-flex">
+                        <div className="flex-grow-1"></div>
+                        <button className="btn btn-secondary" type="button" data-dismiss="modal"
+                                onClick={()=>{props.setIsEditMode(false)}}>
+                            Annuler
                         </button>
+
+                        { editFileLoading ?
+                            <div className="spinner spinner-primary mr-3"></div>
+                            :
+                            <button className="btn btn-primary ml-2" type="submit">
+                                Modifier
+                            </button>
+                        }
                     </div>
                 </div>
             </form>
@@ -93,4 +105,4 @@ const CreateFileForm = () => {
     )
 };
 
-export default CreateFileForm;
+export default EditFileForm;
