@@ -112,7 +112,7 @@ exports.getCategoryFileById = (req, res) => {
 exports.getCategoriesWithTheirsFiles = (req, res) => {
     const page = parseInt(req.query.page) || 0;
     const pageSize = parseInt(req.query.pageSize) || 30;
-    const offset = page * pageSize;
+    const offset = (page-1) * pageSize;
     const limit = pageSize;
     Category.findAll({
         limit,
@@ -166,6 +166,20 @@ exports.addCategory = async (req, res, next) => {
             { message: 'Une erreur s\'est produite lors de la création d\'une catégorie.' }
         ]})
     })
+};
+
+exports.updateStatusCategory = (req, res) => {
+    Category.update(
+        {status: req.query.status} ,
+        {where: {id: req.params.categoryId}}
+    ).then(() => {
+        res.status(200).json({success: true})
+    }).catch(err => {
+        console.error(err);
+        res.status(500).json({
+            errors: [{ message: 'Une erreur s\'est produite lors de la modification d\'une catégorie.' }]
+        });
+    });
 };
 
 

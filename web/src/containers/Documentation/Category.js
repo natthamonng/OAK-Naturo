@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import {getCategoryFileList} from '../../actions/documentation.actions';
+import { getCategoryFileList } from '../../actions/documentation.actions';
 import BreadCrumb from '../../components/Breadcrumb';
 import FileList from '../../components/FileList';
 import Spinner from '../../components/Spinner';
@@ -36,7 +36,7 @@ const Category = () => {
                     <div className="row">
                         <div className="col">
                             <div className="card mb-4">
-                                <FileList files={fileList.files}/>
+                                <FileList files={fileList.files} />
                             </div>
                         </div>
                     </div>

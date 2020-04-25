@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 // import { createSelector } from 'reselect';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import {getCategoryList, getFile} from '../../actions/documentation.actions';
+import {getCategoryList, getFile, removeFile} from '../../actions/documentation.actions';
 import Moment from 'react-moment';
 import BreadCrumb from '../../components/Breadcrumb';
 import EditFileForm from '../../components/EditFileForm';
@@ -46,8 +46,9 @@ const File = () => {
             <div className="main-content">
                 <div className="row">
                     <div className="col">
-                        <BreadCrumb mainName={"Documentation"} mainPath={"/documentation"} sectionName={"Fichiers"}
-                                    sectionPath={`/documentation/categories/${categoryId}`} pageName={categoryTarget.categoryName} />
+                        <BreadCrumb mainName={"Documentation"} mainPath={"/documentation"}
+                                    sectionName={"Fichiers"} sectionPath={`/documentation/categories/${categoryId}`}
+                                    pageName={categoryTarget.categoryName} />
                     </div>
                 </div>
                 <div className="separator-breadcrumb border-top"></div>
@@ -56,16 +57,19 @@ const File = () => {
                         <div className="col-md-6 col-lg-10 offset-lg-1">
                             { isEditMode ?
                                 <>
-                                <EditFileForm
-                                    file={file}
-                                    categoryList={categoryList }
-                                    // setIsEditMode={setIsEditMode}
-                                />
-                                <button className="btn  btn-block btn-secondary mr-4 mb-4" type="button"
-                                        onClick={()=> setIsEditMode(false)}>
-                                    Annuler
-                                </button>
-                                <Alert />
+                                <div className="card mb-3">
+                                    <EditFileForm
+                                        file={file}
+                                        categoryList={categoryList }
+                                    />
+
+                                    <button className="btn btn-secondary m-4 mt-0 border-0"
+                                            type="button" onClick={()=> setIsEditMode(false)}>
+                                         <ins>Annuler</ins>
+                                    </button>
+                                </div>
+
+                                    <Alert />
                                 </>
 
                                 :
@@ -79,15 +83,12 @@ const File = () => {
                                              onClick={()=> {setShowAdminMenu(!showAdminMenu)}} style={{cursor: 'pointer'}} >
                                             <i className="i-Arrow-Down header-icon" id="dropdownMenuButton"
                                                role="button" data-toggle="dropdown" aria-haspopup="true"
-                                               aria-expanded={`${showAdminMenu? 'true' : 'false'}`}>
+                                               aria-expanded={`${showAdminMenu}`}>
                                             </i>
                                             <div className={`dropdown-menu dropdown-menu-right ${showAdminMenu? 'show' : ''}`}
                                                  aria-labelledby="dropdownMenuButton">
                                                 <div className="dropdown-item" onClick={()=> setIsEditMode(true)}>
                                                     <i className="i-Pen-3" ></i> Modifier le fichier
-                                                </div>
-                                                <div className="dropdown-item" onClick={()=> setIsEditMode(true)}>
-                                                    <i className="i-Close" ></i> Supprimer le fichier
                                                 </div>
                                             </div>
                                         </div>
@@ -104,11 +105,20 @@ const File = () => {
                                     <div className="separator-breadcrumb border-top"></div>
                                     <div className="d-flex align-items-start">
                                         <div className="ml-2">
-                                            <p className="m-0 text-title text-16 flex-grow-1">Auteur: { file.author.username }</p>
-                                            <p className="text-muted text-small">Modifié: {' '}
+                                            <p className="m-0 text-title text-16"><strong>Auteur:</strong> {' '}
+                                                { file.author.username }
+                                            </p>
+                                            <p className="text-muted text-small"><strong>Modifié:</strong> {' '}
                                                 <Moment format="DD/MM/YYYY">{ file.updatedAt }</Moment>
                                             </p>
                                         </div>
+                                        <div className="flex-grow-1"></div>
+                                        { ( file.content && ( user.role === 'admin' || file.user_id === user.id)) &&
+                                            <button className="btn btn-outline-primary m-1"
+                                                    onClick={()=> setIsEditMode(true)}>
+                                                <i className="i-Pen-3" ></i> Modifier le fichier
+                                            </button>
+                                        }
                                     </div>
                                 </div>
                             }

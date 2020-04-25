@@ -5,8 +5,7 @@ const initialState = {
     categoryList: [],
     loading: false,
     addCategoryLoading: false,
-    createFileLoading: false,
-    editFileLoading: false,
+    actionFileLoading: false,
     notFound: false,
     error: null
 };
@@ -15,29 +14,24 @@ export default (state = initialState, action) =>
     produce(state, draft => {
         switch (action.type) {
             case actionsType.GET_CATEGORY_LIST_BEGIN:
-                draft.loading = true;
-                draft.error = null;
-                break;
             case actionsType.GET_CATEGORY_FILE_LIST_BEGIN:
-                draft.loading = true;
-                draft.error = null;
-                break;
             case actionsType.GET_FILE_BEGIN:
                 draft.loading = true;
                 draft.error = null;
                 break;
+
             case actionsType.ADD_CATEGORY_BEGIN:
                 draft.addCategoryLoading = true;
                 draft.error = null;
                 break;
+
             case actionsType.CREATE_FILE_BEGIN:
-                draft.createFileLoading = true;
-                draft.error = null;
-                break;
             case actionsType.EDIT_FILE_BEGIN:
-                draft.editFileLoading = true;
+            case actionsType.REMOVE_FILE_BEGIN:
+                draft.actionFileLoading = true;
                 draft.error = null;
                 break;
+
             case actionsType.GET_CATEGORY_LIST_SUCCESS:
                 let categoryList = action.payload.categoryList;
                 categoryList.forEach(list => { list.files = [] });
@@ -48,6 +42,7 @@ export default (state = initialState, action) =>
                 });
                 draft.loading = false;
                 break;
+
             case actionsType.GET_CATEGORY_FILE_LIST_SUCCESS:
                 let files = action.payload.files;
                 let fileListIndex = draft.categoryList.findIndex(list => list.id === files.id);
@@ -65,6 +60,7 @@ export default (state = initialState, action) =>
                 }
                 draft.loading =  false;
                 break;
+
             case actionsType.GET_FILE_SUCCESS:
                 let file = action.payload.file;
                 let categoryIndex = draft.categoryList.findIndex(category => category.id === file.id);
@@ -86,43 +82,62 @@ export default (state = initialState, action) =>
                 }
                 draft.loading =  false;
                 break;
+
             case actionsType.ADD_CATEGORY_SUCCESS:
-                draft.addCategoryLoading = false;
                 let newCategory = action.payload.category;
                 newCategory.files = [];
                 let newCategoryList = state.categoryList.concat(newCategory);
                 draft.categoryList = newCategoryList.sort((objectA, objectB) => {
                     return objectA.categoryName.localeCompare(objectB.categoryName)
                 });
+                draft.addCategoryLoading = false;
                 break;
+
             case actionsType.CREATE_FILE_SUCCESS:
                 let newFile = action.payload.file;
                 let targetCategoryIndex = draft.categoryList.findIndex(category => category.id === newFile.category_id);
                 if (targetCategoryIndex !== -1) {
                     draft.categoryList[targetCategoryIndex].files.unshift(newFile);
                 }
+                draft.actionFileLoading = false;
                 break;
+
             case actionsType.EDIT_FILE_SUCCESS:
-                draft.editFileLoading =  false;
-                // console.log(action.payload.file);
+                draft.actionFileLoading =  false;
+                // getFile() works
                 break;
+
+            case actionsType.REMOVE_FILE_SUCCESS:
+                //TODO
+                let removedFileId = action.payload.fileId;
+                let objIndex = state.categoryList.findIndex((category => category.id === action.payload.categoryId));
+                let copyCategoryArray = [...draft.categoryList];
+                copyCategoryArray[objIndex].files = copyCategoryArray[objIndex].files.filter(function(file) {
+                    return file.id !== removedFileId
+                });
+                draft.categoryList = copyCategoryArray;
+                draft.actionFileLoading =  false;
+
+                break;
+
             case actionsType.ADD_CATEGORY_FAILURE:
                 draft.error =  action.payload.error;
                 draft.addCategoryLoading =  false;
                 break;
+
             case actionsType.CREATE_FILE_FAILURE:
-                draft.error =  action.payload.error;
-                draft.createFileLoading =  false;
-                break;
             case actionsType.EDIT_FILE_FAILURE:
+            case actionsType.REMOVE_FILE_FAILURE:
                 draft.error =  action.payload.error;
-                draft.editFileLoading =  false;
+                draft.actionFileLoading =  false;
                 break;
+
             case actionsType.GET_CATEGORY_LIST_FAILURE:
                 draft.error =  action.payload.error;
                 draft.loading = false;
                 draft.categoryList = [];
                 break;
+
             case actionsType.GET_CATEGORY_FILE_LIST_FAILURE:
             case actionsType.GET_FILE_FAILURE:
                 // draft.error =  action.payload.error;

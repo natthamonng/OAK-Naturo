@@ -13,20 +13,23 @@ router.get('/recent-files', [passportJwt.authenticateJwt], [verifyAuthority.isPa
 router.get('/categories', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
     categoryController.getCategoryList);
 
-router.post('/categories', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin],
-    [verifyDocumentationData.checkDuplicatedCategory], categoryController.addCategory);
-
 router.get('/categories/:categoryId', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
     categoryController.getCategoryFileListById);
 
 router.get('/categories/:categoryId/files/:fileId', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
     categoryController.getCategoryFileById);
 
+router.post('/categories', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin],
+    [verifyDocumentationData.checkDuplicatedCategory], categoryController.addCategory);
+
 router.post('/upload-files', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
     fileController.uploadFiles);
 
 router.post('/files', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
     fileController.createFile, fileController.getFileById);
+
+router.put('/categories/:categoryId/update-status', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin],
+    categoryController.updateStatusCategory);
 
 router.put('/categories/:categoryId/files/:fileId/edit', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
     fileController.getTargetFile, fileController.editFile);

@@ -1,8 +1,6 @@
 import axios from 'axios';
 import { setAlert } from './alert.actions';
 import  * as actionsType from '../constants/ActionTypes';
-import {changeFilterPostFailure, changeFilterPostSuccess} from "./post.actions";
-
 const BASE_URL = process.env.REACT_APP_API_URL;
 
 export const getCategoryListBegin = () => {
@@ -101,6 +99,22 @@ export const editFileFailure = error => ({
     payload: { error }
 });
 
+export const removeFileBegin = () => {
+    return {
+        type: actionsType.REMOVE_FILE_BEGIN
+    }
+};
+
+export const removeFileSuccess = ( categoryId, fileId ) => ({
+    type: actionsType.REMOVE_FILE_SUCCESS,
+    payload: { categoryId, fileId }
+});
+
+export const removeFileFailure = error => ({
+    type: actionsType.REMOVE_FILE_FAILURE,
+    payload: { error }
+});
+
 export const getCategoryList = () => async dispatch => {
     dispatch(getCategoryListBegin());
     await axios.get(`${BASE_URL}/api/documentation/categories`)
@@ -137,7 +151,6 @@ export const getFile = (categoryId, fileId) => async dispatch => {
             dispatch(getFileFailure(errors))
         })
 };
-
 
 export const addNewCategory = (categoryName) => async dispatch => {
     dispatch(addCategoryBegin());
@@ -187,7 +200,26 @@ export const editFile = (file) => async dispatch => {
             }
             dispatch(editFileFailure(err.response.data.errors))
         })
-}
+};
+
+export const removeFile = (categoryId, fileId) => async dispatch => {
+    dispatch(removeFileBegin());
+    await axios.put(`${BASE_URL}/api/documentation/categories/${categoryId}/files/${fileId}/update-status`, {status: 'unpublished'})
+        .then(res => {
+            if (res.data.success === true) {
+                dispatch(removeFileSuccess(categoryId, fileId));
+            }
+        })
+        .catch(err => {
+            const errors = err.response.data.errors;
+            if (errors) {
+                errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+            }
+            dispatch(removeFileFailure(err.response.data.errors))
+        })
+};
+
+
 
 
 

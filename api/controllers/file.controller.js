@@ -35,7 +35,7 @@ exports.uploadFiles = (req, res) => {
 
 exports.getFiles = (req, res) => {
     const page = parseInt(req.query.page) || 0;
-    const pageSize = parseInt(req.query.pageSize) || 30;
+    const pageSize = parseInt(req.query.pageSize) || 5;
     const offset = page * pageSize;
     const limit = pageSize;
     File.findAll({
@@ -192,14 +192,14 @@ exports.editFile = (req, res) => {
 
 exports.updateStatusFile = (req, res) => {
     File.update(
-        {status: req.query.status} ,
+        {status: req.body.status} ,
         {where: {id: req.params.fileId}}
     ).then(() => {
         res.status(200).json({success: true})
     }).catch(err => {
         console.error(err);
         res.status(500).json({
-            errors: [{ message: 'Une erreur s\'est produite lors de la suppression du fichier.' }]
+            errors: [{ message: 'Une erreur s\'est produite lors de la modification du fichier.' }]
         });
     });
 };

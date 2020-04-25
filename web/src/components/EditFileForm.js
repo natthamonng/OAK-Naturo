@@ -9,7 +9,7 @@ const EditFileForm = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const fileId = props.file.id;
-    const editFileLoading = useSelector(state => state.documentation.editFileLoading);
+    const actionFileLoading = useSelector(state => state.documentation.actionFileLoading);
     const [ categoryId, setCategoryId ] = useState(props.file.category_id);
     const [ title, setTitle ] = useState(props.file.title);
     const [ content, setContent ] = useState(props.file.content);
@@ -55,46 +55,44 @@ const EditFileForm = (props) => {
     });
 
     return (
-        <div className="card mb-3">
-            <form className="card-body" onSubmit={(event => onSubmit(event))}>
-                <div className="d-flex flex-column">
-                    <div className="form-group">
-                        <div className="form-group mb-3">
-                            <label htmlFor="title">Titre</label>
-                            <input className="form-control" id="title" type="text"
-                                   onChange={event => onTitleChange(event)} value={title} required />
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <div className="form-group mb-3">
-                            <label htmlFor="picker1">Catégorie</label>
-                            <select className="form-control" defaultValue={categoryId} required
-                                    onChange={event => onCategoryChange(event)}>
-                                { categoryList }
-                            </select>
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <QuillSnowEditor
-                            defaultValue={content}
-                            onEditorChange={onEditorChange}
-                            onFilesChange={onFilesChange}
-                            required
-                        />
-                    </div>
-                    <div className="d-flex">
-                        <div className="flex-grow-1"></div>
-                        { editFileLoading ?
-                            <div className="spinner spinner-primary m-2"></div>
-                            :
-                            <button className="btn  btn-block btn-primary" type="submit">
-                                Modifier
-                            </button>
-                        }
+        <form className="card-body" onSubmit={(event => onSubmit(event))}>
+            <div className="d-flex flex-column">
+                <div className="form-group">
+                    <div className="form-group mb-3">
+                        <label htmlFor="title">Titre</label>
+                        <input className="form-control" id="title" type="text"
+                               onChange={event => onTitleChange(event)} value={title} required />
                     </div>
                 </div>
-            </form>
-        </div>
+                <div className="form-group">
+                    <div className="form-group mb-3">
+                        <label htmlFor="picker1">Catégorie</label>
+                        <select className="form-control" defaultValue={categoryId} required
+                                onChange={event => onCategoryChange(event)}>
+                            { categoryList }
+                        </select>
+                    </div>
+                </div>
+                <div className="form-group">
+                    <QuillSnowEditor
+                        defaultValue={content}
+                        onEditorChange={onEditorChange}
+                        onFilesChange={onFilesChange}
+                        required
+                    />
+                </div>
+                <div className="d-flex">
+                    <div className="flex-grow-1"></div>
+                    { actionFileLoading ?
+                        <div className="spinner spinner-primary m-2"></div>
+                        :
+                        <button className="btn  btn-block btn-primary mx-1" type="submit">
+                            Modifier
+                        </button>
+                    }
+                </div>
+            </div>
+        </form>
     )
 };
 

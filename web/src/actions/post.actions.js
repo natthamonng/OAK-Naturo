@@ -76,7 +76,7 @@ export const changeFilterPostFailure = error => ({
 
 export const getPosts = (filters, page) => async dispatch => {
     dispatch(setPostsLoading());
-    await axios.get(`${BASE_URL}/api/posts/${filters}?page=${page}&pageSize=5`)
+    await axios.get(`${BASE_URL}/api/posts/${filters}?page=${page}&pageSize=5`, filters)
         .then( res => {
             dispatch(getPostsSuccess(res.data.rows, res.data.count))
         })
