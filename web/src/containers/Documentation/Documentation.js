@@ -11,12 +11,8 @@ import Spinner from '../../components/Spinner';
 
 const Documentation = () => {
     const dispatch = useDispatch();
-    const isLoading = useSelector(state => state.documentation.loading);
-    // const documentation = useSelector(state => state.documentation.categoryList);
+    const loading = useSelector(state => state.documentation.loading);
 
-    // if (documentation.length === 0) {
-    //     dispatch(getCategoryList());
-    // }
     useEffect(() => {
         dispatch(getCategoryList());
     }, []);
@@ -36,11 +32,11 @@ const Documentation = () => {
                 <div className="row">
                     <div className="col-md-6 col-lg-4">
                         <DocumentCardMenu/>
-                        <RecentFileList/>
+                        {/*<RecentFileList/>*/}
                     </div>
                     <div className="col-md-6 col-lg-8">
                         <DocumentButtonMenu/>
-                        { isLoading ?
+                        { loading ?
                             <div className="col-12 d-flex justify-content-center mt-4">
                                 <Spinner/>
                             </div>

@@ -7,9 +7,6 @@ const { passportJwt, verifyAuthority, verifyDocumentationData } = require("../mi
 router.get('/', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
     categoryController.getCategoriesWithTheirsFiles);
 
-router.get('/recent-files', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
-    fileController.getFiles);
-
 router.get('/categories', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
     categoryController.getCategoryList);
 
@@ -18,6 +15,9 @@ router.get('/categories/:categoryId', [passportJwt.authenticateJwt], [verifyAuth
 
 router.get('/categories/:categoryId/files/:fileId', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
     categoryController.getCategoryFileById);
+
+router.get('/deletedFiles', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin],
+    fileController.getUnpublishedFiles, fileController.getFiles);
 
 router.post('/categories', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin],
     [verifyDocumentationData.checkDuplicatedCategory], categoryController.addCategory);

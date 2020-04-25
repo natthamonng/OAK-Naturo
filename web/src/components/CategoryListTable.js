@@ -24,7 +24,7 @@ const CategoryListTable = () => {
     return (
         <div className="card mb-4">
             <div className="card-header d-flex align-items-center">
-                <h3 className="w-50 float-left card-title m-0">Listes des catégories</h3>
+                <h3 className="w-50 float-left card-title m-0">Liste des catégories</h3>
             </div>
             <div className="card-body">
                 <div className="table-responsive">

@@ -3,6 +3,7 @@ import * as actionsType from '../constants/ActionTypes';
 
 const initialState = {
     categoryList: [],
+    deletedFiles: [],
     loading: false,
     addCategoryLoading: false,
     actionFileLoading: false,
@@ -16,6 +17,7 @@ export default (state = initialState, action) =>
             case actionsType.GET_CATEGORY_LIST_BEGIN:
             case actionsType.GET_CATEGORY_FILE_LIST_BEGIN:
             case actionsType.GET_FILE_BEGIN:
+            case actionsType.GET_DELETED_FILES_BEGIN:
                 draft.loading = true;
                 draft.error = null;
                 break;
@@ -108,7 +110,6 @@ export default (state = initialState, action) =>
                 break;
 
             case actionsType.REMOVE_FILE_SUCCESS:
-                //TODO
                 let removedFileId = action.payload.fileId;
                 let objIndex = state.categoryList.findIndex((category => category.id === action.payload.categoryId));
                 let copyCategoryArray = [...draft.categoryList];
@@ -117,7 +118,11 @@ export default (state = initialState, action) =>
                 });
                 draft.categoryList = copyCategoryArray;
                 draft.actionFileLoading =  false;
+                break;
 
+            case actionsType.GET_DELETED_FILES_SUCCESS:
+                draft.deletedFiles = action.payload.deletedFiles;
+                draft.loading = false;
                 break;
 
             case actionsType.ADD_CATEGORY_FAILURE:
@@ -140,9 +145,14 @@ export default (state = initialState, action) =>
 
             case actionsType.GET_CATEGORY_FILE_LIST_FAILURE:
             case actionsType.GET_FILE_FAILURE:
-                // draft.error =  action.payload.error;
+                draft.error =  action.payload.error;
                 draft.notFound = true;
                 draft.loading =  false;
                 break;
+
+            case actionsType.GET_DELETED_FILES_FAILURE:
+                draft.error = action.payload.error;
+                draft.deletedFiles = [];
+                draft.loading = false;
         }
     })

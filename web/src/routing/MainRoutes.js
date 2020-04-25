@@ -8,6 +8,7 @@ import Category from '../containers/Documentation/Category';
 import File from '../containers/Documentation/File';
 import CreateFile from '../containers/Documentation/CreateFile';
 import AddCategory from '../containers/Documentation/AddCategory';
+import RecycleBin from '../containers/RecycleBin/RecycleBin';
 import AddUser from '../containers/Settings/AddUser';
 import ProfileSettings from '../containers/Settings/ProfileSettings';
 import _404 from '../components/_404';
@@ -24,7 +25,7 @@ const Routes = () => {
                 <PrivateRoute exact path='/documentation/categories/:categoryId/files/:fileId' component={Partner(File)} />
                 <PrivateRoute exact path='/documentation/create-file' component={Partner(CreateFile)} />
                 <PrivateRoute exact path='/documentation/add-category' component={Admin(AddCategory)} />
-                <PrivateRoute exact path='/documentation/recycle-bin' component={Admin(_404)} />
+                <PrivateRoute exact path='/documentation/recycle-bin' component={Admin(RecycleBin)} />
                 <PrivateRoute exact path='/settings/add-user' component={Admin(AddUser)} />
                 <PrivateRoute exact path='/profile' component={Visitor(ProfileSettings)} />
                 <Route component={_404} />

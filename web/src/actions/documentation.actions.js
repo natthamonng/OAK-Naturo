@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { setAlert } from './alert.actions';
 import  * as actionsType from '../constants/ActionTypes';
+import {getPostsFailure} from "./post.actions";
 const BASE_URL = process.env.REACT_APP_API_URL;
 
 export const getCategoryListBegin = () => {
@@ -115,6 +116,22 @@ export const removeFileFailure = error => ({
     payload: { error }
 });
 
+export const getDeletedFilesBegin = () => {
+    return {
+        type: actionsType.GET_DELETED_FILES_BEGIN
+    }
+};
+
+export const getDeletedFilesSuccess = ( deletedFiles ) => ({
+    type: actionsType.GET_DELETED_FILES_SUCCESS,
+    payload: { deletedFiles }
+});
+
+export const getDeletedFilesFailure = error => ({
+    type: actionsType.GET_DELETED_FILES_FAILURE,
+    payload: { error }
+});
+
 export const getCategoryList = () => async dispatch => {
     dispatch(getCategoryListBegin());
     await axios.get(`${BASE_URL}/api/documentation/categories`)
@@ -219,9 +236,20 @@ export const removeFile = (categoryId, fileId) => async dispatch => {
         })
 };
 
-
-
-
+export const getDeletedFiles = () => async dispatch => {
+    dispatch(getDeletedFilesBegin());
+    await axios.get(`${BASE_URL}/api/documentation/deletedFiles`)
+        .then(res => {
+            dispatch(getDeletedFilesSuccess(res.data));
+        })
+        .catch(err => {
+            const errors = err.response.data.errors;
+            if (errors) {
+                errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+            }
+            dispatch(getDeletedFilesFailure(err.response.data.errors))
+        })
+};
 
 
 

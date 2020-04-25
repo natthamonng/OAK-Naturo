@@ -38,14 +38,16 @@ exports.getFiles = (req, res) => {
     const pageSize = parseInt(req.query.pageSize) || 5;
     const offset = page * pageSize;
     const limit = pageSize;
+    const condition = req.body || 'published';
+
     File.findAll({
         limit,
         offset,
-        where: {'status': 'published'},
+        where: {'status': condition},
         order: [
             ['updatedAt', 'DESC']
         ],
-        attributes: ['title'],
+        attributes: ['title', 'updatedAt'],
         include: [
             {
                 model: Category,
@@ -55,7 +57,7 @@ exports.getFiles = (req, res) => {
             {
                 model: User,
                 as: 'author',
-                attributes: ['username']
+                attributes: ['id', 'username']
             }
         ]
     })
@@ -202,4 +204,9 @@ exports.updateStatusFile = (req, res) => {
             errors: [{ message: 'Une erreur s\'est produite lors de la modification du fichier.' }]
         });
     });
+};
+
+exports.getUnpublishedFiles = (req, res, next) => {
+    req.body = 'unpublished';
+    next();
 };

@@ -51,8 +51,6 @@ const Wall = () => {
 
     }, [loading, hasMore]);
 
-
-
     return (
         <div className="main-content">
             <div className="row">
@@ -63,7 +61,7 @@ const Wall = () => {
             <div className="separator-breadcrumb border-top"></div>
             <section className="widget-app">
                 <div className="row">
-                    <div className="col-12 col-lg-8  offset-md-2 mb-4">
+                    <div className="col-12 col-lg-10  offset-md-1 mb-4">
 
                         <AddPostForm deFaultFilter={defaultFilter} />
 
