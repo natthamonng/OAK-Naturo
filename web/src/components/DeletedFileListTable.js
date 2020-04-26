@@ -1,15 +1,28 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { restoreFile } from '../actions/documentation.actions';
 import Moment from 'react-moment';
+import Pagination from "./Pagination";
 
 const DeletedFileListTable = () => {
     const dispatch = useDispatch();
     const deletedFiles = useSelector(state => state.documentation.deletedFiles);
-    const deletedFileList = deletedFiles.map((file, index) => {
+
+    // State for pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+
+    // Get current items to show
+    const indexOfLastFile = currentPage * itemsPerPage;
+    const indexOfFirstFile = indexOfLastFile - itemsPerPage;
+    const currentDeletedFilesToShow = deletedFiles.slice(indexOfFirstFile, indexOfLastFile);
+
+    // Change page (called when page number clicked)
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+
+    const deletedFileList = currentDeletedFilesToShow.map((file, index) => {
         return (
             <tr key={`${file.id}-${index}`}>
-                <th scope="row">{index +1}</th>
                 <td>{ file.title }</td>
                 <td>{ file.category.categoryName }</td>
                 <td>{ file.author.username }</td>
@@ -43,7 +56,6 @@ const DeletedFileListTable = () => {
                         <table className="table dataTable-collapse text-center" id="category_table">
                             <thead>
                             <tr>
-                                <th scope="col">#</th>
                                 <th scope="col">Nom de fichier</th>
                                 <th scope="col">Catégorie</th>
                                 <th scope="col">Auteur</th>
@@ -59,6 +71,14 @@ const DeletedFileListTable = () => {
                         </table>
                     </div>
                 </div>
+                { deletedFiles.length > itemsPerPage &&
+                <Pagination
+                    itemsPerPage={itemsPerPage}
+                    total={deletedFiles.length}
+                    paginate={paginate}
+                    currentPage={currentPage}
+                />
+                }
             </div>
         )
     }

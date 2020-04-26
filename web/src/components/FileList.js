@@ -1,46 +1,55 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFile } from '../actions/documentation.actions';
 import Moment from 'react-moment';
+import Pagination from './Pagination';
 
-const FileList = (props) => {
+const FileList = ({files}) => {
     const user = useSelector(state => state.auth.user);
     const dispatch = useDispatch();
 
-    let fileList;
-    if (props.files) {
-        fileList = props.files.map(file => {
-            return (
-                <div key={file.id} className="list-group-item list-group-item-action flex-column align-items-start">
-                    <div className="d-flex w-100 justify-content-between mb-2">
-                        <Link to={`/documentation/categories/${file.category_id}/files/${file.id}`}>
-                            <h5 className="mb-1">{file.title}</h5>
-                        </Link>
+    // State for pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
+
+    // Get current items to show
+    const indexOfLastFile = currentPage * itemsPerPage;
+    const indexOfFirstFile = indexOfLastFile - itemsPerPage;
+    const currentFilesToShow = files.slice(indexOfFirstFile, indexOfLastFile);
+
+    // Change page (called when page number clicked)
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+
+    let fileList = currentFilesToShow.map(file => {
+        return (
+            <div key={file.id} className="list-group-item list-group-item-action flex-column align-items-start">
+                <div className="d-flex w-100 justify-content-between mb-2">
+                    <Link to={`/documentation/categories/${file.category_id}/files/${file.id}`}>
+                        <h5 className="mb-1">{file.title}</h5>
+                    </Link>
+                </div>
+                <div className="d-flex">
+                    <div className="flex-column">
+                        <small className="text-small"><strong>Auteur:</strong> {file.author.username}</small>
+                        <div className="mx-2"></div>
+                        <small className="text-small"><strong>Modifié:</strong> {' '}
+                            <Moment format="DD/MM/YYYY">{file.updatedAt}</Moment>
+                        </small>
                     </div>
-                    <div className="d-flex">
-                        <div className="flex-column">
-                            <small className="text-small"><strong>Auteur:</strong> {file.author.username}</small>
-                            <div className="mx-2"></div>
-                            <small className="text-small"><strong>Modifié:</strong> {' '}
-                                <Moment format="DD/MM/YYYY">{file.updatedAt}</Moment>
+                    <div className="flex-grow-1"></div>
+                    { user.role === 'admin' &&
+                        <div className="d-flex align-items-end">
+                            <small style={{cursor: 'pointer'}} className="text-danger"
+                                   onClick={()=> dispatch(removeFile(file.category_id, file.id))}>
+                                <i className="i-Close"></i> Supprimer
                             </small>
                         </div>
-                        <div className="flex-grow-1"></div>
-                        { user.role === 'admin' &&
-                            <div className="d-flex align-items-end">
-                                <small style={{cursor: 'pointer'}} className="text-danger"
-                                       onClick={()=> dispatch(removeFile(file.category_id, file.id))}>
-                                    <i className="i-Close"></i> Supprimer
-                                </small>
-                            </div>
-                        }
-                    </div>
+                    }
                 </div>
-            )
-        });
-    }
-
+            </div>
+        )
+    });
 
     if (fileList.length === 0) {
         return (
@@ -68,6 +77,14 @@ const FileList = (props) => {
                         <i className="i-File-Edit"></i> Créer un fichier
                     </Link>
                 </div>
+                { files.length > itemsPerPage &&
+                    <Pagination
+                        itemsPerPage={itemsPerPage}
+                        total={files.length}
+                        paginate={paginate}
+                        currentPage={currentPage}
+                    />
+                }
             </div>
         )
     }

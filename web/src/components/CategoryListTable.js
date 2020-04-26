@@ -1,12 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import Pagination from './Pagination';
 
 const CategoryListTable = () => {
     const categories = useSelector(state => state.documentation.categoryList);
-    const categoryList = categories.map((category, index) => {
+
+    // State for pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+
+    // Get current items to show
+    const indexOfLastCategory = currentPage * itemsPerPage;
+    const indexOfFirstCategory = indexOfLastCategory - itemsPerPage;
+    const currentCategoriesToShow = categories.slice(indexOfFirstCategory, indexOfLastCategory);
+
+    // Change page (called when page number clicked)
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+
+    const categoryList = currentCategoriesToShow.map((category, index) => {
         return (
             <tr key={`${category.id}-${index}`}>
-                <th scope="row">{index +1}</th>
                 <td>{ category.categoryName }</td>
                 <td><span className="badge badge-outline-primary">Activé</span></td>
                 <td>
@@ -31,7 +44,6 @@ const CategoryListTable = () => {
                     <table className="table dataTable-collapse text-center" id="category_table">
                         <thead>
                         <tr>
-                            <th scope="col">#</th>
                             <th scope="col">Nom de catégorie</th>
                             <th scope="col">Status(WIP)</th>
                             <th scope="col">Action(WIP)</th>
@@ -44,6 +56,16 @@ const CategoryListTable = () => {
                         </tbody>
                     </table>
                 </div>
+
+                { categories.length > itemsPerPage &&
+                    <Pagination
+                        itemsPerPage={itemsPerPage}
+                        total={categories.length}
+                        paginate={paginate}
+                        currentPage={currentPage}
+                    />
+                }
+
             </div>
         </div>
     )

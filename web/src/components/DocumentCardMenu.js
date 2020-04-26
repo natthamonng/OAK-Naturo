@@ -8,7 +8,7 @@ const DocumentCardMenu = () => {
     return (
         <div className="card mb-4 o-hidden">
             <img className="card-img-top" src={photoWide} alt="card-img-top"/>
-            <div className="card-body">
+            <div className="card-body mb-1">
                 <h5 className="card-title">Documentation</h5>
                 <p className="card-text">
                     Lorem ipsum, dolor sit amet consectetur adipisicing elit. Libero quis beatae officia saepe
