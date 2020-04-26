@@ -9,7 +9,7 @@ const FileList = (props) => {
     const dispatch = useDispatch();
 
     let fileList;
-    if(props.files) {
+    if (props.files) {
         fileList = props.files.map(file => {
             return (
                 <div key={file.id} className="list-group-item list-group-item-action flex-column align-items-start">
@@ -41,19 +41,36 @@ const FileList = (props) => {
         });
     }
 
-    return (
-        <div className="card text-left">
-            <div className="card-body">
-                <h4 className="card-title mb-4">Liste des fichiers: </h4>
-                <div className="list-group">
-                    { fileList }
-                </div>
-                <Link to="/documentation/create-file" className="text-small text-muted font-italic float-right mt-4">
-                    <i className="i-File-Edit"></i> Créer un fichier
+
+    if (fileList.length === 0) {
+        return (
+            <div className="d-flex flex-column align-items-center justify-content-center" style={{minHeight: '50vh'}}>
+                <h1 className="text-muted">
+                    <i className="i-Folder"></i>{' '} Cette catégorie est vide.
+                </h1>
+
+                <Link to="/documentation/create-file"
+                      className="text-small text-muted font-italic mt-4">
+                    <i className="i-File-Edit"></i> <ins>Créer un fichier</ins>
                 </Link>
             </div>
-        </div>
-    )
+        )
+    } else {
+        return (
+            <div className="card text-left">
+                <div className="card-body">
+                    <h4 className="card-title mb-4">Liste des fichiers: </h4>
+                    <div className="list-group">
+                        { fileList }
+                    </div>
+                    <Link to="/documentation/create-file"
+                          className="text-small text-muted font-italic float-right mt-4">
+                        <i className="i-File-Edit"></i> Créer un fichier
+                    </Link>
+                </div>
+            </div>
+        )
+    }
 };
 
 export default FileList;

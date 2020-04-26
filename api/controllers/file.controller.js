@@ -47,7 +47,7 @@ exports.getFiles = (req, res) => {
         order: [
             ['updatedAt', 'DESC']
         ],
-        attributes: ['title', 'updatedAt'],
+        attributes: ['id', 'title', 'createdAt', 'updatedAt'],
         include: [
             {
                 model: Category,

@@ -30,6 +30,7 @@ export default (state = initialState, action) =>
             case actionsType.CREATE_FILE_BEGIN:
             case actionsType.EDIT_FILE_BEGIN:
             case actionsType.REMOVE_FILE_BEGIN:
+            case actionsType.RESTORE_FILE_BEGIN:
                 draft.actionFileLoading = true;
                 draft.error = null;
                 break;
@@ -125,6 +126,14 @@ export default (state = initialState, action) =>
                 draft.loading = false;
                 break;
 
+            case actionsType.RESTORE_FILE_SUCCESS:
+                let restoredFileId = action.payload.fileId;
+                draft.deletedFiles = state.deletedFiles.filter(function(element) {
+                    return element.id !== restoredFileId;
+                });
+                draft.actionFileLoading = false;
+                break;
+
             case actionsType.ADD_CATEGORY_FAILURE:
                 draft.error =  action.payload.error;
                 draft.addCategoryLoading =  false;
@@ -133,6 +142,7 @@ export default (state = initialState, action) =>
             case actionsType.CREATE_FILE_FAILURE:
             case actionsType.EDIT_FILE_FAILURE:
             case actionsType.REMOVE_FILE_FAILURE:
+            case actionsType.RESTORE_FILE_FAILURE:
                 draft.error =  action.payload.error;
                 draft.actionFileLoading =  false;
                 break;

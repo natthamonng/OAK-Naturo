@@ -132,6 +132,22 @@ export const getDeletedFilesFailure = error => ({
     payload: { error }
 });
 
+export const restoreFileBegin = () => {
+    return {
+        type: actionsType.RESTORE_FILE_BEGIN
+    }
+};
+
+export const restoreFileSuccess = ( categoryId, fileId) => ({
+    type: actionsType.RESTORE_FILE_SUCCESS,
+    payload: { categoryId, fileId }
+});
+
+export const restoreFileFailure = error => ({
+    type: actionsType.RESTORE_FILE_FAILURE,
+    payload: { error }
+});
+
 export const getCategoryList = () => async dispatch => {
     dispatch(getCategoryListBegin());
     await axios.get(`${BASE_URL}/api/documentation/categories`)
@@ -251,5 +267,21 @@ export const getDeletedFiles = () => async dispatch => {
         })
 };
 
+export const restoreFile = (categoryId, fileId) => async dispatch => {
+    dispatch(restoreFileBegin());
+    await axios.put(`${BASE_URL}/api/documentation/categories/${categoryId}/files/${fileId}/update-status`, {status: 'published'})
+        .then(res => {
+            if (res.data.success === true) {
+                dispatch(restoreFileSuccess(categoryId, fileId));
+            }
+        })
+        .catch(err => {
+            const errors = err.response.data.errors;
+            if (errors) {
+                errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+            }
+            dispatch(restoreFileFailure(err.response.data.errors))
+        })
+};
 
 

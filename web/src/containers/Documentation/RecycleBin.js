@@ -23,7 +23,7 @@ const RecycleBin = () => {
             <div className="separator-breadcrumb border-top"></div>
             <section className="widget-app">
                 <div className="row">
-                    <div className="col-12 col-lg-10  offset-md-1 mb-4">
+                    <div className="col-12 col-md-10 offset-md-1 mb-4">
                         { loading ?
                             <div className="col-12 d-flex justify-content-center mt-4">
                                 <Spinner/>

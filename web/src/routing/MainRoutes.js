@@ -8,7 +8,7 @@ import Category from '../containers/Documentation/Category';
 import File from '../containers/Documentation/File';
 import CreateFile from '../containers/Documentation/CreateFile';
 import AddCategory from '../containers/Documentation/AddCategory';
-import RecycleBin from '../containers/RecycleBin/RecycleBin';
+import RecycleBin from '../containers/Documentation/RecycleBin';
 import AddUser from '../containers/Settings/AddUser';
 import ProfileSettings from '../containers/Settings/ProfileSettings';
 import _404 from '../components/_404';
