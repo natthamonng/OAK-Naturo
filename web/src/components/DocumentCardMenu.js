@@ -20,8 +20,8 @@ const DocumentCardMenu = () => {
                     <i className="i-File-Edit"></i> Créer un fichier
                 </Link>
                 { role === 'admin' &&
-                <Link to="/documentation/add-category" className="list-group-item">
-                    <i className="i-Folder-Add-"></i> Ajouter une catégorie
+                <Link to="/documentation/manage-category" className="list-group-item">
+                    <i className="i-Folder-Settings"></i> Gérer des catégories
                 </Link>
                 }
                 {role === 'admin' &&

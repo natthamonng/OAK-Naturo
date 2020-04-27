@@ -1,13 +1,15 @@
-import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { getCategoryList } from '../../actions/documentation.actions';
 import BreadCrumb from '../../components/Breadcrumb';
 import AddCategoryForm from '../../components/AddCategoryForm';
 import CategoryListTable from '../../components/CategoryListTable';
 import Alert from '../../components/Alert';
+import Spinner from '../../components/Spinner';
 
-const AddCategory = () => {
+const ManageCategory = () => {
     const categoryList = useSelector(state => state.documentation.categoryList);
+    const loading = useSelector(state => state.documentation.loading);
     const dispatch = useDispatch();
     if (categoryList.length <= 1) {
         dispatch(getCategoryList())
@@ -22,18 +24,27 @@ const AddCategory = () => {
             </div>
             <div className="separator-breadcrumb border-top"></div>
             <section className="widget-app">
-                <div className="row">
-                    <div className="col-md-4">
-                        <AddCategoryForm/>
-                        <Alert/>
+                { loading ?
+                    <div className="d-flex justify-content-center align-items-center" style={{height: '50vh'}}>
+                        <Spinner/>
                     </div>
-                    <div className="col-md-8">
-                        <CategoryListTable/>
+
+                    :
+
+                    <div className="row">
+                        <div className="col-md-4">
+                            <AddCategoryForm/>
+                            <Alert/>
+                        </div>
+
+                        <div className="col-md-8">
+                            <CategoryListTable/>
+                        </div>
                     </div>
-                </div>
+                }
             </section>
         </div>
     )
 };
 
-export default AddCategory;
+export default ManageCategory;

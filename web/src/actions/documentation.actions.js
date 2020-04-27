@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { setAlert } from './alert.actions';
 import  * as actionsType from '../constants/ActionTypes';
-import {getPostsFailure} from "./post.actions";
+
 const BASE_URL = process.env.REACT_APP_API_URL;
 
 export const getCategoryListBegin = () => {
@@ -49,6 +49,22 @@ export const addCategorySuccess = ( category ) => ({
 
 export const addCategoryFailure = error => ({
     type: actionsType.ADD_CATEGORY_FAILURE,
+    payload: { error }
+});
+
+export const editCategoryNameBegin = () => {
+    return {
+        type: actionsType.EDIT_CATEGORY_NAME_BEGIN
+    }
+};
+
+export const editCategoryNameSuccess = ( id, categoryName ) => ({
+    type: actionsType.EDIT_CATEGORY_NAME_SUCCESS,
+    payload: { id, categoryName }
+});
+
+export const editCategoryNameFailure = error => ({
+    type: actionsType.EDIT_CATEGORY_NAME_FAILURE,
     payload: { error }
 });
 
@@ -198,6 +214,23 @@ export const addNewCategory = (categoryName) => async dispatch => {
                 errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
             }
             dispatch(addCategoryFailure(errors))
+        })
+};
+
+export const editCategoryName = (id, categoryName) => async dispatch => {
+    dispatch(editCategoryNameBegin());
+    await axios.put(`${BASE_URL}/api/documentation/categories/${id}/edit`, categoryName)
+        .then(res => {
+            if (res.data.success === true) {
+                dispatch(editCategoryNameSuccess(id, categoryName.categoryName));
+            }
+        })
+        .catch(err => {
+            const errors = err.response.data.errors;
+            if (errors) {
+                errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+            }
+            dispatch(editCategoryNameFailure(err.response.data.errors))
         })
 };
 

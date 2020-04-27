@@ -157,6 +157,20 @@ class QuillSnowEditor extends React.Component {
         e.preventDefault();
 
         if (e.currentTarget && e.currentTarget.files && e.currentTarget.files.length > 0) {
+
+                //TODO alert when file to large
+                let files = e.target.files;
+                let size = 30; //MB
+                let err = "";
+                for( let i = 0; i<files.length; i++ ) {
+                    if (files[i].size/1024/1024 > size) {
+                        err += files[i].type + 'is too large, please pick a smaller file\n';
+                        // alert('La taille de votre vidéo est trop grande.');
+                        console.log(err);
+                        return;
+                    }
+                }
+
             const file = e.currentTarget.files[0];
 
             let formData = new FormData();

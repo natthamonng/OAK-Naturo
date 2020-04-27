@@ -13,6 +13,7 @@ let storage = multer.diskStorage({
     filename: (req, file, cb) => {
         cb(null, `${Date.now()}_${file.originalname}`);
     },
+    //TODO fileFilter & fieResize
     fileFilter: (req, file, cb) => {
         const ext = path.extname(file.originalname);
         if (ext !== '.jpg' && ext !== '.png' && ext !== '.mp4') {

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import Pagination from './Pagination';
+import EditCategoryNameModal from './EditCategoryNameModal';
 
 const CategoryListTable = () => {
     const categories = useSelector(state => state.documentation.categoryList);
+    const loading = useSelector(state => state.documentation.editCategoryLoading);
 
     // State for pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -20,12 +22,13 @@ const CategoryListTable = () => {
     const categoryList = currentCategoriesToShow.map((category, index) => {
         return (
             <tr key={`${category.id}-${index}`}>
-                <td>{ category.categoryName }</td>
-                <td><span className="badge badge-outline-primary">Activé</span></td>
                 <td>
-                    <a className="text-primary mr-2" href="#">
-                        <i className="nav-icon i-Pen-2 font-weight-bold"></i>
-                    </a>
+                    { category.categoryName }
+                </td>
+                <td>
+                    <EditCategoryNameModal category={category}/>
+                </td>
+                <td>
                     <a className="text-danger mr-2" href="#">
                         <i className="nav-icon i-Close-Window font-weight-bold"></i>
                     </a>
@@ -45,8 +48,8 @@ const CategoryListTable = () => {
                         <thead>
                         <tr>
                             <th scope="col">Nom de catégorie</th>
-                            <th scope="col">Status(WIP)</th>
-                            <th scope="col">Action(WIP)</th>
+                            <th scope="col">Modifier</th>
+                            <th scope="col">Supprimer(WIP)</th>
                         </tr>
                         </thead>
                         <tbody>

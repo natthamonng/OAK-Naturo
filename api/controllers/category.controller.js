@@ -37,12 +37,12 @@ exports.getCategoryFileListById = (req, res) => {
                 where: {
                     status: 'published'
                 },
-                attributes: ['id', 'title', 'user_id', 'category_id', 'updatedAt'],
+                attributes: ['id', 'title', 'user_id', 'category_id', 'createdAt', 'updatedAt'],
                 include: [
                     {
                         model: User,
                         as: 'author',
-                        attributes: ['username'],
+                        attributes: ['id', 'username'],
                     }
                 ]
             }
@@ -60,7 +60,7 @@ exports.getCategoryFileListById = (req, res) => {
         .catch(err => {
             console.log(err);
             res.status(500).json({ errors: [
-                    { message: 'Une erreur s\'est produite lors de la recupération d\'une catégorie.' }
+                    { message: 'Une erreur s\'est produite lors de la récupération d\'une catégorie.' }
                 ]})
         })
 };
@@ -81,7 +81,7 @@ exports.getCategoryFileById = (req, res) => {
                     status: 'published',
                     id: fileId,
                 },
-                attributes: ['id', 'title','content', 'status', 'user_id', 'category_id', 'updatedAt'],
+                // attributes: ['id', 'title','content', 'status', 'user_id', 'category_id', 'updatedAt'],
                 include: [
                     {
                         model: User,
@@ -104,51 +104,9 @@ exports.getCategoryFileById = (req, res) => {
         .catch(err => {
             console.log(err);
             res.status(500).json({ errors: [
-                    { message: 'Une erreur s\'est produite lors de la recupération d\'une catégorie.' }
+                    { message: 'Une erreur s\'est produite lors de la récupération d\'une catégorie.' }
                 ]})
         })
-};
-
-exports.getCategoriesWithTheirsFiles = (req, res) => {
-    const page = parseInt(req.query.page) || 0;
-    const pageSize = parseInt(req.query.pageSize) || 30;
-    const offset = (page-1) * pageSize;
-    const limit = pageSize;
-    Category.findAll({
-        limit,
-        offset,
-        order: [
-            ['categoryName', 'ASC']
-        ],
-        include: [
-            {
-                model: File,
-                as: 'files',
-                required: false,
-                where: {
-                    status: 'published'
-                },
-                attributes: ['id', 'title', 'content', 'createdAt', 'user_id', 'category_id'],
-                include: [
-                    {
-                        model: User,
-                        as: 'author',
-                        attributes: ['username'],
-                    }
-                ]
-            }
-        ]
-        }
-    )
-    .then(result => {
-        res.status(200).json(result)
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json({ errors: [
-            { message: 'Une erreur s\'est produite lors de la recupération des catégories.' }
-        ]})
-    })
 };
 
 exports.addCategory = async (req, res, next) => {
@@ -156,8 +114,6 @@ exports.addCategory = async (req, res, next) => {
         categoryName: req.body.categoryName
     })
     .then(category => {
-        // req.category = category;
-        // next();
         res.status(200).json(category);
     })
     .catch(err => {
@@ -168,10 +124,10 @@ exports.addCategory = async (req, res, next) => {
     })
 };
 
-exports.updateStatusCategory = (req, res) => {
+exports.editCategoryName = (req, res) => {
     Category.update(
-        {status: req.query.status} ,
-        {where: {id: req.params.categoryId}}
+        { categoryName: req.body.categoryName } ,
+        { where: { id: req.params.categoryId }}
     ).then(() => {
         res.status(200).json({success: true})
     }).catch(err => {
@@ -180,7 +136,23 @@ exports.updateStatusCategory = (req, res) => {
             errors: [{ message: 'Une erreur s\'est produite lors de la modification d\'une catégorie.' }]
         });
     });
+
 };
+
+
+// exports.updateStatusCategory = (req, res) => {
+//     Category.update(
+//         {status: req.query.status} ,
+//         {where: {id: req.params.categoryId}}
+//     ).then(() => {
+//         res.status(200).json({success: true})
+//     }).catch(err => {
+//         console.error(err);
+//         res.status(500).json({
+//             errors: [{ message: 'Une erreur s\'est produite lors de la modification d\'une catégorie.' }]
+//         });
+//     });
+// };
 
 
 

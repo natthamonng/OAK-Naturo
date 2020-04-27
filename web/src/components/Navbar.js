@@ -155,9 +155,9 @@ const Navbar = ({ auth: { user }, signOutUser }) => {
                                             </li>
                                             {role === "admin" &&
                                             <li>
-                                                <Link to="/documentation/add-category">
-                                                    <i className="nav-icon mr-2 i-Folder-Add-"></i>
-                                                    <span className="item-name">Ajouter une catégorie</span>
+                                                <Link to="/documentation/manage-category">
+                                                    <i className="nav-icon mr-2 i-Folder-Settings"></i>
+                                                    <span className="item-name">Gérer des catégories</span>
                                                 </Link>
                                             </li>
                                             }

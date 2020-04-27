@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// import { createSelector } from 'reselect';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {getCategoryList, getFile, removeFile} from '../../actions/documentation.actions';
@@ -9,21 +8,14 @@ import EditFileForm from '../../components/EditFileForm';
 import Spinner from '../../components/Spinner';
 import _404 from '../../components/_404';
 import Alert from '../../components/Alert';
-// import ReactQuill from 'react-quill';
-import '../../assets/scss/quill-editor.scss';
-
-// const selectCategory = createSelector(
-//     state => state.documentation.categoryList,
-//     categoryList => categoryList.filter(category => category)
-// );
 
 const File = () => {
     const { categoryId, fileId } = useParams();
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
     const notFound = useSelector(state => state.documentation.notFound);
-    // const categoryList = useSelector(selectCategory);
     const categoryList = useSelector(state => state.documentation.categoryList);
+
     if (categoryList.length <= 1) {
         dispatch(getCategoryList())
     }
@@ -95,11 +87,6 @@ const File = () => {
                                         }
                                     </div>
 
-                                    {/*<ReactQuill*/}
-                                    {/*    value={file.content}*/}
-                                    {/*    readOnly={true}*/}
-                                    {/*    theme={"bubble"}*/}
-                                    {/*/>*/}
                                     <div className="content-body" dangerouslySetInnerHTML={{ __html: file.content }} />
 
                                     <div className="separator-breadcrumb border-top"></div>

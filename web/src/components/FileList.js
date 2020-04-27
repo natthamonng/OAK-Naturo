@@ -7,6 +7,7 @@ import Pagination from './Pagination';
 
 const FileList = ({files}) => {
     const user = useSelector(state => state.auth.user);
+    const loading = useSelector(state => state.documentation.loading);
     const dispatch = useDispatch();
 
     // State for pagination
@@ -31,27 +32,34 @@ const FileList = ({files}) => {
                 </div>
                 <div className="d-flex">
                     <div className="flex-column">
-                        <small className="text-small"><strong>Auteur:</strong> {file.author.username}</small>
-                        <div className="mx-2"></div>
-                        <small className="text-small"><strong>Modifié:</strong> {' '}
-                            <Moment format="DD/MM/YYYY">{file.updatedAt}</Moment>
-                        </small>
+                        <div>
+                            <small className="text-small"><strong>Auteur:</strong> {file.author.username}</small>
+                        </div>
+                        <div>
+                            <small className="text-small"><strong>Créé:</strong> {' '}
+                                <Moment format="DD/MM/YYYY">{file.createdAt}</Moment>
+                            </small>
+                            {' '}
+                            <small className="text-small"><strong>Modifié:</strong> {' '}
+                                <Moment format="DD/MM/YYYY">{file.updatedAt}</Moment>
+                            </small>
+                        </div>
                     </div>
                     <div className="flex-grow-1"></div>
                     { user.role === 'admin' &&
-                        <div className="d-flex align-items-end">
-                            <small style={{cursor: 'pointer'}} className="text-danger"
-                                   onClick={()=> dispatch(removeFile(file.category_id, file.id))}>
-                                <i className="i-Close"></i> Supprimer
-                            </small>
-                        </div>
+                    <div className="d-flex align-items-end">
+                        <small style={{cursor: 'pointer'}} className="text-danger"
+                               onClick={()=> dispatch(removeFile(file.category_id, file.id))}>
+                            <i className="i-Close"></i> Supprimer
+                        </small>
+                    </div>
                     }
                 </div>
             </div>
         )
     });
 
-    if (fileList.length === 0) {
+    if (fileList.length === 0 && !loading) {
         return (
             <div className="d-flex flex-column align-items-center justify-content-center" style={{minHeight: '50vh'}}>
                 <h1 className="text-muted">

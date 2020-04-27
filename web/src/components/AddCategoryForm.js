@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import {connect, useSelector} from 'react-redux';
-import {addNewCategory} from '../actions/documentation.actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { addNewCategory } from '../actions/documentation.actions';
 
-const AddCategoryForm = (props) => {
-    const addCategoryLoading = useSelector(state => state.documentation.addCategoryLoading);
+const AddCategoryForm = () => {
+    const dispatch = useDispatch();
+    const loading = useSelector(state => state.documentation.addCategoryLoading);
     const [categoryName, setCategoryName] = useState('');
 
     const onChange = event => {
@@ -12,7 +13,7 @@ const AddCategoryForm = (props) => {
 
     const onSubmit = event => {
         event.preventDefault();
-        props.addNewCategory({categoryName});
+        dispatch(addNewCategory({categoryName}));
         setCategoryName('')
     };
 
@@ -28,7 +29,7 @@ const AddCategoryForm = (props) => {
                         onChange={ event => onChange(event)} value={categoryName}/>
                     </div>
 
-                    { addCategoryLoading ?
+                    { loading ?
                         <div className="spinner spinner-primary mr-3"></div>
                         :
                         <button className="btn btn-primary pd-x-20" type="submit">
@@ -41,4 +42,4 @@ const AddCategoryForm = (props) => {
     )
 };
 
-export default connect( null, { addNewCategory })(AddCategoryForm);
+export default AddCategoryForm;

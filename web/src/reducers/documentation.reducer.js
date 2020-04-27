@@ -6,6 +6,7 @@ const initialState = {
     deletedFiles: [],
     loading: false,
     addCategoryLoading: false,
+    editCategoryLoading: false,
     actionFileLoading: false,
     notFound: false,
     error: null
@@ -24,6 +25,11 @@ export default (state = initialState, action) =>
 
             case actionsType.ADD_CATEGORY_BEGIN:
                 draft.addCategoryLoading = true;
+                draft.error = null;
+                break;
+
+            case actionsType.EDIT_CATEGORY_NAME_BEGIN:
+                draft.editCategoryLoading = true;
                 draft.error = null;
                 break;
 
@@ -96,6 +102,12 @@ export default (state = initialState, action) =>
                 draft.addCategoryLoading = false;
                 break;
 
+            case actionsType.EDIT_CATEGORY_NAME_SUCCESS:
+                let objCategoryIndex = state.categoryList.findIndex((category => category.id === action.payload.id));
+                draft.categoryList[objCategoryIndex].categoryName = action.payload.categoryName;
+                draft.editCategoryLoading = false;
+                break;
+
             case actionsType.CREATE_FILE_SUCCESS:
                 let newFile = action.payload.file;
                 let targetCategoryIndex = draft.categoryList.findIndex(category => category.id === newFile.category_id);
@@ -136,7 +148,12 @@ export default (state = initialState, action) =>
 
             case actionsType.ADD_CATEGORY_FAILURE:
                 draft.error =  action.payload.error;
-                draft.addCategoryLoading =  false;
+                draft.addCategoryLoading = false;
+                break;
+
+            case actionsType.EDIT_CATEGORY_NAME_FAILURE:
+                draft.error =  action.payload.error;
+                draft.editCategoryLoading =  false;
                 break;
 
             case actionsType.CREATE_FILE_FAILURE:
@@ -147,17 +164,17 @@ export default (state = initialState, action) =>
                 draft.actionFileLoading =  false;
                 break;
 
-            case actionsType.GET_CATEGORY_LIST_FAILURE:
-                draft.error =  action.payload.error;
-                draft.loading = false;
-                draft.categoryList = [];
-                break;
-
             case actionsType.GET_CATEGORY_FILE_LIST_FAILURE:
             case actionsType.GET_FILE_FAILURE:
                 draft.error =  action.payload.error;
                 draft.notFound = true;
                 draft.loading =  false;
+                break;
+
+            case actionsType.GET_CATEGORY_LIST_FAILURE:
+                draft.error =  action.payload.error;
+                draft.loading = false;
+                draft.categoryList = [];
                 break;
 
             case actionsType.GET_DELETED_FILES_FAILURE:

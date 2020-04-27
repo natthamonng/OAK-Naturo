@@ -27,6 +27,7 @@ const DeletedFileListTable = () => {
                 <td>{ file.category.categoryName }</td>
                 <td>{ file.author.username }</td>
                 <td><Moment format="DD/MM/YYYY">{ file.createdAt }</Moment></td>
+                <td><Moment format="DD/MM/YYYY">{ file.updatedAt }</Moment></td>
                 <td>
                     <div className="text-primary mr-2" style={{cursor: 'pointer'}}
                          onClick={()=> dispatch(restoreFile(file.category.id, file.id))}>
@@ -60,6 +61,7 @@ const DeletedFileListTable = () => {
                                 <th scope="col">Catégorie</th>
                                 <th scope="col">Auteur</th>
                                 <th scope="col">Créé</th>
+                                <th scope="col">Modifié</th>
                                 <th scope="col">Restaurer</th>
                             </tr>
                             </thead>

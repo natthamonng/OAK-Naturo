@@ -4,9 +4,6 @@ const fileController = require("../controllers/file.controller");
 const categoryController = require("../controllers/category.controller");
 const { passportJwt, verifyAuthority, verifyDocumentationData } = require("../middlewares");
 
-router.get('/', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
-    categoryController.getCategoriesWithTheirsFiles);
-
 router.get('/categories', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
     categoryController.getCategoryList);
 
@@ -28,8 +25,11 @@ router.post('/upload-files', [passportJwt.authenticateJwt], [verifyAuthority.isP
 router.post('/files', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
     fileController.createFile, fileController.getFileById);
 
-router.put('/categories/:categoryId/update-status', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin],
-    categoryController.updateStatusCategory);
+router.put('/categories/:categoryId/edit', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin],
+    [verifyDocumentationData.checkDuplicatedCategory], categoryController.editCategoryName);
+
+// router.put('/categories/:categoryId/update-status', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin],
+//     categoryController.updateStatusCategory);
 
 router.put('/categories/:categoryId/files/:fileId/edit', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
     fileController.getTargetFile, fileController.editFile);
