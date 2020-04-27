@@ -4,6 +4,7 @@ import * as actionsType from '../constants/ActionTypes';
 const initialState = {
     categoryList: [],
     deletedFiles: [],
+    deletedCategories: [],
     loading: false,
     addCategoryLoading: false,
     editCategoryLoading: false,
@@ -18,6 +19,7 @@ export default (state = initialState, action) =>
             case actionsType.GET_CATEGORY_LIST_BEGIN:
             case actionsType.GET_CATEGORY_FILE_LIST_BEGIN:
             case actionsType.GET_FILE_BEGIN:
+            case actionsType.GET_DELETED_CATEGORIES_BEGIN:
             case actionsType.GET_DELETED_FILES_BEGIN:
                 draft.loading = true;
                 draft.error = null;
@@ -30,6 +32,7 @@ export default (state = initialState, action) =>
 
             case actionsType.EDIT_CATEGORY_NAME_BEGIN:
             case actionsType.REMOVE_CATEGORY_BEGIN:
+            case actionsType.RESTORE_CATEGORY_BEGIN:
                 draft.editCategoryLoading = true;
                 draft.error = null;
                 break;
@@ -110,10 +113,22 @@ export default (state = initialState, action) =>
                 break;
 
             case actionsType.REMOVE_CATEGORY_SUCCESS:
-                //TODO
                 let removedCategoryId = action.payload.categoryId;
                 draft.categoryList = state.categoryList.filter(function(element) {
                     return element.id !== removedCategoryId;
+                });
+                draft.editCategoryLoading = false;
+                break;
+            
+            case actionsType.GET_DELETED_CATEGORIES_SUCCESS:
+                draft.deletedCategories = action.payload.deletedCategories;
+                draft.loading = false;
+                break;
+
+            case actionsType.RESTORE_CATEGORY_SUCCESS:
+                let restoredCategoryId = action.payload.categoryId;
+                draft.deletedCategories = state.deletedCategories.filter(function(element) {
+                    return element.id !== restoredCategoryId;
                 });
                 draft.editCategoryLoading = false;
                 break;
@@ -163,6 +178,7 @@ export default (state = initialState, action) =>
 
             case actionsType.EDIT_CATEGORY_NAME_FAILURE:
             case actionsType.REMOVE_CATEGORY_FAILURE:
+            case actionsType.RESTORE_CATEGORY_FAILURE:
                 draft.error =  action.payload.error;
                 draft.editCategoryLoading =  false;
                 break;
@@ -187,10 +203,17 @@ export default (state = initialState, action) =>
                 draft.loading = false;
                 draft.categoryList = [];
                 break;
+            
+            case actionsType.GET_DELETED_CATEGORIES_FAILURE:
+                draft.error = action.payload.error;
+                draft.deletedCategories = [];
+                draft.loading = false;
+                break;
 
             case actionsType.GET_DELETED_FILES_FAILURE:
                 draft.error = action.payload.error;
                 draft.deletedFiles = [];
                 draft.loading = false;
+                break;
         }
     })

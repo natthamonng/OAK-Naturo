@@ -31,7 +31,7 @@ const DeleteCategoryModal = ({ categoryId }) => {
                         </button>
                     </div>
                     <div className="modal-body text-danger">
-                        Supprimer cette catégorie et touts les fichiers associés ?
+                        Supprimer cette catégorie et tous les fichiers associés ?
                     </div>
                     <div className="modal-footer">
                         <button className="btn btn-secondary" type="button" data-dismiss="modal"

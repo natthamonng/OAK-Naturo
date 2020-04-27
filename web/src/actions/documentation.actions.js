@@ -84,6 +84,38 @@ export const removeCategoryFailure = error => ({
     payload: { error }
 });
 
+export const getDeletedCategoriesBegin = () => {
+    return {
+        type: actionsType.GET_DELETED_CATEGORIES_BEGIN
+    }
+};
+
+export const getDeletedCategoriesSuccess = ( deletedCategories ) => ({
+    type: actionsType.GET_DELETED_CATEGORIES_SUCCESS,
+    payload: { deletedCategories }
+});
+
+export const getDeletedCategoriesFailure = error => ({
+    type: actionsType.GET_DELETED_CATEGORIES_FAILURE,
+    payload: { error }
+});
+
+export const restoreCategoryBegin = () => {
+    return {
+        type: actionsType.RESTORE_CATEGORY_BEGIN
+    }
+};
+
+export const restoreCategorySuccess = ( categoryId ) => ({
+    type: actionsType.RESTORE_CATEGORY_SUCCESS,
+    payload: { categoryId }
+});
+
+export const restoreCategoryFailure = error => ({
+    type: actionsType.RESTORE_CATEGORY_FAILURE,
+    payload: { error }
+});
+
 export const getFileBegin = () => {
     return {
         type: actionsType.GET_FILE_BEGIN
@@ -264,6 +296,38 @@ export const removeCategoryAndItsFiles = (categoryId) => async dispatch => {
                 errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
             }
             dispatch(removeCategoryFailure(err.response.data.errors))
+        })
+};
+
+export const getDeletedCategories = () => async dispatch => {
+    dispatch(getDeletedCategoriesBegin());
+    await axios.get(`${BASE_URL}/api/documentation/deletedCategories`)
+        .then(res => {
+            dispatch(getDeletedCategoriesSuccess(res.data));
+        })
+        .catch(err => {
+            const errors = err.response.data.errors;
+            if (errors) {
+                errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+            }
+            dispatch(getDeletedCategoriesFailure(err.response.data.errors))
+        })
+};
+
+export const restoreCategoryAndItsFiles = (categoryId) => async dispatch => {
+    dispatch(restoreCategoryBegin());
+    await axios.put(`${BASE_URL}/api/documentation/categories/${categoryId}/update-status`, {status: 'published'})
+        .then(res => {
+            if (res.data.success === true) {
+                dispatch(restoreCategorySuccess(categoryId));
+            }
+        })
+        .catch(err => {
+            const errors = err.response.data.errors;
+            if (errors) {
+                errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+            }
+            dispatch(restoreCategoryFailure(err.response.data.errors))
         })
 };
 

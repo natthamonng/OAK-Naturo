@@ -39,7 +39,7 @@ exports.getFiles = (req, res) => {
     const pageSize = parseInt(req.query.pageSize) || 5;
     const offset = page * pageSize;
     const limit = pageSize;
-    const condition = req.body || 'published';
+    const condition = req.body.status || 'published';
 
     File.findAll({
         limit,
@@ -215,6 +215,6 @@ exports.updateStatusFile = (req, res) => {
 };
 
 exports.getUnpublishedFiles = (req, res, next) => {
-    req.body = 'unpublished';
+    req.body = {status: 'unpublished'};
     next();
 };

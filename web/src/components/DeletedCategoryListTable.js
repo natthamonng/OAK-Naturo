@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { restoreFile } from '../actions/documentation.actions';
+import { restoreCategoryAndItsFiles } from '../actions/documentation.actions';
 import Moment from 'react-moment';
 import Pagination from "./Pagination";
 
-const DeletedFileListTable = () => {
+const DeletedCategoryListTable = () => {
     const dispatch = useDispatch();
-    const deletedFiles = useSelector(state => state.documentation.deletedFiles);
+    const deletedCategories = useSelector(state => state.documentation.deletedCategories);
 
     // State for pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -15,22 +15,20 @@ const DeletedFileListTable = () => {
     // Get current items to show
     const indexOfLastFile = currentPage * itemsPerPage;
     const indexOfFirstFile = indexOfLastFile - itemsPerPage;
-    const currentDeletedFilesToShow = deletedFiles.slice(indexOfFirstFile, indexOfLastFile);
+    const currentDeletedCategoriesToShow = deletedCategories.slice(indexOfFirstFile, indexOfLastFile);
 
     // Change page (called when page number clicked)
     const paginate = pageNumber => setCurrentPage(pageNumber);
 
-    const deletedFileList = currentDeletedFilesToShow.map((file, index) => {
+    const deletedCategoryList = currentDeletedCategoriesToShow.map((category, index) => {
         return (
-            <tr key={`${file.id}-${index}`}>
-                <td>{ file.title }</td>
-                <td>{ file.category.categoryName }</td>
-                <td>{ file.author.username }</td>
-                <td><Moment format="DD/MM/YYYY">{ file.createdAt }</Moment></td>
-                <td><Moment format="DD/MM/YYYY">{ file.updatedAt }</Moment></td>
+            <tr key={`${category.id}-${index}`}>
+                <td>{ category.categoryName }</td>
+                <td><Moment format="DD/MM/YYYY">{ category.createdAt }</Moment></td>
+                <td><Moment format="DD/MM/YYYY">{ category.updatedAt }</Moment></td>
                 <td>
                     <div className="text-primary mr-2" style={{cursor: 'pointer'}}
-                         onClick={()=> dispatch(restoreFile(file.category.id, file.id))}>
+                         onClick={()=> dispatch(restoreCategoryAndItsFiles(category.id))}>
                         <i className="nav-icon i-Inbox-Out font-weight-bold"></i>
                     </div>
                 </td>
@@ -38,11 +36,11 @@ const DeletedFileListTable = () => {
         )
     });
 
-    if (deletedFileList.length === 0) {
+    if (deletedCategoryList.length === 0) {
         return (
             <div className="d-flex align-items-center justify-content-center" style={{minHeight: '10vh'}}>
                 <h1 className="text-mute">
-                    <i className="i-Inbox-Empty"></i>{' '} Il n'y a pas de fichiers supprimés.
+                    <i className="i-Inbox-Empty"></i>{' '} Il n'y a pas de catégories supprimées.
                 </h1>
             </div>
         )
@@ -50,16 +48,14 @@ const DeletedFileListTable = () => {
         return (
             <div className="card mb-4">
                 <div className="card-header d-flex align-items-center">
-                    <h3 className="w-50 float-left card-title m-0">Liste des fichiers supprimés</h3>
+                    <h3 className="w-50 float-left card-title m-0">Liste des catégories supprimées</h3>
                 </div>
                 <div className="card-body">
                     <div className="table-responsive">
                         <table className="table dataTable-collapse text-center" id="category_table">
                             <thead>
                             <tr>
-                                <th scope="col">Nom de fichier</th>
-                                <th scope="col">Catégorie</th>
-                                <th scope="col">Auteur</th>
+                                <th scope="col">Nom de catégorie</th>
                                 <th scope="col">Créé</th>
                                 <th scope="col">Modifié</th>
                                 <th scope="col">Restaurer</th>
@@ -67,17 +63,17 @@ const DeletedFileListTable = () => {
                             </thead>
                             <tbody>
 
-                            { deletedFileList }
+                            { deletedCategoryList }
 
                             </tbody>
                         </table>
                     </div>
-                    <small className="text-muted">* Les fichiers associés aux catégories supprimées n'apparaissent pas ici.</small>
+                    <small className="text-muted">* La reatauration des catégories supprimées va récupérer tous les fichiers associés.</small>
                 </div>
-                { deletedFiles.length > itemsPerPage &&
+                { deletedCategories.length > itemsPerPage &&
                 <Pagination
                     itemsPerPage={itemsPerPage}
-                    total={deletedFiles.length}
+                    total={deletedCategories.length}
                     paginate={paginate}
                     currentPage={currentPage}
                 />
@@ -87,4 +83,4 @@ const DeletedFileListTable = () => {
     }
 };
 
-export default DeletedFileListTable;
+export default DeletedCategoryListTable;

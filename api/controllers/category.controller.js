@@ -4,9 +4,11 @@ const Category = db.categories;
 const User = db.users;
 
 exports.getCategoryList = (req, res) => {
+    const condition = req.body.status || 'published';
+        
     Category.findAll({
         where: {
-            status: 'published'
+            status: condition
         },
         order: [
             ['categoryName', 'ASC']
@@ -148,7 +150,6 @@ exports.updateStatusCategory = (req, res, next) => {
         {status: req.body.status} ,
         {where: {id: req.params.categoryId}}
     ).then(() => {
-        // res.status(200).json({success: true})
         next();
     }).catch(err => {
         console.error(err);
@@ -158,5 +159,9 @@ exports.updateStatusCategory = (req, res, next) => {
     });
 };
 
+exports.getUnpublishedCategories = (req, res, next) => {
+    req.body = {status: 'unpublished'};
+    next();
+};
 
 

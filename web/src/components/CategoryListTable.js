@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import Pagination from './Pagination';
 import EditCategoryNameModal from './EditCategoryNameModal';
 import DeleteCategoryModal from './DeleteCategoryModal';
+import Moment from 'react-moment';
 
 const CategoryListTable = () => {
     const categories = useSelector(state => state.documentation.categoryList);
@@ -26,11 +27,14 @@ const CategoryListTable = () => {
                 <td>
                     { category.categoryName }
                 </td>
+                <td><Moment format="DD/MM/YYYY">{ category.createdAt }</Moment></td>
+                <td><Moment format="DD/MM/YYYY">{ category.updatedAt }</Moment></td>
                 <td>
-                    <EditCategoryNameModal category={category}/>
-                </td>
-                <td>
-                    <DeleteCategoryModal categoryId={category.id} />
+                    <div className="d-flex justify-content-center">
+                        <EditCategoryNameModal category={category}/>
+                        <div className="mx-1"></div>
+                        <DeleteCategoryModal categoryId={category.id} />
+                    </div>
                 </td>
             </tr>
         )
@@ -47,8 +51,10 @@ const CategoryListTable = () => {
                         <thead>
                         <tr>
                             <th scope="col">Nom de catégorie</th>
-                            <th scope="col">Modifier</th>
-                            <th scope="col">Supprimer</th>
+                            <th scope="col">Créé</th>
+                            <th scope="col">Modifié</th>
+                            <th scope="col">Actions</th>
+                            {/* <th scope="col">Supprimer</th> */}
                         </tr>
                         </thead>
                         <tbody>

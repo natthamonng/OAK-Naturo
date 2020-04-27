@@ -13,6 +13,9 @@ router.get('/categories/:categoryId', [passportJwt.authenticateJwt], [verifyAuth
 router.get('/categories/:categoryId/files/:fileId', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
     categoryController.getCategoryFileById);
 
+router.get('/deletedCategories', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin],
+    categoryController.getUnpublishedCategories, categoryController.getCategoryList);
+
 router.get('/deletedFiles', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin],
     fileController.getUnpublishedFiles, fileController.getFiles);
 
