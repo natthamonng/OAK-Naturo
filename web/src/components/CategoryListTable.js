@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import Pagination from './Pagination';
 import EditCategoryNameModal from './EditCategoryNameModal';
+import DeleteCategoryModal from './DeleteCategoryModal';
 
 const CategoryListTable = () => {
     const categories = useSelector(state => state.documentation.categoryList);
@@ -29,9 +30,7 @@ const CategoryListTable = () => {
                     <EditCategoryNameModal category={category}/>
                 </td>
                 <td>
-                    <a className="text-danger mr-2" href="#">
-                        <i className="nav-icon i-Close-Window font-weight-bold"></i>
-                    </a>
+                    <DeleteCategoryModal categoryId={category.id} />
                 </td>
             </tr>
         )
@@ -49,7 +48,7 @@ const CategoryListTable = () => {
                         <tr>
                             <th scope="col">Nom de catégorie</th>
                             <th scope="col">Modifier</th>
-                            <th scope="col">Supprimer(WIP)</th>
+                            <th scope="col">Supprimer</th>
                         </tr>
                         </thead>
                         <tbody>

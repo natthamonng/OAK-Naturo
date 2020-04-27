@@ -28,8 +28,8 @@ router.post('/files', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerO
 router.put('/categories/:categoryId/edit', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin],
     [verifyDocumentationData.checkDuplicatedCategory], categoryController.editCategoryName);
 
-// router.put('/categories/:categoryId/update-status', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin],
-//     categoryController.updateStatusCategory);
+router.put('/categories/:categoryId/update-status', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin],
+    categoryController.updateStatusCategory, fileController.updateStatusFile);
 
 router.put('/categories/:categoryId/files/:fileId/edit', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
     fileController.getTargetFile, fileController.editFile);

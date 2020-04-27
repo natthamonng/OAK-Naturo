@@ -26,12 +26,12 @@ const EditCategoryNameModal = ({ category }) => {
             <i className="i-Pen-3" type="button" data-toggle="modal" data-target="#editCategoryName"
                onClick={()=>{setShowModal(true)}} style={{cursor: 'pointer'}}></i>
 
-            <div className={`modal fade ${showModal ? 'show' : ''}`} id="editCategoryName" tabIndex="-1" role="dialog"
+            <div className={`modal fade ${showModal ? 'show' : ''}`} tabIndex="-1" role="dialog"
                  aria-labelledby="editCategoryName" aria-hidden={`${!showModal}`} style={style}>
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="verifyModalContent2_title">Modifier le nom d'une catégorie</h5>
+                            <h5 className="modal-title" id="editCategoryName">Modifier le nom d'une catégorie</h5>
                             <button onClick={()=>{setShowModal(false)}} className="close" type="button"
                                     data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">×</span>

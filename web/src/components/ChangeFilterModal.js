@@ -22,15 +22,15 @@ const ChangeFilterModal = ({post, changeFilterPost }) => {
 
     return (
         <>
-        <i className="i-Pen-3" type="button" data-toggle="modal" data-target="#changeFilter" data-weather="@getbootstrap"
+        <i className="i-Pen-3" type="button" data-toggle="modal" data-target="#changeFilter"
            onClick={()=>{setShowModal(true)}} style={{cursor: 'pointer'}}></i>
 
-        <div className={`modal fade ${showModal ? 'show' : ''}`} id="changeFilter" tabIndex="-1" role="dialog"
+        <div className={`modal fade ${showModal ? 'show' : ''}`} tabIndex="-1" role="dialog"
              aria-labelledby="changeFilter" aria-hidden={`${!showModal}`} style={style}>
             <div className="modal-dialog" role="document">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title" id="verifyModalContent2_title">Changer le filtre</h5>
+                        <h5 className="modal-title" id="changeFilter">Changer le filtre</h5>
                         <button onClick={()=>{setShowModal(false)}} className="close" type="button"
                                 data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>

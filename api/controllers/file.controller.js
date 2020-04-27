@@ -53,7 +53,8 @@ exports.getFiles = (req, res) => {
             {
                 model: Category,
                 as: 'category',
-                attributes: ['id', 'categoryName']
+                attributes: ['id', 'categoryName'],
+                where: {'status': 'published'}
             },
             {
                 model: User,
@@ -194,9 +195,15 @@ exports.editFile = (req, res) => {
 };
 
 exports.updateStatusFile = (req, res) => {
+    let condition;
+    if (req.params.fileId){
+        condition = {id: req.params.fileId}
+    } else if (req.params.categoryId){
+        condition = {category_id: req.params.categoryId}
+    }
     File.update(
-        {status: req.body.status} ,
-        {where: {id: req.params.fileId}}
+        {status: req.body.status},
+        {where: condition}
     ).then(() => {
         res.status(200).json({success: true})
     }).catch(err => {

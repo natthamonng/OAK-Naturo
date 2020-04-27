@@ -3,6 +3,12 @@ module.exports = (sequelize, DataTypes) => {
   const Category = sequelize.define('Category', {
     categoryName: {
       type: DataTypes.STRING
+    },
+    status: {
+      type: DataTypes.ENUM,
+      values: ['published', 'unpublished'],
+      defaultValue: 'published',
+      allowNull: false,
     }
   }, {});
 

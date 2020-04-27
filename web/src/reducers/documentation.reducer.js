@@ -29,6 +29,7 @@ export default (state = initialState, action) =>
                 break;
 
             case actionsType.EDIT_CATEGORY_NAME_BEGIN:
+            case actionsType.REMOVE_CATEGORY_BEGIN:
                 draft.editCategoryLoading = true;
                 draft.error = null;
                 break;
@@ -108,6 +109,15 @@ export default (state = initialState, action) =>
                 draft.editCategoryLoading = false;
                 break;
 
+            case actionsType.REMOVE_CATEGORY_SUCCESS:
+                //TODO
+                let removedCategoryId = action.payload.categoryId;
+                draft.categoryList = state.categoryList.filter(function(element) {
+                    return element.id !== removedCategoryId;
+                });
+                draft.editCategoryLoading = false;
+                break;
+
             case actionsType.CREATE_FILE_SUCCESS:
                 let newFile = action.payload.file;
                 let targetCategoryIndex = draft.categoryList.findIndex(category => category.id === newFile.category_id);
@@ -152,6 +162,7 @@ export default (state = initialState, action) =>
                 break;
 
             case actionsType.EDIT_CATEGORY_NAME_FAILURE:
+            case actionsType.REMOVE_CATEGORY_FAILURE:
                 draft.error =  action.payload.error;
                 draft.editCategoryLoading =  false;
                 break;

@@ -68,6 +68,22 @@ export const editCategoryNameFailure = error => ({
     payload: { error }
 });
 
+export const removeCategoryBegin = () => {
+    return {
+        type: actionsType.REMOVE_CATEGORY_BEGIN
+    }
+};
+
+export const removeCategorySuccess = ( categoryId ) => ({
+    type: actionsType.REMOVE_CATEGORY_SUCCESS,
+    payload: { categoryId }
+});
+
+export const removeCategoryFailure = error => ({
+    type: actionsType.REMOVE_CATEGORY_FAILURE,
+    payload: { error }
+});
+
 export const getFileBegin = () => {
     return {
         type: actionsType.GET_FILE_BEGIN
@@ -231,6 +247,23 @@ export const editCategoryName = (id, categoryName) => async dispatch => {
                 errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
             }
             dispatch(editCategoryNameFailure(err.response.data.errors))
+        })
+};
+
+export const removeCategoryAndItsFiles = (categoryId) => async dispatch => {
+    dispatch(removeCategoryBegin());
+    await axios.put(`${BASE_URL}/api/documentation/categories/${categoryId}/update-status`, {status: 'unpublished'})
+        .then(res => {
+            if (res.data.success === true) {
+                dispatch(removeCategorySuccess(categoryId));
+            }
+        })
+        .catch(err => {
+            const errors = err.response.data.errors;
+            if (errors) {
+                errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+            }
+            dispatch(removeCategoryFailure(err.response.data.errors))
         })
 };
 

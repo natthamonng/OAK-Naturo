@@ -11,9 +11,12 @@ const ManageCategory = () => {
     const categoryList = useSelector(state => state.documentation.categoryList);
     const loading = useSelector(state => state.documentation.loading);
     const dispatch = useDispatch();
-    if (categoryList.length <= 1) {
-        dispatch(getCategoryList())
-    }
+    
+    useEffect(() => {
+        if (categoryList.length <= 1) {
+            dispatch(getCategoryList())
+        }
+    }, []);
 
     return (
         <div className="main-content">

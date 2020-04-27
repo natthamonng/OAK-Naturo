@@ -5,6 +5,9 @@ const User = db.users;
 
 exports.getCategoryList = (req, res) => {
     Category.findAll({
+        where: {
+            status: 'published'
+        },
         order: [
             ['categoryName', 'ASC']
         ]
@@ -15,8 +18,8 @@ exports.getCategoryList = (req, res) => {
         .catch(err => {
             console.log(err);
             res.status(500).json({ errors: [
-                    { message: 'Une erreur s\'est produite lors de la récupération de la liste des catégories.' }
-                ]})
+                { message: 'Une erreur s\'est produite lors de la récupération de la liste des catégories.' }
+            ]})
         })
 };
 
@@ -60,8 +63,8 @@ exports.getCategoryFileListById = (req, res) => {
         .catch(err => {
             console.log(err);
             res.status(500).json({ errors: [
-                    { message: 'Une erreur s\'est produite lors de la récupération d\'une catégorie.' }
-                ]})
+                { message: 'Une erreur s\'est produite lors de la récupération d\'une catégorie.' }
+            ]})
         })
 };
 
@@ -70,7 +73,8 @@ exports.getCategoryFileById = (req, res) => {
     const categoryId = req.params.categoryId;
     Category.findOne({
         where: {
-            id: categoryId
+            id: categoryId,
+            status: 'published'
         },
         include: [
             {
@@ -95,8 +99,8 @@ exports.getCategoryFileById = (req, res) => {
         .then(result => {
             if(result.files.length === 0) {
                 res.status(404).json({ errors: [
-                        { message: 'Fichier introuvable.' }
-                    ]});
+                    { message: 'Fichier introuvable.' }
+                ]});
             } else {
                 res.status(200).json(result);
             }
@@ -104,8 +108,8 @@ exports.getCategoryFileById = (req, res) => {
         .catch(err => {
             console.log(err);
             res.status(500).json({ errors: [
-                    { message: 'Une erreur s\'est produite lors de la récupération d\'une catégorie.' }
-                ]})
+                { message: 'Une erreur s\'est produite lors de la récupération d\'une catégorie.' }
+            ]})
         })
 };
 
@@ -136,23 +140,23 @@ exports.editCategoryName = (req, res) => {
             errors: [{ message: 'Une erreur s\'est produite lors de la modification d\'une catégorie.' }]
         });
     });
-
 };
 
-
-// exports.updateStatusCategory = (req, res) => {
-//     Category.update(
-//         {status: req.query.status} ,
-//         {where: {id: req.params.categoryId}}
-//     ).then(() => {
-//         res.status(200).json({success: true})
-//     }).catch(err => {
-//         console.error(err);
-//         res.status(500).json({
-//             errors: [{ message: 'Une erreur s\'est produite lors de la modification d\'une catégorie.' }]
-//         });
-//     });
-// };
+exports.updateStatusCategory = (req, res, next) => {
+    console.log(req.params.categoryId);
+    Category.update(
+        {status: req.body.status} ,
+        {where: {id: req.params.categoryId}}
+    ).then(() => {
+        // res.status(200).json({success: true})
+        next();
+    }).catch(err => {
+        console.error(err);
+        res.status(500).json({
+            errors: [{ message: 'Une erreur s\'est produite lors de la modification d\'une catégorie.' }]
+        });
+    });
+};
 
 
 

@@ -7,18 +7,20 @@ const DocumentButtonMenu = () => {
 
     return (
         <div className="row">
-            <div className="col-12 col-sm-6">
+            <div className="col-12 col-xl-6">
                 <div className="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
                     <NavLink to="/documentation/create-file" className="card-body text-center">
                         <i className="i-File-Edit"></i>
                         <div className="ml-4">
                             <p className="text-primary text-24 line-height-1 mb-2">Créer un fichier</p>
+                            <p className="text-muted mt-2 mb-0">Créer et enregistrer un nouveau fichier</p>
+
                         </div>
                     </NavLink>
                 </div>
             </div>
             { role === "admin" &&
-            <div className="col-12 col-sm-6">
+            <div className="col-12 col-xl-6">
                 <div className="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
                     <NavLink to="/documentation/manage-category" className="card-body text-center">
                         <i className="i-Folder-Settings"></i>
