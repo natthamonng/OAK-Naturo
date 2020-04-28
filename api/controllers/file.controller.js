@@ -1,8 +1,11 @@
-const multer = require("multer");
-const sharp = require("sharp");
+const multer = require('multer');
+const sharp = require('sharp');
 const fs = require('fs');
-const path = require("path");
+const path = require('path');
 require('dotenv').config();
+
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 const db = require('../models');
 const File = db.files;
 const Category = db.categories;
@@ -16,7 +19,6 @@ let storage = multer.diskStorage({
     filename: (req, file, cb) => {
         cb(null, `${Date.now()}_${file.originalname}`);
     },
-    //TODO fileResize
 });
 
 const fileFilter = (req, file, cb) => {
@@ -80,8 +82,8 @@ exports.getFiles = (req, res) => {
         .catch(err => {
             console.log(err);
             res.status(500).json({ errors: [
-                    { message: 'Une erreur s\'est produite lors de la recupération des fichiers.' }
-                ]})
+                { message: 'Une erreur s\'est produite lors de la recupération des fichiers.' }
+            ]})
         })
 };
 
@@ -96,12 +98,12 @@ exports.getFileById = (req, res) => {
             {
                 model: Category,
                 as: 'category',
-                attributes: ['categoryName']
+                attributes: ['id', 'categoryName']
             },
             {
                 model: User,
                 as: 'author',
-                attributes: ['username']
+                attributes: ['id', 'username']
             }
         ]
     })
@@ -111,9 +113,57 @@ exports.getFileById = (req, res) => {
         .catch(err => {
             console.log(err);
             res.status(500).json({ errors: [
-                    { message: 'Une erreur s\'est produite lors de la recupération d\'un fichier.' }
-                ]})
+                { message: 'Une erreur s\'est produite lors de la recupération d\'un fichier.' }
+            ]})
         })
+};
+
+exports.getFilesByQuery = (req, res) => {
+    const keyword = req.query.keyword;
+    console.log('KEYWORD: ', keyword);
+    File.findAndCountAll({
+        where: {
+            status: 'published',
+            [Op.or]: [
+                {
+                    title: {
+                        [Op.like]: `%${keyword}%`
+                    }
+                },
+                {
+                    content: {
+                        [Op.like]: `%${keyword}%`
+                    }
+                }
+            ],
+        },
+        attributes: ['id', 'title', 'category_id', 'createdAt', 'updatedAt'],
+        order: [
+            ['updatedAt', 'DESC']
+        ],
+        include: [
+            {
+                model: Category,
+                as: 'category',
+                attributes: ['categoryName']
+            },
+            {
+                model: User,
+                as: 'author',
+                attributes: ['username']
+            }
+        ]
+    }).then(result => {
+        if (result.count === 0){
+            res.status(404).json({ errors: [{ message: 'Aucun résultat trouvé.' }]
+            })
+        } else {
+            res.status(200).json(result)
+        }
+    }).catch(err => {
+        res.status(404).json({ errors: [{ message: 'Aucun résultat trouvé.' }]
+        })
+    })
 };
 
 exports.getFilesByCategory = (req, res) => {
@@ -151,8 +201,8 @@ exports.getFilesByCategory = (req, res) => {
         .catch(err => {
             console.log(err);
             res.status(500).json({ errors: [
-                    { message: 'Une erreur s\'est produite lors de la recupération des fichiers.' }
-                ]})
+                { message: 'Une erreur s\'est produite lors de la recupération des fichiers.' }
+            ]})
         })
 };
 

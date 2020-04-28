@@ -4,6 +4,9 @@ const fileController = require("../controllers/file.controller");
 const categoryController = require("../controllers/category.controller");
 const { passportJwt, verifyAuthority, verifyDocumentationData } = require("../middlewares");
 
+router.get('/search', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
+    fileController.getFilesByQuery);
+
 router.get('/categories', [passportJwt.authenticateJwt], [verifyAuthority.isPartnerOrAdmin],
     categoryController.getCategoryList);
 

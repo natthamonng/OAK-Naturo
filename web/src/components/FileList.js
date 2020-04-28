@@ -33,14 +33,14 @@ const FileList = ({files}) => {
                 <div className="d-flex">
                     <div className="flex-column">
                         <div>
-                            <small className="text-small"><strong>Auteur:</strong> {file.author.username}</small>
+                            <small className="text-small"><span className="font-weight-bold">Auteur:</span> {file.author.username}</small>
                         </div>
                         <div>
-                            <small className="text-small"><strong>Créé:</strong> {' '}
+                            <small className="text-small"><span className="font-weight-bold">Créé:</span> {' '}
                                 <Moment format="DD/MM/YYYY">{file.createdAt}</Moment>
                             </small>
                             {' '}
-                            <small className="text-small"><strong>Modifié:</strong> {' '}
+                            <small className="text-small"><span className="font-weight-bold">Modifié:</span> {' '}
                                 <Moment format="DD/MM/YYYY">{file.updatedAt}</Moment>
                             </small>
                         </div>

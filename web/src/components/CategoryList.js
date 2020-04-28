@@ -53,7 +53,7 @@ const CategoryList = () => {
                 }
 
                 { role === "admin" &&
-                <Link to="/documentation/add-category" className="text-small text-muted font-italic float-right">
+                <Link to="/documentation/manage-category" className="text-small text-muted font-italic float-right">
                     <i className="i-Folder-Add-"></i> Ajouter une catégorie
                 </Link>
                 }

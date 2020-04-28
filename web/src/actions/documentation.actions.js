@@ -212,6 +212,8 @@ export const restoreFileFailure = error => ({
     payload: { error }
 });
 
+let error = 'Une erreur s\'est produite.';
+
 export const getCategoryList = () => async dispatch => {
     dispatch(getCategoryListBegin());
     await axios.get(`${BASE_URL}/api/documentation/categories`)
@@ -219,8 +221,10 @@ export const getCategoryList = () => async dispatch => {
             dispatch(getCategoryListSuccess(res.data))
         })
         .catch( err => {
-            console.log(err.response.data.errors);
-            dispatch(getCategoryListFailure(err.response.data.errors))
+            if (err.response.data.errors) {
+                error = err.response.data.errors
+            }
+            dispatch(getCategoryListFailure(error))
         })
 };
 

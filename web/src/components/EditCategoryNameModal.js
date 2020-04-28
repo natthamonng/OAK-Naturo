@@ -26,7 +26,7 @@ const EditCategoryNameModal = ({ category }) => {
             <i className="i-Pen-3" type="button" data-toggle="modal" data-target="#editCategoryName"
                onClick={()=>{setShowModal(true)}} style={{cursor: 'pointer'}}></i>
 
-            <div className={`modal fade ${showModal ? 'show' : ''}`} tabIndex="-1" role="dialog"
+            <div className={`modal fade ml-3 ${showModal ? 'show' : ''}`} tabIndex="-1" role="dialog"
                  aria-labelledby="editCategoryName" aria-hidden={`${!showModal}`} style={style}>
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">

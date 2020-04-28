@@ -39,13 +39,7 @@ const DeletedFileListTable = () => {
     });
 
     if (deletedFileList.length === 0) {
-        return (
-            <div className="d-flex align-items-center justify-content-center" style={{minHeight: '10vh'}}>
-                <h1 className="text-mute">
-                    <i className="i-Inbox-Empty"></i>{' '} Il n'y a pas de fichiers supprimés.
-                </h1>
-            </div>
-        )
+        return null;
     } else {
         return (
             <div className="card mb-4">

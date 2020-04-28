@@ -17,7 +17,7 @@ const DeleteCategoryModal = ({ categoryId }) => {
             <i className="nav-icon i-Close-Window font-weight-bold" data-toggle="modal" data-target="#removeCategory"></i>
         </div>
         
-        <div className={`modal fade bd-example-modal-sm ${showModal ? 'show' : ''}`} tabIndex="-1" role="dialog"
+        <div className={`modal fade bd-example-modal-sm ml-3 ${showModal ? 'show' : ''}`} tabIndex="-1" role="dialog"
              aria-labelledby="removeCategory" aria-hidden={`${!showModal}`} style={style}>
             <div className="modal-dialog modal-sm">
                 <div className="modal-content">

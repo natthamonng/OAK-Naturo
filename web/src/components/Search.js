@@ -1,0 +1,64 @@
+import React, { useState } from 'react';
+import useFileSearch from '../utils/useFileSearch';
+import Logo from '../assets/images/acorn.png';
+import SearchResultList from "./SearchResultList";
+
+const Search = () => {
+    const [searchModeOpen, setSearchModeOpen] = useState(false);
+    const [query, setQuery] = useState('');
+
+    const {
+        files,
+        total,
+        loading,
+        error
+    } = useFileSearch(query);
+
+    const handleQueryChange = (e) => {
+        setQuery(e.target.value);
+    };
+
+    if(total > 0) {
+        console.log(files);
+    }
+
+    return (
+        <>
+        <div className="input-group mb-3">
+            <input className="form-control" type="text" placeholder="Rechercher..." aria-label="searchBar"
+                   aria-describedby="searchBar" onFocus={()=> setSearchModeOpen(true)} />
+            <div className="input-group-append">
+                <span className="input-group-text bg-transparent" id="searchBar">
+                    <i className="i-Magnifi-Glass1"></i>
+                </span>
+            </div>
+        </div>
+
+        <div className={`search-ui ${searchModeOpen? 'open' : ''}`}>
+            <div className="search-header">
+                <img src={Logo} alt="logo" className="logo"/>
+                <button className="search-close btn btn-icon bg-transparent float-right mt-2"
+                        onClick={()=> setSearchModeOpen(false)}>
+                    <i className="i-Close-Window text-22 text-muted"></i>
+                </button>
+            </div>
+            <input type="text"
+                   placeholder="Rechercher"
+                   className="search-input"
+                   autoFocus={true}
+                   value={query}
+                   onChange={e => {handleQueryChange(e)}}
+            />
+
+            <SearchResultList files={files} />
+
+            <h5 className="text-muted">{error && 'Aucun résultat trouvé.'}</h5>
+            <h5 className="text-muted">{loading && 'loading...'}</h5>
+
+        </div>
+
+        </>
+    )
+};
+
+export default Search;

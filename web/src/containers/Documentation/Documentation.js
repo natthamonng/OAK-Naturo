@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getCategoryList } from '../../actions/documentation.actions';
 import BreadCrumb from '../../components/Breadcrumb';
-import SearchBar from '../../components/SearchBar';
+import Search from '../../components/Search';
 import DocumentCardMenu from '../../components/DocumentCardMenu';
 import RecentFileList from '../../components/RecentFileList';
 import DocumentButtonMenu from '../../components/DocumentButtonMenu';
@@ -24,7 +24,7 @@ const Documentation = () => {
                     <BreadCrumb mainName={"Documentation"} mainPath={"/documentation"} pageName={"Tous les documents"} />
                 </div>
                 <div className="col-md-4">
-                    <SearchBar/>
+                    <Search/>
                 </div>
             </div>
             <div className="separator-breadcrumb border-top"></div>

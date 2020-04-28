@@ -13,9 +13,9 @@ const DeletedCategoryListTable = () => {
     const itemsPerPage = 10;
 
     // Get current items to show
-    const indexOfLastFile = currentPage * itemsPerPage;
-    const indexOfFirstFile = indexOfLastFile - itemsPerPage;
-    const currentDeletedCategoriesToShow = deletedCategories.slice(indexOfFirstFile, indexOfLastFile);
+    const indexOfLastCategory = currentPage * itemsPerPage;
+    const indexOfFirstCategory = indexOfLastCategory - itemsPerPage;
+    const currentDeletedCategoriesToShow = deletedCategories.slice(indexOfFirstCategory, indexOfLastCategory);
 
     // Change page (called when page number clicked)
     const paginate = pageNumber => setCurrentPage(pageNumber);
@@ -37,13 +37,7 @@ const DeletedCategoryListTable = () => {
     });
 
     if (deletedCategoryList.length === 0) {
-        return (
-            <div className="d-flex align-items-center justify-content-center" style={{minHeight: '10vh'}}>
-                <h1 className="text-mute">
-                    <i className="i-Inbox-Empty"></i>{' '} Il n'y a pas de catégories supprimées.
-                </h1>
-            </div>
-        )
+        return null;
     } else {
         return (
             <div className="card mb-4">
