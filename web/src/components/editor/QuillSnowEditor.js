@@ -4,6 +4,7 @@ import 'react-quill/dist/quill.snow.css';
 import '../../assets/scss/quill-editor.scss';
 
 import axios from 'axios';
+import {REMOVE_ALERT} from "../../constants/ActionTypes";
 const __ISMSIE__ = !!navigator.userAgent.match(/Trident/i);
 const BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -75,6 +76,7 @@ class QuillSnowEditor extends React.Component {
             defaultValue: props.defaultValue ? props.defaultValue : "",
             editorHtml: __ISMSIE__ ? "<p>&nbsp;</p>" : "",
             files: [],
+            error: null
         };
 
         this.reactQuillRef = null;
@@ -136,7 +138,8 @@ class QuillSnowEditor extends React.Component {
 
                         // Upload files to node-server, then use response data in attribute src
                         // Go to the image blot and create the image, take src and alt from the valuation and put it in editorHTML.
-                        quill.insertEmbed(position, "image", { src: `${BASE_URL}/${response.data.url}`, alt: response.data.fileName });
+                        quill.insertEmbed(position, "image", { src: `${BASE_URL}/${response.data.url}`,
+                            alt: response.data.fileName });
                         quill.setSelection(position + 1);
 
                         if (this._isMounted) {
@@ -147,7 +150,8 @@ class QuillSnowEditor extends React.Component {
                     }
                 })
                 .catch(err => {
-                    console.log('Failed to upload file with error: ', err)
+                    this.setState({error: err.response.data.err});
+                    setTimeout(() => this.setState({error: null}), 3000);
                 })
         }
     };
@@ -158,15 +162,14 @@ class QuillSnowEditor extends React.Component {
 
         if (e.currentTarget && e.currentTarget.files && e.currentTarget.files.length > 0) {
 
-                //TODO alert when file to large
                 let files = e.target.files;
-                let size = 30; //MB
+                let size = 128; //MB
                 let err = "";
                 for( let i = 0; i<files.length; i++ ) {
                     if (files[i].size/1024/1024 > size) {
-                        err += files[i].type + 'is too large, please pick a smaller file\n';
-                        // alert('La taille de votre vidéo est trop grande.');
-                        console.log(err);
+                        err += 'La taille de votre vidéo est trop grande (Maximum 30MB).';
+                        this.setState({error: err});
+                        setTimeout(() => this.setState({error: null}), 3000);
                         return;
                     }
                 }
@@ -190,7 +193,8 @@ class QuillSnowEditor extends React.Component {
 
                         let range = quill.getSelection();
                         let position = range ? range.index : 0;
-                        quill.insertEmbed(position, "video", { src: `${BASE_URL}/${response.data.url}`, title: response.data.fileName });
+                        quill.insertEmbed(position, "video", { src: `${BASE_URL}/${response.data.url}`,
+                            title: response.data.fileName });
                         quill.setSelection(position + 1);
 
                         if (this._isMounted) {
@@ -201,7 +205,8 @@ class QuillSnowEditor extends React.Component {
                     }
                 })
                 .catch(err => {
-                    console.log('Failed to upload file with error: ', err)
+                    this.setState({error: err.response.data.err});
+                    setTimeout(() => this.setState({error: null}), 3000);
                 })
         }
     };
@@ -209,6 +214,8 @@ class QuillSnowEditor extends React.Component {
     render() {
         return (
             <div>
+                <p className="text-danger">{this.state.error}</p>
+
                 <div id="toolbar">
                     <select className="ql-header" defaultValue={""} onChange={e => e.persist()}>
                         <option value="" disabled>Header</option>
@@ -261,6 +268,7 @@ class QuillSnowEditor extends React.Component {
 
                     <button className="ql-clean" />
                 </div>
+
                 <ReactQuill
                     className="editor-edit"
                     ref={(el) => { this.reactQuillRef = el }}
@@ -272,8 +280,9 @@ class QuillSnowEditor extends React.Component {
                     // value={this.state.editorHtml}
                     placeholder={this.props.placeholder}
                 />
-                <input type="file" accept="image/*" ref={this.inputOpenImageRef} style={{ display: "none" }} onChange={this.insertImage} />
-                <input type="file" accept="video/*" ref={this.inputOpenVideoRef} style={{ display: "none" }} onChange={this.insertVideo} />
+
+                <input type="file" accept="image/png, image/jpeg" ref={this.inputOpenImageRef} style={{ display: "none" }} onChange={this.insertImage} />
+                <input type="file" accept="video/mp4" ref={this.inputOpenVideoRef} style={{ display: "none" }} onChange={this.insertVideo} />
             </div>
         )
     }

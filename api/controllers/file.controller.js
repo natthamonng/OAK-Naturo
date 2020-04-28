@@ -1,4 +1,7 @@
 const multer = require("multer");
+const sharp = require("sharp");
+const fs = require('fs');
+const path = require("path");
 require('dotenv').config();
 const db = require('../models');
 const File = db.files;
@@ -13,24 +16,32 @@ let storage = multer.diskStorage({
     filename: (req, file, cb) => {
         cb(null, `${Date.now()}_${file.originalname}`);
     },
-    //TODO fileFilter & fieResize
-    fileFilter: (req, file, cb) => {
-        const ext = path.extname(file.originalname);
-        if (ext !== '.jpg' && ext !== '.png' && ext !== '.mp4') {
-            return cb(res.status(400).end('only jpg, png, mp4 is allowed'), false);
-        }
-        cb(null, true)
-    }
+    //TODO fileResize
 });
 
-const upload = multer({ storage: storage }).single("file");
+const fileFilter = (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    if (ext !== '.jpg' && ext !== '.png' && ext !== '.mp4') {
+        return cb(('Ce type de fichier n’est pas pris en charge. seuls jpg, png, mp4 sont autorisés.'), false);
+    } else {
+        cb(null, true)
+    }
+};
+
+const upload = multer({ storage: storage, fileFilter: fileFilter }).single("file");
 
 exports.uploadFiles = (req, res) => {
     upload(req, res, err => {
         if (err) {
-            return res.json({ success: false, err });
+            return res.status(400).json({ success: false, err });
+        } else {
+            const imagePath = fs.readFileSync(req.file.path);
+            sharp(imagePath).resize({ width: 1200 }).toBuffer()
+                .then(buf => {
+                    fs.writeFileSync(req.file.path, buf);
+                });
+            return res.status(200).json({ success: true, url: res.req.file.path, fileName: res.req.file.filename });
         }
-        return res.json({ success: true, url: res.req.file.path, fileName: res.req.file.filename });
     });
 };
 
