@@ -3,6 +3,13 @@ import Moment from 'react-moment';
 import Pagination from './Pagination';
 
 const UserListTable = ({ users }) => {
+    const [filter, setFilter] = useState('');
+
+    // Filtered items
+    const filteredUsers = users.filter(user => (user.username).toLowerCase().includes(filter));
+    const filteredEmails = users.filter(user => (user.email).toLowerCase().includes(filter));
+    const uniqueSet = new Set([...filteredUsers, ...filteredEmails]);
+
     // State for pagination
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
@@ -10,7 +17,7 @@ const UserListTable = ({ users }) => {
     // Get current items to show
     const indexOfLastUser = currentPage * itemsPerPage;
     const indexOfFirstUser = indexOfLastUser - itemsPerPage;
-    const currentUsersToShow = users.slice(indexOfFirstUser, indexOfLastUser);
+    const currentUsersToShow = [...uniqueSet].slice(indexOfFirstUser, indexOfLastUser);
 
     // Change page (called when page number clicked)
     const paginate = pageNumber => setCurrentPage(pageNumber);
@@ -31,8 +38,26 @@ const UserListTable = ({ users }) => {
     } else {
         return (
             <div className="card mb-4">
-                <div className="card-header d-flex align-items-center">
-                    <h3 className="w-50 float-left card-title m-0">Liste des utilisateurs</h3>
+                <div className="card-header d-flex align-items-center flex-column flex-md-row">
+                    <div className="col-md-8"></div>
+                    <div className="form-group mb-0 col-md-4">
+                        <div className="input-group">
+                            <div className="input-group-prepend">
+                                <span className="input-group-text" id="filter-user">
+                                    <i className="i-Search-People"></i>
+                                </span>
+                            </div>
+                            <input className="form-control"
+                                   type="text" placeholder="rechercher..."
+                                   aria-label="filter-user" aria-describedby="filter-user"
+                                   value={filter}
+                                   onChange={e=> setFilter(e.target.value)}
+                            />
+                        </div>
+                        <small className="ul-form__text form-text" id="passwordHelpBlock">
+                            * Avec username ou adresse mail.
+                        </small>
+                    </div>
                 </div>
                 <div className="card-body">
                     <div className="table-responsive">
@@ -53,7 +78,7 @@ const UserListTable = ({ users }) => {
                         </table>
                     </div>
                 </div>
-                { users.length > itemsPerPage &&
+                { filteredUsers.length > itemsPerPage &&
                     <Pagination
                         itemsPerPage={itemsPerPage}
                         total={users.length}
