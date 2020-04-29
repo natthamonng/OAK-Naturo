@@ -4,7 +4,6 @@ import { getCategoryList } from '../../actions/documentation.actions';
 import BreadCrumb from '../../components/Breadcrumb';
 import Search from '../../components/Search';
 import DocumentCardMenu from '../../components/DocumentCardMenu';
-import RecentFileList from '../../components/RecentFileList';
 import DocumentButtonMenu from '../../components/DocumentButtonMenu';
 import CategoryList from '../../components/CategoryList';
 import Spinner from '../../components/Spinner';
@@ -32,7 +31,6 @@ const Documentation = () => {
                 <div className="row">
                     <div className="col-md-6 col-lg-4">
                         <DocumentCardMenu/>
-                        {/*<RecentFileList/>*/}
                     </div>
                     <div className="col-md-6 col-lg-8">
                         <DocumentButtonMenu/>

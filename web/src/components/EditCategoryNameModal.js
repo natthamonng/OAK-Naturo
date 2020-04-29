@@ -53,14 +53,16 @@ const EditCategoryNameModal = ({ category }) => {
                                                     </span>
                                                 </div>
                                                 <input className="form-control"
-                                                       type="text" value={categoryName}
+                                                       type="text"
                                                        aria-label="category-name" aria-describedby="category-name"
+                                                       value={categoryName}
+                                                       onFocus={e => e.currentTarget.select()}
                                                        onChange={(event) => onChange(event)}
                                                 />
                                             </div>
-                                            <small className="ul-form__text form-text" id="passwordHelpBlock">
-                                                Some help content goes here
-                                            </small>
+                                            {/*<small className="ul-form__text form-text" id="passwordHelpBlock">*/}
+                                            {/*    Some help content goes here*/}
+                                            {/*</small>*/}
                                         </div>
                                     </div>
                                 </div>

@@ -166,7 +166,7 @@ exports.unPublishPost = (req, res) => {
     });
 };
 
-exports.changeFilterPost = (req, res) => {
+exports.updateFilterPost = (req, res) => {
     Post.update(
         {filter: req.params.filter} ,
         {where: {id: req.params.postId}}

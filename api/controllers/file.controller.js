@@ -120,7 +120,6 @@ exports.getFileById = (req, res) => {
 
 exports.getFilesByQuery = (req, res) => {
     const keyword = req.query.keyword;
-    console.log('KEYWORD: ', keyword);
     File.findAndCountAll({
         where: {
             status: 'published',
@@ -134,6 +133,16 @@ exports.getFilesByQuery = (req, res) => {
                     content: {
                         [Op.like]: `%${keyword}%`
                     }
+                },
+                {
+                    categoryName: Sequelize.where(Sequelize.col('category.categoryName'), {
+                        [Op.like]: `%${keyword}%`
+                    }),
+                },
+                {
+                    username: Sequelize.where(Sequelize.col('author.username'), {
+                        [Op.like]: `%${keyword}%`
+                    }),
                 }
             ],
         },
@@ -145,14 +154,15 @@ exports.getFilesByQuery = (req, res) => {
             {
                 model: Category,
                 as: 'category',
-                attributes: ['categoryName']
+                attributes: ['categoryName'],
             },
             {
                 model: User,
                 as: 'author',
                 attributes: ['username']
             }
-        ]
+        ],
+        subQuery: false
     }).then(result => {
         if (result.count === 0){
             res.status(404).json({ errors: [{ message: 'Aucun résultat trouvé.' }]
@@ -165,6 +175,8 @@ exports.getFilesByQuery = (req, res) => {
         })
     })
 };
+
+
 
 exports.getFilesByCategory = (req, res) => {
     const categoryId = req.params.categoryId;
@@ -279,3 +291,4 @@ exports.getUnpublishedFiles = (req, res, next) => {
     req.body = {status: 'unpublished'};
     next();
 };
+

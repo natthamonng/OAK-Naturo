@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import useFileSearch from '../utils/useFileSearch';
 import Logo from '../assets/images/acorn.png';
 import SearchResultList from "./SearchResultList";
@@ -6,6 +6,7 @@ import SearchResultList from "./SearchResultList";
 const Search = () => {
     const [searchModeOpen, setSearchModeOpen] = useState(false);
     const [query, setQuery] = useState('');
+    const inputRef = useRef(null);
 
     const {
         files,
@@ -18,15 +19,13 @@ const Search = () => {
         setQuery(e.target.value);
     };
 
-    if(total > 0) {
-        console.log(files);
-    }
-
     return (
         <>
         <div className="input-group mb-3">
-            <input className="form-control" type="text" placeholder="Rechercher..." aria-label="searchBar"
-                   aria-describedby="searchBar" onFocus={()=> setSearchModeOpen(true)} />
+            <input className="form-control" type="text" placeholder="Rechercher..."
+                   aria-label="searchBar" aria-describedby="searchBar"
+                   onFocus={()=> setSearchModeOpen(true)}
+                   onClick={() => inputRef.current.focus()}/>
             <div className="input-group-append">
                 <span className="input-group-text bg-transparent" id="searchBar">
                     <i className="i-Magnifi-Glass1"></i>
@@ -45,11 +44,11 @@ const Search = () => {
             <input type="text"
                    placeholder="Rechercher"
                    className="search-input"
-                   autoFocus={true}
+                   ref={inputRef}
                    value={query}
                    onChange={e => {handleQueryChange(e)}}
             />
-
+            <h5 className="text-muted">{files.length === 0? '' : `${total} filchier(s) trouvé(s)`}</h5>
             <SearchResultList files={files} />
 
             <h5 className="text-muted">{error && 'Aucun résultat trouvé.'}</h5>

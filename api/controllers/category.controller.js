@@ -87,7 +87,6 @@ exports.getCategoryFileById = (req, res) => {
                     status: 'published',
                     id: fileId,
                 },
-                // attributes: ['id', 'title','content', 'status', 'user_id', 'category_id', 'updatedAt'],
                 include: [
                     {
                         model: User,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import BreadCrumb from '../../components/Breadcrumb';
 import CreateFileForm from '../../components/CreateFileForm';
 import {useDispatch, useSelector} from 'react-redux';
@@ -8,9 +8,12 @@ import Alert from '../../components/Alert';
 const CreateFile = () => {
     const categoryList = useSelector(state => state.documentation.categoryList);
     const dispatch = useDispatch();
-    if (categoryList.length <= 1) {
-        dispatch(getCategoryList())
-    }
+
+    useEffect(() => {
+        if (categoryList.length <= 1) {
+            dispatch(getCategoryList())
+        }
+    }, []);
 
     return (
         <div className="main-content">
