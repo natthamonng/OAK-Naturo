@@ -34,6 +34,9 @@ const Navbar = ({ auth: { user }, signOutUser }) => {
                         <div className={`dropdown-menu dropdown-menu-right ${showAdminMenu? 'show' : ''}`}
                              aria-labelledby="dropdownMenuButton">
                             <div className="menu-icon-grid">
+                                <Link to="/settings/users">
+                                    <i className="i-Find-User"></i>Liste des utilisateurs
+                                </Link>
                                 <Link to="/settings/add-user">
                                     <i className="i-Add-User"></i>Ajouter un nouveau utilisateur
                                 </Link>

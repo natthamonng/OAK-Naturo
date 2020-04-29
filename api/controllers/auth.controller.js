@@ -85,7 +85,7 @@ exports.forgotPassword = (req, res) => {
         where: {
             email: req.body.email,
         },
-    }).then((user) => {
+    }).then(async(user) => {
         if (user === null) {
             res.status(403).json({
                 errors: [{message: 'Cet email n\'existe pas.'}]
@@ -98,7 +98,7 @@ exports.forgotPassword = (req, res) => {
             });
 
             const mailer = new Mailer();
-            mailer.sendEmail(
+            await mailer.sendEmail(
                 user,
                 'Réinitialisation de mot de passe.',
                 'Vous recevez cet e-mail car vous (ou quelqu\'un d\'autre) avez demandé la réinitialisation du mot de passe de votre compte.\n\n'

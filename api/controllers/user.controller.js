@@ -5,10 +5,10 @@ const db = require('../models');
 const User = db.users;
 
 // Find a single User with an id
-exports.getUser = async (req, res) => {
+exports.getUser =  (req, res) => {
     const id = req.params.id;
 
-    await User.findByPk(id)
+    User.findByPk(id)
         .then(data => {
             if(!data)
                 throw new Error();
@@ -16,7 +16,27 @@ exports.getUser = async (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving User with id=" + id
+                message: "Error retrieving User with id= " + id
+            });
+        });
+};
+
+exports.getUsers = (req, res) => {
+
+    User.findAll({
+        order: [
+            ['username', 'ASC']
+        ],
+        attributes: ['id', 'username', 'email', 'role', 'createdAt']
+    })
+        .then(data => {
+            if(!data)
+                throw new Error();
+            res.status(200).send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Error retrieving Users."
             });
         });
 };
@@ -32,7 +52,7 @@ exports.addProfile = async (req, res, next) => {
             where: {
                 email: req.body.email,
             },
-         }).then((user) => {
+         }).then(async (user) => {
             if (user === null) {
                 res.status(403).json({
                     errors: [{message: 'Cet email n\'existe pas.'}]
@@ -45,7 +65,7 @@ exports.addProfile = async (req, res, next) => {
                 });
 
                 const mailer = new Mailer();
-                mailer.sendEmail(
+                await mailer.sendEmail(
                     user,
                     'Réinitialisation de mot de passe.',
                     `Bonjour, ${user.username} !\n\n`

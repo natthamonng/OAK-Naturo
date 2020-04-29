@@ -176,8 +176,6 @@ exports.getFilesByQuery = (req, res) => {
     })
 };
 
-
-
 exports.getFilesByCategory = (req, res) => {
     const categoryId = req.params.categoryId;
     const page = parseInt(req.query.page) || 0;

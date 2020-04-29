@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import axios from 'axios';
 import { setAlert } from '../../actions/alert.actions';
+import BreadCrumb from '../../components/Breadcrumb';
 import Alert from '../../components/Alert';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
@@ -13,6 +14,7 @@ const AddUser = ({ setAlert }) => {
         email: '',
         role: 'visitor'
     });
+    const [loading, setLoading] = useState(false);
 
     const { username, email, role } = formData;
 
@@ -30,21 +32,16 @@ const AddUser = ({ setAlert }) => {
         })
     };
 
-    const addNewUser = ({ username, email, role }) => {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        };
-
-        const body = JSON.stringify({username, email, role });
-
-        axios.post(`${BASE_URL}/api/users`, body, config)
+    const addNewUser = (data) => {
+        setLoading(true);
+        axios.post(`${BASE_URL}/api/users`, data)
             .then(res => {
+                setLoading(false);
                 const success = res.data.success;
                 success.forEach(msg => setAlert(msg.message, 'primary'));
             })
             .catch(err => {
+                setLoading(false);
             const errors = err.response.data.errors;
             if (errors) {
                 errors.forEach(error => setAlert(error.message, 'danger'));
@@ -54,16 +51,10 @@ const AddUser = ({ setAlert }) => {
 
     return (
         <div className="main-content">
-            <div className="breadcrumb">
-                <h1>Ajouter un nouvel utilisateur</h1>
-                <ul>
-                    <li>Paramètre</li>
-                    <li>Ajouter un nouvel utilisateur</li>
-                </ul>
-            </div>
+            <BreadCrumb mainName={"Paramètre"} mainPath={"#"} pageName={"Ajouter un nouvel utilisateur"} />
             <div className="separator-breadcrumb border-top"></div>
-            <Alert/>
             <div className="col-md-12">
+                <Alert/>
                 <div className="card mb-4">
                     <div className="card-body">
                         <div className="card-title mb-3">Ajouter un nouvel utilisateur</div>
@@ -103,7 +94,11 @@ const AddUser = ({ setAlert }) => {
                                     </select>
                                 </div>
                                 <div className="col-md-12">
-                                    <button className="btn btn-primary">Ajouter</button>
+                                    { loading ?
+                                        <div className="spinner spinner-primary mr-3"></div>
+                                        :
+                                        <button className="btn btn-primary">Ajouter</button>
+                                    }
                                 </div>
                             </div>
                         </form>
