@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {connect} from "react-redux";
 import { useLocation } from 'react-router-dom';
 import { addNewPost } from '../actions/post.actions';
@@ -9,12 +9,16 @@ const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter, addPostLoading
     const location = useLocation();
     const userId = user.id;
     const [postFilter, setPostFilter] = useState(deFaultFilter);
-    const postContentRef = useRef(null);
+    const [postContent, setPostContent] = useState('');
     const [imagesData, setImagesData] = useState([]);
     const [previews, setPreviews] = useState([]);
 
     const onFilterChange = event => {
         setPostFilter(event.target.value)
+    };
+
+    const onPostContentChange = event => {
+        setPostContent(event.target.value)
     };
 
     const onImageChange = event => {
@@ -62,18 +66,18 @@ const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter, addPostLoading
     const onSubmit = event => {
         event.preventDefault();
 
-        if (postContentRef.length < 0 || imagesData === [] ) return;
+        if (postContent === '' || imagesData === [] ) return;
         const data = new FormData();
         data.append('user_id', userId);
         data.append('filter', postFilter);
-        data.append('content', postContentRef.current.value);
+        data.append('content', postContent);
         for (const image of imagesData) {
             data.append('file', image)
         }
 
         addNewPost(data);
 
-        postContentRef.current.value = '';
+        setPostContent('');
         setPostFilter(deFaultFilter);
         setImagesData( []);
         setPreviews( []);
@@ -93,7 +97,9 @@ const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter, addPostLoading
                         { thumbnails }
 
                         { thumbnails.length > 0 &&
-                        <div className="text-danger mb-2" onClick={() => removeAll()}>
+                        <div className="text-danger mb-2"
+                             style={{cursor: 'pointer'}}
+                             onClick={() => removeAll()}>
                             <i className="nav-icon i-Close-Window font-weight-bold"></i>
                             {' '}Annuler
                         </div>
@@ -107,7 +113,8 @@ const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter, addPostLoading
                             id="content" name="content"
                             placeholder={ 'Que voulez-vous dire, ' + user.username + ' ?'}
                             cols="30" rows="3"
-                            ref = {postContentRef}
+                            value={postContent}
+                            onChange={event=> onPostContentChange(event)}
                         />
                     </div>
                     <div className="d-flex">
@@ -141,7 +148,7 @@ const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter, addPostLoading
                         { addPostLoading ?
                             <div className="spinner spinner-primary mr-3"></div>
                             :
-                            <button className="btn btn-icon btn-rounded btn-primary">
+                            <button className="btn btn-icon btn-rounded btn-primary" type="submit">
                                 <i className="i-Paper-Plane"></i>
                             </button>
                         }

@@ -18,7 +18,6 @@ const initialState = {
 export default (state = initialState, action) =>
     produce(state, draft => {
         switch (action.type) {
-            // TODO reinitialize state when changing location
             case actionsType.REINITIALIZE_STATE:
                 draft.posts = [];
                 draft.page = 1;

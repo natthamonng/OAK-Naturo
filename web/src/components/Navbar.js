@@ -16,17 +16,22 @@ const Navbar = ({ auth: { user }, signOutUser }) => {
             <div className="logo">
                 <img src={Logo} alt="logo" />
             </div>
-            <div className="menu-toggle" onClick={()=> {setIsSidebarOpen(!isSidebarOpen)}}>
+            <button className="menu-toggle bg-white border-0"
+                    style={{outline: 'none'}}
+                    onClick={()=> {setIsSidebarOpen(!isSidebarOpen)}}
+                    onBlur={()=> {setIsSidebarOpen(false)}} >
                 <div></div>
                 <div></div>
                 <div></div>
-            </div>
+            </button>
             <div style={{margin: 'auto'}}></div>
             <div className="header-part-right">
                 {/*Admin menu Dropdown*/}
                 { role === 'admin' &&
-                    <div className={`dropdown ${showAdminMenu? 'show' : ''}`}
-                         onClick={()=> {setShowAdminMenu(!showAdminMenu)}}>
+                    <button className={`dropdown bg-white border-0 ${showAdminMenu? 'show' : ''}`}
+                            style={{outline: 'none'}}
+                            onClick={()=> {setShowAdminMenu(!showAdminMenu)}}
+                            onBlur={()=> {setShowAdminMenu(false)}}>
                         <i className="i-Geek text-muted header-icon" id="dropdownMenuButton"
                            role="button" data-toggle="dropdown" aria-haspopup="true"
                            aria-expanded={`${showAdminMenu? 'true' : 'false'}`}>
@@ -42,16 +47,19 @@ const Navbar = ({ auth: { user }, signOutUser }) => {
                                 </Link>
                             </div>
                         </div>
-                    </div>
+                    </button>
                 }
                 {/* Notificaiton */}
                 <div className="dropdown">
-                    <div className="badge-top-container" onClick={()=> {setShowNotification(!showNotification)}}
-                         role="button" id="dropdownNotification" data-toggle="dropdown"
-                         aria-haspopup="true" aria-expanded="false">
+                    <button className="badge-top-container bg-white border-0"
+                            role="button" id="dropdownNotification" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false"
+                            style={{outline: 'none'}}
+                            onClick={()=> {setShowNotification(!showNotification)}}
+                            onBlur={()=> {setShowNotification(false)}}>
                         <span className="badge badge-primary">1</span>
                         <i className="i-Bell text-muted header-icon"></i>
-                    </div>
+                    </button>
                     {/* Notification dropdown */}
                     <div className={`dropdown-menu dropdown-menu-right notification-dropdown 
                          rtl-ps-none ${showNotification? 'show' : ''}`}
@@ -73,8 +81,10 @@ const Navbar = ({ auth: { user }, signOutUser }) => {
                     </div>
                 </div>
                 {/* User avatar dropdown*/}
-                <div className="dropdown" style={{cursor: 'pointer'}}
-                     onClick={()=> {setShowAvatarMenu(!showAvatarMenu)}}>
+                <button className="dropdown bg-white border-0 p-0"
+                        style={{outline: 'none', cursor: 'pointer'}}
+                        onClick={()=> {setShowAvatarMenu(!showAvatarMenu)}}
+                        onBlur={()=> {setShowAvatarMenu(false)}}>
                     <div className="user col align-self-end">
                         <div className="badge badge-round-primary lg" id="userDropdown"
                              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -90,7 +100,7 @@ const Navbar = ({ auth: { user }, signOutUser }) => {
                             <div className="dropdown-item" onClick={signOutUser} >Déconnexion</div>
                         </div>
                     </div>
-                </div>
+                </button>
             </div>
         </div>
 

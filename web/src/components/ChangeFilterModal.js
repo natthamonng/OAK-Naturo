@@ -66,9 +66,13 @@ const ChangeFilterModal = ({ post, changeFilterPost }) => {
                         </fieldset>
                         <div className="modal-footer">
                             <button className="btn btn-secondary" data-dismiss="modal" type="button"
-                                    onClick={()=>{setShowModal(false)}}>Annuler</button>
-                            <button className="btn btn-primary"  type="submit"
-                                    onClick={()=>{setShowModal(false)}}>Valider</button>
+                                    onClick={()=> setShowModal(false)}>
+                                Annuler
+                            </button>
+                            <button className="btn btn-primary" type="submit"
+                                    onClick={()=> setShowModal(false)}>
+                                Valider
+                            </button>
                         </div>
                     </form>
                 </Modal.Body>

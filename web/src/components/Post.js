@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {connect, useSelector} from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { removePost } from '../actions/post.actions';
@@ -6,7 +6,7 @@ import Moment from 'react-moment';
 import Avatar from './Avatar';
 import AddCommentForm from './AddCommentForm';
 import Comment from './Comment';
-import ChangeFilterModal from "./ChangeFilterModal";
+import ChangeFilterModal from './ChangeFilterModal';
 import ModalImage from 'react-modal-image';
 
 const Post = ({ post, removePost }) => {
@@ -52,8 +52,10 @@ const Post = ({ post, removePost }) => {
                     </div>
                     <div className="flex-grow-1"></div>
                     { (user.role === 'admin' || user.id === post.user_id) &&
-                    <div className={`dropdown ${showDeleteMenu? 'show' : ''}`}
-                         onClick={()=> {setShowDeleteMenu(!showDeleteMenu)}} style={{cursor: 'pointer'}} >
+                    <button className={`dropdown border-0 bg-white ${showDeleteMenu? 'show' : ''}`}
+                            style={{cursor: 'pointer', outline: 'none'}}
+                            onClick={()=> {setShowDeleteMenu(!showDeleteMenu)}}
+                            onBlur={()=> {setShowDeleteMenu(false)}} >
                         <i className="i-Arrow-Down header-icon" id="dropdownMenuButton"
                            role="button" data-toggle="dropdown" aria-haspopup="true"
                            aria-expanded={`${showDeleteMenu? 'true' : 'false'}`}>
@@ -64,7 +66,7 @@ const Post = ({ post, removePost }) => {
                                 Supprimer
                             </div>
                         </div>
-                    </div>
+                    </button>
                     }
                 </div>
 

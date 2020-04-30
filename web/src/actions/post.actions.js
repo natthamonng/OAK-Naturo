@@ -96,13 +96,13 @@ export const addNewPost = (post) => async dispatch => {
             'content-type': 'multipart/form-data'
         }
     };
-    const body = post;
-    await axios.post(`${BASE_URL}/api/posts`, body, config)
+    await axios.post(`${BASE_URL}/api/posts`, post, config)
         .then(res => {
             dispatch(addPostSuccess(res.data))
         })
         .catch(err => {
-            console.log(err.response.data.errors);
+            const errors = err.response.data.errors;
+            errors.forEach(err => dispatch(setAlert(err.message, 'danger')));
             dispatch(addPostFailure(err.response.data.errors))
         })
 };

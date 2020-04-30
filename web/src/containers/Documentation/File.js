@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCategoryList, getFile } from '../../actions/documentation.actions';
+import { getFile } from '../../actions/documentation.actions';
 import Moment from 'react-moment';
 import BreadCrumb from '../../components/Breadcrumb';
 import Search from '../../components/Search';
@@ -78,8 +78,10 @@ const File = () => {
                                     <h1 className="mb-4">{file.title}</h1>
                                         <div className="flex-grow-1"></div>
                                         { ( file.content && ( user.role === 'admin' || file.user_id === user.id)) &&
-                                        <div className={`dropdown ${showAdminMenu? 'show' : ''}`}
-                                             onClick={()=> {setShowAdminMenu(!showAdminMenu)}} style={{cursor: 'pointer'}} >
+                                        <button className={`dropdown bg-white border-0 ${showAdminMenu? 'show' : ''}`}
+                                                style={{outline: 'none'}}
+                                                onClick={()=> {setShowAdminMenu(!showAdminMenu)}}
+                                                onBlur={()=> {setShowAdminMenu(false)}} >
                                             <i className="i-Arrow-Down header-icon" id="dropdownMenuButton"
                                                role="button" data-toggle="dropdown" aria-haspopup="true"
                                                aria-expanded={`${showAdminMenu}`}>
@@ -90,7 +92,7 @@ const File = () => {
                                                     <i className="i-Pen-3" ></i> Modifier le fichier
                                                 </div>
                                             </div>
-                                        </div>
+                                        </button>
                                         }
                                     </div>
 

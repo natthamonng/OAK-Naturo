@@ -14,8 +14,10 @@ const Comment = ({ comment, postId, removeComment }) => {
                 <Avatar username={comment.author.username}/>
             </div>
             { (user.role === 'admin' || user.id === comment.user_id) &&
-            <div className={`dropdown ${showAdminMenu? 'show' : ''} float-right ml-1`}
-                 onClick={()=> {setShowAdminMenu(!showAdminMenu)}} style={{cursor: 'pointer'}} >
+            <button className={`dropdown border-0 bg-white ${showAdminMenu? 'show' : ''} float-right ml-1`}
+                    style={{cursor: 'pointer', outline: 'none'}}
+                    onClick={()=> {setShowAdminMenu(!showAdminMenu)}}
+                    onBlur={()=> {setShowAdminMenu(false)}} >
                 <i className="i-Remove header-icon" id="dropdownMenuButton"
                    role="button" data-toggle="dropdown" aria-haspopup="true"
                    aria-expanded={`${showAdminMenu? 'true' : 'false'}`}>
@@ -26,7 +28,7 @@ const Comment = ({ comment, postId, removeComment }) => {
                         Supprimer
                     </div>
                 </div>
-            </div>
+            </button>
             }
             <div className="message">
                 <div>
