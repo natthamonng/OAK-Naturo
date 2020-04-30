@@ -28,10 +28,8 @@ const Navbar = ({ auth: { user }, signOutUser }) => {
             <div className="header-part-right">
                 {/*Admin menu Dropdown*/}
                 { role === 'admin' &&
-                    <button className={`dropdown bg-white border-0 ${showAdminMenu? 'show' : ''}`}
-                            style={{outline: 'none'}}
-                            onClick={()=> {setShowAdminMenu(!showAdminMenu)}}
-                            onBlur={()=> {setShowAdminMenu(false)}}>
+                    <div className={`dropdown ${showAdminMenu? 'show' : ''}`}
+                            onClick={()=> {setShowAdminMenu(!showAdminMenu)}}>
                         <i className="i-Geek text-muted header-icon" id="dropdownMenuButton"
                            role="button" data-toggle="dropdown" aria-haspopup="true"
                            aria-expanded={`${showAdminMenu? 'true' : 'false'}`}>
@@ -47,7 +45,7 @@ const Navbar = ({ auth: { user }, signOutUser }) => {
                                 </Link>
                             </div>
                         </div>
-                    </button>
+                    </div>
                 }
                 {/* Notificaiton */}
                 <div className="dropdown">
@@ -81,10 +79,10 @@ const Navbar = ({ auth: { user }, signOutUser }) => {
                     </div>
                 </div>
                 {/* User avatar dropdown*/}
-                <button className="dropdown bg-white border-0 p-0"
-                        style={{outline: 'none', cursor: 'pointer'}}
+                <div className="dropdown"
+                        style={{ cursor: 'pointer'}}
                         onClick={()=> {setShowAvatarMenu(!showAvatarMenu)}}
-                        onBlur={()=> {setShowAvatarMenu(false)}}>
+                        >
                     <div className="user col align-self-end">
                         <div className="badge badge-round-primary lg" id="userDropdown"
                              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -100,7 +98,7 @@ const Navbar = ({ auth: { user }, signOutUser }) => {
                             <div className="dropdown-item" onClick={signOutUser} >Déconnexion</div>
                         </div>
                     </div>
-                </button>
+                </div>
             </div>
         </div>
 

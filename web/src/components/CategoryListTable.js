@@ -9,7 +9,8 @@ const CategoryListTable = ({categories}) => {
     const [filter, setFilter] = useState('');
 
     // Filtered items
-    const filteredCategories = categories.filter(category => (category.categoryName).toLowerCase().includes(filter));
+    const filteredCategories = categories.filter(category =>
+        (category.categoryName).toLowerCase().includes(filter.toLowerCase()));
 
     // State for pagination
     const [currentPage, setCurrentPage] = useState(1);

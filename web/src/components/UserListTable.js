@@ -6,8 +6,8 @@ const UserListTable = ({ users }) => {
     const [filter, setFilter] = useState('');
 
     // Filtered items
-    const filteredUsers = users.filter(user => (user.username).toLowerCase().includes(filter));
-    const filteredEmails = users.filter(user => (user.email).toLowerCase().includes(filter));
+    const filteredUsers = users.filter(user => (user.username).toLowerCase().includes(filter.toLowerCase()));
+    const filteredEmails = users.filter(user => (user.email).toLowerCase().includes(filter.toLowerCase()));
     const uniqueSet = new Set([...filteredUsers, ...filteredEmails]);
 
     // State for pagination
