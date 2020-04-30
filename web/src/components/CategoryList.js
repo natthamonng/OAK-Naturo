@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import Pagination from './Pagination';
 
-const CategoryList = () => {
-    const role = useSelector(state => state.auth.user.role);
-    const categories = useSelector(state => state.documentation.categoryList);
-
+const CategoryList = ({ role, categories }) => {
     // State for pagination
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 6;

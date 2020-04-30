@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import {getCategoryList, getFile } from '../../actions/documentation.actions';
+import { getCategoryList, getFile } from '../../actions/documentation.actions';
 import Moment from 'react-moment';
 import BreadCrumb from '../../components/Breadcrumb';
 import Search from '../../components/Search';
@@ -16,10 +16,8 @@ const File = () => {
     const user = useSelector(state => state.auth.user);
     const notFound = useSelector(state => state.documentation.notFound);
     const categoryList = useSelector(state => state.documentation.categoryList);
-
-    if (categoryList.length <= 1) {
-        dispatch(getCategoryList())
-    }
+    const fileLoading = useSelector(state => state.documentation.loading);
+    const editingFile = useSelector(state => state.documentation.actionFileLoading);
 
     const [isEditMode, setIsEditMode] = useState(false);
     const [showAdminMenu, setShowAdminMenu] = useState(false);
@@ -28,13 +26,19 @@ const File = () => {
         dispatch(getFile(categoryId, fileId));
     }, [categoryId, fileId]);
 
+    useEffect(() => {
+        if (categoryList.length <= 1) {
+            dispatch(getCategoryList())
+        }
+    }, []);
+
     let file, categoryTarget;
     if (categoryList.length !== 0) {
         categoryTarget = categoryList.find(element => element.id === Number(categoryId));
         file = categoryTarget.files.find(element => element.id === Number(fileId));
     }
 
-    if (file && !notFound) {
+    if (file && !notFound && !fileLoading) {
         return (
             <div className="main-content">
                 <div className="row">
@@ -56,7 +60,8 @@ const File = () => {
                                 <div className="card mb-3">
                                     <EditFileForm
                                         file={file}
-                                        categoryList={categoryList }
+                                        categories={categoryList}
+                                        loading={editingFile}
                                     />
 
                                     <button className="btn btn-secondary m-4 mt-0 border-0"
@@ -128,7 +133,7 @@ const File = () => {
         return <_404/>
     } else {
         return (
-            <div className="d-flex justify-content-center mt-5">
+            <div className="d-flex justify-content-center align-items-center" style={{height: "50vh"}}>
                 <Spinner/>
             </div>
         )

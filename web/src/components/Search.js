@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import useFileSearch from '../utils/useFileSearch';
 import Logo from '../assets/images/acorn.png';
-import SearchResultList from "./SearchResultList";
+import SearchResultList from './SearchResultList';
 
 const Search = () => {
     const [searchModeOpen, setSearchModeOpen] = useState(false);

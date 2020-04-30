@@ -81,7 +81,7 @@ const UserListTable = ({ users }) => {
                 { filteredUsers.length > itemsPerPage &&
                     <Pagination
                         itemsPerPage={itemsPerPage}
-                        total={users.length}
+                        total={filteredUsers.length}
                         paginate={paginate}
                         currentPage={currentPage}
                     />

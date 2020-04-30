@@ -22,7 +22,7 @@ const ManageCategory = () => {
         <div className="main-content">
             <div className="row">
                 <div className="col">
-                    <BreadCrumb mainName={"Documentation"} mainPath={"/documentation"}  pageName={"Ajouter une catégorie"} />
+                    <BreadCrumb mainName={"Documentation"} mainPath={"/documentation"}  pageName={"Gérer des catégories"} />
                 </div>
             </div>
             <div className="separator-breadcrumb border-top"></div>
@@ -41,7 +41,7 @@ const ManageCategory = () => {
                         </div>
 
                         <div className="col-md-8">
-                            <CategoryListTable/>
+                            <CategoryListTable categories={categoryList}/>
                         </div>
                     </div>
                 }

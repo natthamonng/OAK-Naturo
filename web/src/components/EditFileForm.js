@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {useHistory} from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { editFile } from '../actions/documentation.actions';
 import QuillSnowEditor from './editor/QuillSnowEditor';
 import 'react-quill/dist/quill.bubble.css';
 
-const EditFileForm = (props) => {
+const EditFileForm = ({ file, categories, loading }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const fileId = props.file.id;
-    const actionFileLoading = useSelector(state => state.documentation.actionFileLoading);
-    const [ categoryId, setCategoryId ] = useState(props.file.category_id);
-    const [ title, setTitle ] = useState(props.file.title);
-    const [ content, setContent ] = useState(props.file.content);
+    const fileId = file.id;
+
+    const [ categoryId, setCategoryId ] = useState(file.category_id);
+    const [ title, setTitle ] = useState(file.title);
+    const [ content, setContent ] = useState(file.content);
     const [ files, setFiles ] = useState([]);
 
     const onCategoryChange = (event) => {
@@ -50,7 +50,7 @@ const EditFileForm = (props) => {
         }, 2000)
     };
 
-    const categoryList = props.categoryList.map(category => {
+    const categoryList = categories.map(category => {
         return <option key={category.id} value={category.id}>{category.categoryName}</option>
     });
 
@@ -83,7 +83,7 @@ const EditFileForm = (props) => {
                 </div>
                 <div className="d-flex">
                     <div className="flex-grow-1"></div>
-                    { actionFileLoading ?
+                    { loading ?
                         <div className="spinner spinner-primary m-2"></div>
                         :
                         <button className="btn  btn-block btn-primary mx-1" type="submit">

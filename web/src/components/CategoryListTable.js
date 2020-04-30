@@ -1,22 +1,24 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Pagination from './Pagination';
 import EditCategoryNameModal from './EditCategoryNameModal';
 import DeleteCategoryModal from './DeleteCategoryModal';
 import Moment from 'react-moment';
 
-const CategoryListTable = () => {
-    const categories = useSelector(state => state.documentation.categoryList);
-    const loading = useSelector(state => state.documentation.editCategoryLoading);
+const CategoryListTable = ({categories}) => {
+    const [filter, setFilter] = useState('');
+
+    // Filtered items
+    const filteredCategories = categories.filter(category => (category.categoryName).toLowerCase().includes(filter));
 
     // State for pagination
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
+    const itemsPerPage = 5;
 
     // Get current items to show
     const indexOfLastCategory = currentPage * itemsPerPage;
     const indexOfFirstCategory = indexOfLastCategory - itemsPerPage;
-    const currentCategoriesToShow = categories.slice(indexOfFirstCategory, indexOfLastCategory);
+    const currentCategoriesToShow = filteredCategories.slice(indexOfFirstCategory, indexOfLastCategory);
 
     // Change page (called when page number clicked)
     const paginate = pageNumber => setCurrentPage(pageNumber);
@@ -24,9 +26,7 @@ const CategoryListTable = () => {
     const categoryList = currentCategoriesToShow.map((category, index) => {
         return (
             <tr key={`${category.id}-${index}`}>
-                <td>
-                    { category.categoryName }
-                </td>
+                <td><Link to={`/documentation/categories/${category.id}`}>{ category.categoryName }</Link></td>
                 <td><Moment format="DD/MM/YYYY">{ category.createdAt }</Moment></td>
                 <td><Moment format="DD/MM/YYYY">{ category.updatedAt }</Moment></td>
                 <td>
@@ -42,8 +42,23 @@ const CategoryListTable = () => {
 
     return (
         <div className="card mb-4">
-            <div className="card-header d-flex align-items-center">
-                <h3 className="w-50 float-left card-title m-0">Liste des catégories</h3>
+            <div className="card-header d-flex align-items-center justify-content-center flex-column flex-md-row">
+                <h3 className="card-title col-md-8 mb-md-0">Liste des catégories</h3>
+                <div className="form-group col-md-4">
+                    <div className="input-group">
+                        <div className="input-group-prepend">
+                                <span className="input-group-text" id="filter-category">
+                                    <i className="i-Folder-Search"></i>
+                                </span>
+                        </div>
+                        <input className="form-control"
+                               type="text" placeholder="rechercher..."
+                               aria-label="filter-category" aria-describedby="filter-category"
+                               value={filter}
+                               onChange={e=> setFilter(e.target.value)}
+                        />
+                    </div>
+                </div>
             </div>
             <div className="card-body">
                 <div className="table-responsive">
@@ -54,7 +69,6 @@ const CategoryListTable = () => {
                             <th scope="col">Créé</th>
                             <th scope="col">Modifié</th>
                             <th scope="col">Actions</th>
-                            {/* <th scope="col">Supprimer</th> */}
                         </tr>
                         </thead>
                         <tbody>
@@ -65,10 +79,10 @@ const CategoryListTable = () => {
                     </table>
                 </div>
 
-                { categories.length > itemsPerPage &&
+                { filteredCategories.length > itemsPerPage &&
                     <Pagination
                         itemsPerPage={itemsPerPage}
-                        total={categories.length}
+                        total={filteredCategories.length}
                         paginate={paginate}
                         currentPage={currentPage}
                     />

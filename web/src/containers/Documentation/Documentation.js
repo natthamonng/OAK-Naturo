@@ -11,6 +11,8 @@ import Spinner from '../../components/Spinner';
 const Documentation = () => {
     const dispatch = useDispatch();
     const loading = useSelector(state => state.documentation.loading);
+    const role = useSelector(state => state.auth.user.role);
+    const categories = useSelector(state => state.documentation.categoryList);
 
     useEffect(() => {
         dispatch(getCategoryList());
@@ -39,7 +41,7 @@ const Documentation = () => {
                                 <Spinner/>
                             </div>
                             :
-                            <CategoryList/>
+                            <CategoryList role={role} categories={categories}/>
                         }
                     </div>
                 </div>

@@ -1,7 +1,7 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import BreadCrumb from '../../components/Breadcrumb';
 import CreateFileForm from '../../components/CreateFileForm';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getCategoryList } from '../../actions/documentation.actions';
 import Alert from '../../components/Alert';
 

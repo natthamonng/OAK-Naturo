@@ -1,16 +1,15 @@
-import React, {useState} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { restoreFile } from '../actions/documentation.actions';
 import Moment from 'react-moment';
-import Pagination from "./Pagination";
+import Pagination from './Pagination';
 
-const DeletedFileListTable = () => {
+const DeletedFileListTable = ({ deletedFiles }) => {
     const dispatch = useDispatch();
-    const deletedFiles = useSelector(state => state.documentation.deletedFiles);
 
     // State for pagination
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
+    const itemsPerPage = 5;
 
     // Get current items to show
     const indexOfLastFile = currentPage * itemsPerPage;
