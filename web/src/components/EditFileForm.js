@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { editFile } from '../actions/documentation.actions';
+import { editFile, getCategoryList } from '../actions/documentation.actions';
 import QuillSnowEditor from './editor/QuillSnowEditor';
 import 'react-quill/dist/quill.bubble.css';
 
@@ -14,6 +14,12 @@ const EditFileForm = ({ file, categories, loading }) => {
     const [ title, setTitle ] = useState(file.title);
     const [ content, setContent ] = useState(file.content);
     const [ files, setFiles ] = useState([]);
+
+    useEffect(() => {
+        if (categoryList.length <= 1) {
+            dispatch(getCategoryList())
+        }
+    }, []);
 
     const onCategoryChange = (event) => {
         setCategoryId(event.target.value);

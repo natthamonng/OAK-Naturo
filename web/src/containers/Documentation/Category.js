@@ -21,8 +21,12 @@ const Category = () => {
     }, [categoryId]);
 
     let fileList;
-    if( categoryList.length !== 0) {
+    if ( categoryList.length !== 0) {
         fileList = categoryList.find(element => element.id === Number(categoryId))
+    }
+
+    if ( notFound ) {
+        return <_404/>
     }
 
     if (fileList && !notFound && !loading) {
@@ -52,8 +56,6 @@ const Category = () => {
                 </section>
             </div>
         )
-    } else if (notFound) {
-        return <_404/>
     } else {
         return (
             <div className="d-flex justify-content-center align-items-center" style={{height: '50vh'}}>

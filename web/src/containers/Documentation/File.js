@@ -26,16 +26,14 @@ const File = () => {
         dispatch(getFile(categoryId, fileId));
     }, [categoryId, fileId]);
 
-    useEffect(() => {
-        if (categoryList.length <= 1) {
-            dispatch(getCategoryList())
-        }
-    }, []);
-
     let file, categoryTarget;
     if (categoryList.length !== 0) {
         categoryTarget = categoryList.find(element => element.id === Number(categoryId));
         file = categoryTarget.files.find(element => element.id === Number(fileId));
+    }
+
+    if (notFound) {
+        return <_404/>
     }
 
     if (file && !notFound && !fileLoading) {
@@ -129,8 +127,6 @@ const File = () => {
                 </section>
             </div>
         )
-    } else if (notFound) {
-        return <_404/>
     } else {
         return (
             <div className="d-flex justify-content-center align-items-center" style={{height: "50vh"}}>
