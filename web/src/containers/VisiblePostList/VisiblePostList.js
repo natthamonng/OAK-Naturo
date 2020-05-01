@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import PostList from '../../components/PostList'
-import { VisibilityFilters } from '../../actions/post.actions';
+import PostList from '../../components/PostList';
+import { VisibilityFilters } from '../../constants/PostFilters';
 
 const getVisiblePosts = (posts, filter) => {
     switch (filter) {
@@ -20,9 +20,8 @@ const getVisiblePosts = (posts, filter) => {
 };
 
 const mapStateToProps = state => ({
-    posts: getVisiblePosts(state.posts.posts, state.visibilityFilter)
+    posts: getVisiblePosts(state.posts.posts, state.visibilityFilter),
+    user: state.auth.user
 });
 
-export default connect(
-    mapStateToProps
-)(PostList)
+export default connect(mapStateToProps)(PostList)

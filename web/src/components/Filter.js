@@ -1,6 +1,6 @@
 import React from 'react';
 import FilterLink from '../containers/FilterLink/FilterLink';
-import { VisibilityFilters } from '../actions/post.actions';
+import { VisibilityFilters } from '../constants/PostFilters';
 
 const Filter = () => {
    return (

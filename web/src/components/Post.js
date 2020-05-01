@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
-import {connect, useSelector} from 'react-redux';
+import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { removePost } from '../actions/post.actions';
 import Moment from 'react-moment';
 import Avatar from './Avatar';
 import AddCommentForm from './AddCommentForm';
 import Comment from './Comment';
-import ChangeFilterModal from './ChangeFilterModal';
+import EditFilterModal from './EditFilterModal';
 import ModalImage from 'react-modal-image';
 
-const Post = ({ post, removePost }) => {
+const Post = ({ post, removePost, user }) => {
     let location = useLocation();
-    const user = useSelector(state => state.auth.user);
     const [showDeleteMenu, setShowDeleteMenu] = useState(false);
 
     const postId = post.id;
@@ -87,11 +86,13 @@ const Post = ({ post, removePost }) => {
                         { post.filter === 'protocol' && <><i className="i-Conference"></i> Protocole</> }
                         { post.filter === 'pro' && <><i className="i-Bar-Chart"></i> Pro</> }
                     </div>
-                    { (user.role === "admin" && location.pathname === '/home') && <ChangeFilterModal post={post}/> }
+                    { (user.role === "admin" && location.pathname === '/home') && <EditFilterModal post={post}/> }
                 </div>
 
                 <div className="pt-2">
-                    <AddCommentForm postId={postId} />
+                    <AddCommentForm
+                        postId={postId}
+                        userId={user.id} />
                     <div>
                         { commentsList }
                     </div>

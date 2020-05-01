@@ -6,7 +6,7 @@ import Search from '../../components/Search';
 import DocumentCardMenu from '../../components/DocumentCardMenu';
 import DocumentButtonMenu from '../../components/DocumentButtonMenu';
 import CategoryList from '../../components/CategoryList';
-import Spinner from '../../components/Spinner';
+import SpinnerBubble from '../../components/SpinnerBubble';
 
 const Documentation = () => {
     const dispatch = useDispatch();
@@ -38,7 +38,7 @@ const Documentation = () => {
                         <DocumentButtonMenu/>
                         { loading ?
                             <div className="col-12 d-flex justify-content-center mt-4">
-                                <Spinner/>
+                                <SpinnerBubble/>
                             </div>
                             :
                             <CategoryList role={role} categories={categories}/>

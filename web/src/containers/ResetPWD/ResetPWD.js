@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alert.actions';
 
 import Alert from '../../components/Alert';
-import Spinner from '../../components/Spinner';
+import SpinnerBubble from '../../components/SpinnerBubble';
 
 import logo from '../../assets/images/acorn.png';
 import photoWide from '../../assets/images/photo-wide-6.jpg';
@@ -128,7 +128,7 @@ const ResetPWD = ({ setAlert , match}) => {
                            <div className="p-4">
 
                            { state.isLoading ?
-                               <Spinner/>
+                               <SpinnerBubble/>
                                :
                                <div className="auth-logo text-center mb-4"><img src={logo} alt="logo"/></div>
                            }

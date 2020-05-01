@@ -5,7 +5,7 @@ import { getCategoryFileList } from '../../actions/documentation.actions';
 import BreadCrumb from '../../components/Breadcrumb';
 import Search from '../../components/Search';
 import FileList from '../../components/FileList';
-import Spinner from '../../components/Spinner';
+import SpinnerBubble from '../../components/SpinnerBubble';
 import _404 from '../../components/_404';
 
 const Category = () => {
@@ -59,7 +59,7 @@ const Category = () => {
     } else {
         return (
             <div className="d-flex justify-content-center align-items-center" style={{height: '50vh'}}>
-                <Spinner/>
+                <SpinnerBubble/>
             </div>
         )
     }

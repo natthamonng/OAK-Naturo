@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
-import {connect, useSelector} from 'react-redux';
-import {addNewComment} from '../actions/comment.actions';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { addNewComment } from '../actions/comment.actions';
+import Spinner from './Spinner';
 
-const AddCommentForm = ({postId, addNewComment}) => {
-    const userId = useSelector(state => state.auth.user.id);
-    const addCommentLoading = useSelector(state => state.posts.addCommentLoading);
+const AddCommentForm = (props) => {
+    const {postId, userId, addCommentLoading, addNewComment} = props;
+
     const [formData, setFormData] = useState({
         user_id: userId,
         post_id: postId,
@@ -22,7 +24,9 @@ const AddCommentForm = ({postId, addNewComment}) => {
         if (comment.length === 0 ){
             return;
         }
+
         addNewComment({ user_id, post_id, comment });
+
         setFormData((previousState) => {
             return {
                 ...previousState,
@@ -42,7 +46,7 @@ const AddCommentForm = ({postId, addNewComment}) => {
                 />
 
                 { addCommentLoading ?
-                    <div className="spinner spinner-primary mr-3"></div>
+                    <Spinner/>
                     :
                     <button className="btn btn-icon btn-rounded btn-primary ml-2">
                         <i className="i-Paper-Plane"></i>
@@ -53,4 +57,13 @@ const AddCommentForm = ({postId, addNewComment}) => {
     )
 };
 
-export default connect( null, { addNewComment })(AddCommentForm);
+AddCommentForm.propTypes = {
+    addCommentLoading: PropTypes.bool.isRequired,
+    addNewComment: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = state => ({
+    addCommentLoading: state.posts.addCommentLoading
+});
+
+export default connect(mapStateToProps, {addNewComment})(AddCommentForm);

@@ -58,19 +58,19 @@ export const removePostFailure = error => ({
     payload: { error }
 });
 
-export const changeFilterPostBegin = () => {
+export const editFilterPostBegin = () => {
     return {
-        type: actionsType.CHANGE_FILTER_POST_BEGIN
+        type: actionsType.EDIT_FILTER_POST_BEGIN
     }
 };
 
-export const changeFilterPostSuccess = ( postId, filter ) => ({
-    type: actionsType.CHANGE_FILTER_POST_SUCCESS,
+export const editFilterPostSuccess = ( postId, filter ) => ({
+    type: actionsType.EDIT_FILTER_POST_SUCCESS,
     payload: { postId, filter }
 });
 
-export const changeFilterPostFailure = error => ({
-    type: actionsType.CHANGE_FILTER_POST_FAILURE,
+export const editFilterPostFailure = error => ({
+    type: actionsType.EDIT_FILTER_POST_FAILURE,
     payload: { error }
 });
 
@@ -121,17 +121,17 @@ export const removePost = (postId) => async dispatch => {
         })
 };
 
-export const changeFilterPost = (postId, filter) => async dispatch => {
-    dispatch(changeFilterPostBegin());
+export const editFilterPost = (postId, filter) => async dispatch => {
+    dispatch(editFilterPostBegin());
     await axios.put(`${BASE_URL}/api/posts/${postId}/${filter}`)
         .then(res => {
             if (res.data.success === true) {
-                dispatch(changeFilterPostSuccess(postId, filter))
+                dispatch(editFilterPostSuccess(postId, filter))
             }
         })
         .catch(err => {
             console.log(err.response.data.errors);
-            dispatch(changeFilterPostFailure(err.response.data.errors))
+            dispatch(editFilterPostFailure(err.response.data.errors))
         })
 };
 
@@ -139,14 +139,6 @@ export const setVisibilityFilter = filter => ({
     type: actionsType.SET_VISIBILITY_FILTER,
     filter
 });
-
-export const VisibilityFilters = {
-    ALL: 'ALL',
-    GENERAL: 'GENERAL',
-    WITNESS: 'WITNESS',
-    PROTOCOL: 'PROTOCOL',
-    PRO: 'PRO'
-};
 
 export const reinitializeState = () => {
     return {

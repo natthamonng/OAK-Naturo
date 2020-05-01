@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 const Alert = ({ alerts }) => {
+
     return(
         alerts !== null && alerts.length > 0 && alerts.map(alert => (
-        <div key={alert.id} className={`alert alert-${alert.alertType}`} role ="alert">
-                {alert.message}
-        </div>
+            <div key={alert.id} className={`alert text-center alert-${alert.alertType}`} role ="alert">
+                <strong>{alert.message}</strong>
+            </div>
         ))
     );
-}
+};
 
 Alert.propTypes = {
     alerts: PropTypes.array.isRequired

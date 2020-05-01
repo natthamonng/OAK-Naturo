@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { changeFilterPost } from '../actions/post.actions';
+import { editFilterPost } from '../actions/post.actions';
 import { Modal } from 'react-bootstrap';
 
-const ChangeFilterModal = ({ post, changeFilterPost }) => {
+const EditFilterModal = (props) => {
+    const { post, editFilterPost } = props;
     const [showModal, setShowModal] = useState(false);
     const [filter, setFilter] = useState(post.filter);
 
@@ -13,7 +14,7 @@ const ChangeFilterModal = ({ post, changeFilterPost }) => {
 
     const onSubmit = (event) => {
         event.preventDefault();
-        changeFilterPost(post.id, filter)
+        editFilterPost(post.id, filter)
     };
 
     return (
@@ -81,4 +82,4 @@ const ChangeFilterModal = ({ post, changeFilterPost }) => {
     )
 };
 
-export default connect( null, { changeFilterPost })(ChangeFilterModal);
+export default connect( null, { editFilterPost })(EditFilterModal);

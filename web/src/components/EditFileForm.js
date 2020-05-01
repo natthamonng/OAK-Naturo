@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { editFile, getCategoryList } from '../actions/documentation.actions';
 import QuillSnowEditor from './editor/QuillSnowEditor';
 import 'react-quill/dist/quill.bubble.css';
+import Spinner from './Spinner';
 
 const EditFileForm = ({ file, categories, loading }) => {
     const dispatch = useDispatch();
@@ -90,7 +91,7 @@ const EditFileForm = ({ file, categories, loading }) => {
                 <div className="d-flex">
                     <div className="flex-grow-1"></div>
                     { loading ?
-                        <div className="spinner spinner-primary m-2"></div>
+                        <Spinner/>
                         :
                         <button className="btn  btn-block btn-primary mx-1" type="submit">
                             Modifier

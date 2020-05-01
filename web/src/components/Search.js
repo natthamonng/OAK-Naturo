@@ -8,6 +8,10 @@ const Search = () => {
     const [query, setQuery] = useState('');
     const inputRef = useRef(null);
 
+    const handleOnSearchClose = () => {
+        setSearchModeOpen(false);
+        setQuery('');
+    };
     const {
         files,
         total,
@@ -37,7 +41,7 @@ const Search = () => {
             <div className="search-header">
                 <img src={Logo} alt="logo" className="logo"/>
                 <button className="search-close btn btn-icon bg-transparent float-right mt-2"
-                        onClick={()=> setSearchModeOpen(false)}>
+                        onClick={handleOnSearchClose}>
                     <i className="i-Close-Window text-22 text-muted"></i>
                 </button>
             </div>
@@ -46,7 +50,7 @@ const Search = () => {
                    className="search-input"
                    ref={inputRef}
                    value={query}
-                   onChange={e => {handleQueryChange(e)}}
+                   onChange={handleQueryChange}
             />
             <h5 className="text-muted">{files.length === 0? '' : `${total} filchier(s) trouvé(s)`}</h5>
             <SearchResultList files={files} />

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import '../../assets/scss/quill-editor.scss';
+import '../../assets/scss/custom/quill-editor.scss';
 
 import axios from 'axios';
 import {REMOVE_ALERT} from "../../constants/ActionTypes";

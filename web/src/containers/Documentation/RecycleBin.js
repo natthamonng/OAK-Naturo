@@ -4,7 +4,7 @@ import { getDeletedFiles, getDeletedCategories } from '../../actions/documentati
 import BreadCrumb from '../../components/Breadcrumb';
 import DeletedCategoryListTable from '../../components/DeletedCategoryListTable';
 import DeletedFileListTable from '../../components/DeletedFileListTable';
-import Spinner from '../../components/Spinner';
+import SpinnerBubble from '../../components/SpinnerBubble';
 
 const RecycleBin = () => {
     const dispatch = useDispatch();
@@ -30,7 +30,7 @@ const RecycleBin = () => {
                     <div className="col-12 col-md-10 offset-md-1 mb-4">
                         { loading &&
                             <div className="col-12 d-flex justify-content-center align-items-center" style={{height: '50vh'}}>
-                                <Spinner/>
+                                <SpinnerBubble/>
                             </div>
                         }
                         { (!loading && deletedFiles.length === 0 && deletedCategories.length === 0) ?

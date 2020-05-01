@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import {connect} from "react-redux";
+import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { addNewPost } from '../actions/post.actions';
 import { setAlert } from '../actions/alert.actions';
 import Alert from './Alert';
+import Spinner from './Spinner';
 
 const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter, addPostLoading }) => {
     const location = useLocation();
@@ -46,7 +47,7 @@ const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter, addPostLoading
 
         for ( let i = 0; i < files.length; i++ ) {
             if (types.every(type => files[i].type !== type)) {
-                message += 'Format du fichier sélectionné n\'est pas supporté.';
+                message += 'Ce type de fichier n\'est pas pris en charge. seuls jpg et png sont autorisés.';
             }
         }
 
@@ -85,13 +86,13 @@ const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter, addPostLoading
 
     return (
         <div className="chat-content-wrap" data-sidebar-content="chat">
+            <Alert/>
             <div className="d-flex pl-3 pr-3 pt-2 pb-2 o-hidden box-shadow-1 chat-topbar">
                 <div className="d-flex align-items-center">
                     <p className="m-0 text-title text-16 flex-grow-1">Créer une publication</p>
                 </div>
             </div>
             <div className="pl-3 pr-3 pt-3 pb-3 box-shadow-1 chat-input-area">
-                <Alert />
                 { thumbnails.length > 0 &&
                     <div className="mt-2">
                         { thumbnails }
@@ -140,13 +141,14 @@ const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter, addPostLoading
                             <i className="i-Add-File"></i>
                             <input
                                 id="image" type="file" multiple
+                                accept="image/png, image/jpeg"
                                 onChange={event => onImageChange(event)}
                                 style={{ position: 'absolute', fontSize: '50px', opacity: '0', right: '0', top: '0'}}
                             />
                         </button>
 
                         { addPostLoading ?
-                            <div className="spinner spinner-primary mr-3"></div>
+                            <Spinner/>
                             :
                             <button className="btn btn-icon btn-rounded btn-primary" type="submit">
                                 <i className="i-Paper-Plane"></i>

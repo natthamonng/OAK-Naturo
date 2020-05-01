@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from './Pagination';
 
-const CategoryList = ({ role, categories }) => {
+const CategoryList = (props) => {
+    const { role, categories } = props;
+
     // State for pagination
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 6;

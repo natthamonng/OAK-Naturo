@@ -6,7 +6,7 @@ import { signInUser } from "../../actions/auth.actions";
 import Alert from '../../components/Alert';
 import logo from '../../assets/images/acorn.png';
 import photoWide from '../../assets/images/photo-wide-6.jpg';
-import '../../assets/scss/welcome-text.scss';
+import '../../assets/scss/custom/welcome-text.scss';
 
 function SignIn({ signInUser, isAuthenticated }) {
     let location = useLocation();

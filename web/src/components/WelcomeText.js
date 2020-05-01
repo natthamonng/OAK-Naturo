@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import '../assets/scss/home.scss';
+import '../assets/scss/custom/home.scss';
 
 function WelcomeText() {
     const [ style, setStyle ] = useState({display: 'flex'});

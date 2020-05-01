@@ -5,7 +5,7 @@ import BreadCrumb from '../../components/Breadcrumb';
 import AddCategoryForm from '../../components/AddCategoryForm';
 import CategoryListTable from '../../components/CategoryListTable';
 import Alert from '../../components/Alert';
-import Spinner from '../../components/Spinner';
+import SpinnerBubble from '../../components/SpinnerBubble';
 
 const ManageCategory = () => {
     const categoryList = useSelector(state => state.documentation.categoryList);
@@ -29,7 +29,7 @@ const ManageCategory = () => {
             <section className="widget-app">
                 { loading ?
                     <div className="d-flex justify-content-center align-items-center" style={{height: '50vh'}}>
-                        <Spinner/>
+                        <SpinnerBubble/>
                     </div>
 
                     :

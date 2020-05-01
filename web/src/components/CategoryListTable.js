@@ -5,7 +5,7 @@ import EditCategoryNameModal from './EditCategoryNameModal';
 import DeleteCategoryModal from './DeleteCategoryModal';
 import Moment from 'react-moment';
 
-const CategoryListTable = ({categories}) => {
+const CategoryListTable = ({ categories }) => {
     const [filter, setFilter] = useState('');
 
     // Filtered items

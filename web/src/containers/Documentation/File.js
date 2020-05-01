@@ -6,7 +6,7 @@ import Moment from 'react-moment';
 import BreadCrumb from '../../components/Breadcrumb';
 import Search from '../../components/Search';
 import EditFileForm from '../../components/EditFileForm';
-import Spinner from '../../components/Spinner';
+import SpinnerBubble from '../../components/SpinnerBubble';
 import _404 from '../../components/_404';
 import Alert from '../../components/Alert';
 
@@ -132,7 +132,7 @@ const File = () => {
     } else {
         return (
             <div className="d-flex justify-content-center align-items-center" style={{height: "50vh"}}>
-                <Spinner/>
+                <SpinnerBubble/>
             </div>
         )
     }

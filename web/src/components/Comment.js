@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {connect, useSelector} from 'react-redux';
+import React, { useState } from 'react';
+import { connect, useSelector } from 'react-redux';
 import { removeComment } from '../actions/comment.actions';
 import Avatar from "./Avatar";
 import Moment from "react-moment";

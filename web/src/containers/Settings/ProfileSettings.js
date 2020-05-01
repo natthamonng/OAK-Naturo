@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import { setAlert } from '../../actions/alert.actions';
 import Alert from '../../components/Alert';
+import avatar from '../../assets/images/faces/user.png';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -20,14 +21,19 @@ const ProfileSettings = ({ setAlert, user }) => {
             <div className="separator-breadcrumb border-top"></div>
             <Alert/>
             <div className="col-md-12">
-                <div className="card mb-4">
+                <div className="card user-profile o-hidden mb-4">
+                    <div className="header-cover"></div>
+                    <div className="user-info">
+                        <img className="profile-picture avatar-lg mb-2" src={avatar} alt="user-avater"/>
+                        <p className="m-0 text-24">{user.username}</p>
+                        {/*<p className="text-muted m-0">Digital Marketer</p>*/}
+                    </div>
                     <div className="card-body">
-                        <div className="card-title mb-3">Paramètres du compte</div>
-                        <div className="not-found-wrap text-center" style={{height: '50vh'}}>
+                        <div className="not-found-wrap text-center" style={{height: '40vh'}}>
                             <h1 className="text-60">En-cours de production</h1>
                         </div>
-
-                        
+                    </div>
+                </div>
 
                         {/*<form>*/}
                         {/*    <div className="row">*/}
@@ -56,8 +62,7 @@ const ProfileSettings = ({ setAlert, user }) => {
                         {/*        </div>*/}
                         {/*    </div>*/}
                         {/*</form>*/}
-                    </div>
-                </div>
+
             </div>
         </div>
     )

@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addNewCategory } from '../actions/documentation.actions';
+import Spinner from './Spinner';
 
 const AddCategoryForm = () => {
     const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const AddCategoryForm = () => {
                     </div>
 
                     { loading ?
-                        <div className="spinner spinner-primary mr-3"></div>
+                        <Spinner/>
                         :
                         <button className="btn btn-primary pd-x-20" type="submit">
                             <i className="i-File-Edit"></i> Ajouter

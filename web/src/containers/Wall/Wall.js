@@ -6,7 +6,7 @@ import BreadCrumb from '../../components/Breadcrumb';
 import Filter from '../../components/Filter';
 import VisiblePostList from '../VisiblePostList/VisiblePostList';
 import AddPostForm from '../../components/AddPostForm';
-import Spinner from '../../components/Spinner';
+import SpinnerBubble from '../../components/SpinnerBubble';
 
 const Wall = () => {
     const dispatch = useDispatch();
@@ -80,7 +80,7 @@ const Wall = () => {
                         { loading &&
                             <div className="row">
                                 <div className="col-12 d-flex justify-content-center mt-4">
-                                    <Spinner/>
+                                    <SpinnerBubble/>
                                 </div>
                             </div>
                         }

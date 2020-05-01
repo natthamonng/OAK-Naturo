@@ -5,7 +5,7 @@ import {Link, Redirect} from 'react-router-dom';
 import axios from 'axios';
 import { setAlert } from '../../actions/alert.actions';
 import Alert from '../../components/Alert';
-import Spinner  from '../../components/Spinner';
+import SpinnerBubble  from '../../components/SpinnerBubble';
 
 
 import PhotoWide from '../../assets/images/photo-wide-6.jpg';
@@ -71,7 +71,7 @@ const ForgotPWD = ({ setAlert, isAuthenticated}) => {
                             <div className="p-4">
                                 <div className="auth-logo text-center mb-4">
                                     { isLoading ?
-                                        <Spinner />
+                                        <SpinnerBubble />
                                         :
                                         <img src={Logo} alt="Logo"/>
                                     }

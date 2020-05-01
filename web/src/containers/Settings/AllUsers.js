@@ -1,6 +1,6 @@
 import React from 'react';
 import BreadCrumb from '../../components/Breadcrumb';
-import Spinner from '../../components/Spinner';
+import SpinnerBubble from '../../components/SpinnerBubble';
 import UserListTable from '../../components/UserListTable';
 import useGetUsers from '../../utils/useGetUsers';
 
@@ -19,7 +19,7 @@ const AllUsers = () => {
             <div className="col-12">
                 { loading ?
                     <div className="d-flex align-items-center justify-content-center" style={{minHeight: '50vh'}}>
-                        <Spinner/>
+                        <SpinnerBubble/>
                     </div>
                 :
                     <UserListTable users={users}/>
