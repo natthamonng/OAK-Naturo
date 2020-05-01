@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 
-export default function SearchResultItem({file}) {
+export default function SearchResultItem({ file }) {
     return (
         <Link to={`/documentation/categories/${file.category_id}/files/${file.id}`}
               className="ul-widget-app__row-comments border-bottom-gray-200 mb-0">

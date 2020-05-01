@@ -30,13 +30,13 @@ function isTokenExpired(token) {
 }
 
 function setToken(token) {
-    localStorage.setItem('token', token)
+    localStorage.setItem('oak-naturo', token)
 }
 
 function getToken() {
-    return localStorage.getItem('token')
+    return localStorage.getItem('oak-naturo')
 }
 
 function logout() {
-    localStorage.removeItem('token');
+    localStorage.removeItem('oak-naturo');
 }

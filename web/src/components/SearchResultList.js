@@ -1,7 +1,7 @@
 import React from 'react';
 import SearchResultItem from './SearchResultItem';
 
-export default function SearchResultList({files }) {
+export default function SearchResultList({ files }) {
 
     const searchResultList = files.map((file) => {
         return (

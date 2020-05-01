@@ -12,6 +12,7 @@ const Search = () => {
         setSearchModeOpen(false);
         setQuery('');
     };
+
     const {
         files,
         total,
@@ -25,41 +26,40 @@ const Search = () => {
 
     return (
         <>
-        <div className="input-group mb-3">
-            <input className="form-control" type="text" placeholder="Rechercher..."
-                   aria-label="searchBar" aria-describedby="searchBar"
-                   onFocus={()=> setSearchModeOpen(true)}
-                   onClick={() => inputRef.current.focus()}/>
-            <div className="input-group-append">
-                <span className="input-group-text bg-transparent" id="searchBar">
-                    <i className="i-Magnifi-Glass1"></i>
-                </span>
+            <div className="input-group mb-3">
+                <input className="form-control" type="text" placeholder="Rechercher..."
+                       aria-label="searchBar" aria-describedby="searchBar"
+                       onFocus={()=> setSearchModeOpen(true)}
+                       onClick={() => inputRef.current.focus()}/>
+                <div className="input-group-append">
+                    <span className="input-group-text bg-transparent" id="searchBar">
+                        <i className="i-Magnifi-Glass1"></i>
+                    </span>
+                </div>
             </div>
-        </div>
 
-        <div className={`search-ui ${searchModeOpen? 'open' : ''}`}>
-            <div className="search-header">
-                <img src={Logo} alt="logo" className="logo"/>
-                <button className="search-close btn btn-icon bg-transparent float-right mt-2"
-                        onClick={handleOnSearchClose}>
-                    <i className="i-Close-Window text-22 text-muted"></i>
-                </button>
+            <div className={`search-ui ${searchModeOpen? 'open' : ''}`}>
+                <div className="search-header">
+                    <img src={Logo} alt="logo" className="logo"/>
+                    <button className="search-close btn btn-icon bg-transparent float-right mt-2"
+                            onClick={handleOnSearchClose}>
+                        <i className="i-Close-Window text-22 text-muted"></i>
+                    </button>
+                </div>
+                <input type="text"
+                       placeholder="Rechercher"
+                       className="search-input"
+                       ref={inputRef}
+                       value={query}
+                       onChange={handleQueryChange}
+                />
+                <h5 className="text-muted">{files.length === 0? '' : `${total} filchier(s) trouvé(s)`}</h5>
+                <SearchResultList files={files} />
+
+                <h5 className="text-muted">{error && 'Aucun résultat trouvé.'}</h5>
+                <h5 className="text-muted">{loading && 'loading...'}</h5>
+
             </div>
-            <input type="text"
-                   placeholder="Rechercher"
-                   className="search-input"
-                   ref={inputRef}
-                   value={query}
-                   onChange={handleQueryChange}
-            />
-            <h5 className="text-muted">{files.length === 0? '' : `${total} filchier(s) trouvé(s)`}</h5>
-            <SearchResultList files={files} />
-
-            <h5 className="text-muted">{error && 'Aucun résultat trouvé.'}</h5>
-            <h5 className="text-muted">{loading && 'loading...'}</h5>
-
-        </div>
-
         </>
     )
 };

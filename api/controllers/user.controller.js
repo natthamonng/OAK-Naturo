@@ -1,8 +1,11 @@
 require('dotenv').config();
+const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const Mailer = require('../helpers/mailer');
 const db = require('../models');
 const User = db.users;
+
+const BCRYPT_SALT_ROUNDS = 8;
 
 // Find a single User with an id
 exports.getUser =  (req, res) => {
@@ -69,7 +72,7 @@ exports.addProfile = async (req, res, next) => {
                     user,
                     'Réinitialisation de mot de passe.',
                     `Bonjour, ${user.username} !\n\n`
-                    +'Bienvenue au club. Il ne vous reste qu\'une seule étape pour terminer la création de votre compte.\n\n'
+                    +'Bienvenue. Il ne vous reste qu\'une seule étape pour terminer la création de votre compte.\n\n'
                     + 'Veuillez cliquer sur le lien suivant ou collez-le dans votre navigateur pour réinitialiser votre mot de passe dans l\'heure suivant sa réception:\n\n'
                     + `${process.env.WEB_URL}/reset-password/${token}\n\n`
                     + 'A bientôt!'
@@ -87,6 +90,56 @@ exports.addProfile = async (req, res, next) => {
         console.error(err);
         res.status(500).json({
             errors: [{ message: 'Une erreur s\'est produite lors de la création de l\'utilisateur.' }]
+        });
+    });
+};
+
+exports.resetPassword = (req, res) => {
+    User.findOne({
+        where: {
+            id: req.user.id,
+        },
+    }).then((userInfo) => {
+        bcrypt
+            .hash(req.body.password, BCRYPT_SALT_ROUNDS)
+            .then((hashedPassword) => {
+                userInfo.update({
+                    password: hashedPassword,
+                });
+            })
+            .then(() => {
+                res.status(200).json({
+                    success: [{ message: 'Mot de passe mis à jour.' }]
+                });
+            });
+    }).catch(err => {
+        res.status(500).json({
+            errors: [{ message: 'Une erreur s\'est produite lors de la modification du mot de passe.' }]
+        });
+    });
+};
+
+exports.editProfile = (req, res) => {
+    let condition;
+    if (req.body.username){
+        condition = {username: req.body.username}
+    } else if (req.body.email){
+        condition = {email: req.body.email}
+    }
+    User.findOne({
+        where: {
+            id: req.user.id,
+        },
+    }).then((userInfo) => {
+        userInfo.update(condition)
+            .then(() => {
+                res.status(200).json({
+                    success: [{ message: 'Profile mis à jour.' }]
+                });
+            });
+    }).catch(err => {
+        res.status(500).json({
+            errors: [{ message: 'Une erreur s\'est produite lors de la modification du compte.' }]
         });
     });
 };

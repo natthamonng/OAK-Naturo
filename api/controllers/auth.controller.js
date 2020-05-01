@@ -71,7 +71,13 @@ exports.getProfile = (req, res) => {
             ]
         }})
         .then(data => {
-            res.status(200).json(data);
+            const token = jwt.sign(data.dataValues, process.env.JWT_SECRET, { expiresIn: '365d' });
+            if (!token) {
+                return res.status(500).json({
+                    errors: [{ message: 'Error signing token.' }]
+                });
+            }
+            res.status(200).json({user: data, token});
         }).catch(err => {
         console.error(err);
         res.status(500).json({
@@ -101,7 +107,8 @@ exports.forgotPassword = (req, res) => {
             await mailer.sendEmail(
                 user,
                 'Réinitialisation de mot de passe.',
-                'Vous recevez cet e-mail car vous (ou quelqu\'un d\'autre) avez demandé la réinitialisation du mot de passe de votre compte.\n\n'
+                `Bonjour, ${user.username} !\n\n`
+                + 'Vous recevez cet e-mail car vous (ou quelqu\'un d\'autre) avez demandé la réinitialisation du mot de passe de votre compte.\n\n'
                 + 'Veuillez cliquer sur le lien suivant ou collez-le dans votre navigateur pour terminer le processus dans l\'heure suivant sa réception:\n\n'
                 + `${process.env.WEB_URL}/reset-password/${token}\n\n`
                 + 'Si vous ne l\'avez pas demandée, veuillez ignorer cet e-mail et votre mot de passe restera identique.\n',

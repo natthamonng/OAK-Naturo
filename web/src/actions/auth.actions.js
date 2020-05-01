@@ -11,13 +11,14 @@ export const loadUserByJwt = (token) => async dispatch => {
     dispatch({ type: USER_LOADING });
     setAuthToken(token);
     await axios.get(`${BASE_URL}/api/auth/me`)
-        .then(res =>
-            // TODO: API doit renvoyer nouveau JWT et stocker dans localStorage (user reste toujours connecté).
+        .then(res =>{
             dispatch({
                 type: USER_LOADED,
                 payload: res.data
-            })
-        )
+            });
+            setAuthToken(res.data.token);
+            authService.setToken(res.data.token);
+        })
         .catch(err => {
             const errors = err.response.data.errors;
             if (errors) {

@@ -22,7 +22,8 @@ export default function(state = initialState, action) {
                 ...state,
                 isAuthenticated: true,
                 loading: false,
-                user: payload
+                user: payload.user,
+                token: payload.token
             };
         case SIGNIN_SUCCESS:
             authService.setToken(payload.token);

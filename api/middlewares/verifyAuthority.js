@@ -14,9 +14,18 @@ isPartnerOrAdmin = (req, res, next) => {
     }
 };
 
+isOwnProfile = (req, res, next) => {
+    if ( req.user.id === req.body.id) {
+        next()
+    } else {
+        res.status(401).json({ error: 'Non autorisé.'})
+    }
+};
+
 const verifyAuthority = {
     isAdmin: isAdmin,
-    isPartnerOrAdmin: isPartnerOrAdmin
+    isPartnerOrAdmin: isPartnerOrAdmin,
+    isOwnProfile: isOwnProfile
 };
 
 module.exports = verifyAuthority;
