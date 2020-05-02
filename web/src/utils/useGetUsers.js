@@ -17,7 +17,7 @@ export default function useGetUsers() {
         setError(false);
         axios.get(`${BASE_URL}/api/users`)
             .then(res => {
-                setUsers(res.data);
+                setUsers(res.data.users);
                 setLoading(false);
             })
             .catch(err => {

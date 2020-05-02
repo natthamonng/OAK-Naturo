@@ -1,5 +1,4 @@
 const db = require('../models');
-const Post = db.posts;
 const User = db.users;
 const Comment = db.comments;
 
@@ -20,11 +19,17 @@ exports.getPostComments = (req, res, next) => {
         ]
     })
         .then((result) => {
-            res.status(200).json(result)
+            res.status(200).json({
+                success: true,
+                result
+            })
         })
         .catch((err) => {
-            res.status(500).json(err);
             console.log(err);
+            res.status(500).json({
+                success: false,
+                message: 'Une erreur s\'est produite lors de la récupération des commentaires.'
+            });
         })
 };
 
@@ -39,7 +44,8 @@ exports.addNewComment = async (req, res, next) => {
     }).catch(err => {
         console.error(err);
         res.status(500).json({
-            errors: [{ message: 'Une erreur s\'est produite lors de la création du commentaire.' }]
+            success: false,
+            message: 'Une erreur s\'est produite lors de la création du commentaire.'
         });
     });
 };
@@ -52,11 +58,14 @@ exports.unPublishComment = (req, res) => {
             post_id: req.params.postId
         }}
     ).then(comment => {
-        res.status(200).json({success: true})
+        res.status(200).json({
+            success: true
+        })
     }).catch(err => {
         console.error(err);
         res.status(500).json({
-            errors: [{ message: 'Une erreur s\'est produite lors de la suppression du commentaire.' }]
+            success: false,
+            message: 'Une erreur s\'est produite lors de la suppression du commentaire.'
         });
     });
 };

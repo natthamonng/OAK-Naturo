@@ -63,7 +63,6 @@ export default (state = initialState, action) =>
                     // Object not exists
                     draft.categoryList.push(files);
                 } else {
-                    // TODO Testing
                     // Object already exists
                     let ids = new Set(state.categoryList[fileListIndex].files.map(list => list.id));
                     draft.categoryList[fileListIndex].files = [

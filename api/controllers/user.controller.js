@@ -13,12 +13,15 @@ exports.getUser =  (req, res) => {
 
     User.findByPk(id)
         .then(data => {
-            if(!data)
-                throw new Error();
-            res.send(data);
+            if(!data) throw new Error();
+            res.send({
+                success: true,
+                user: data
+            });
         })
         .catch(err => {
             res.status(500).send({
+                success: false,
                 message: "Error retrieving User with id= " + id
             });
         });
@@ -33,12 +36,15 @@ exports.getUsers = (req, res) => {
         attributes: ['id', 'username', 'email', 'role', 'createdAt']
     })
         .then(data => {
-            if(!data)
-                throw new Error();
-            res.status(200).send(data);
+            if(!data) throw new Error();
+            res.status(200).send({
+                success: true,
+                users: data
+            });
         })
         .catch(err => {
             res.status(500).send({
+                success: false,
                 message: "Error retrieving Users."
             });
         });
@@ -58,7 +64,8 @@ exports.addProfile = async (req, res, next) => {
          }).then(async (user) => {
             if (user === null) {
                 res.status(403).json({
-                    errors: [{message: 'Cet email n\'existe pas.'}]
+                    success: false,
+                    message: 'Cet email n\'existe pas.'
                 })
             } else {
                 const token = crypto.randomBytes(20).toString('hex');
@@ -83,13 +90,15 @@ exports.addProfile = async (req, res, next) => {
                 })
             }
              res.status(200).json({
-                 success: [{ message: 'Nouvel utilisateur créé avec succès.' }]
+                 success: true,
+                 message: 'Nouvel utilisateur créé avec succès.'
              });
         })
     }).catch(err => {
         console.error(err);
         res.status(500).json({
-            errors: [{ message: 'Une erreur s\'est produite lors de la création de l\'utilisateur.' }]
+            success: false,
+            message: 'Une erreur s\'est produite lors de la création de l\'utilisateur.'
         });
     });
 };
@@ -109,12 +118,15 @@ exports.resetPassword = (req, res) => {
             })
             .then(() => {
                 res.status(200).json({
-                    success: [{ message: 'Mot de passe mis à jour.' }]
+                    success: true,
+                    message: 'Mot de passe mis à jour.'
                 });
             });
     }).catch(err => {
+        console.log(err);
         res.status(500).json({
-            errors: [{ message: 'Une erreur s\'est produite lors de la modification du mot de passe.' }]
+            success: false,
+            message: 'Une erreur s\'est produite lors de la modification du mot de passe.'
         });
     });
 };
@@ -134,12 +146,15 @@ exports.editProfile = (req, res) => {
         userInfo.update(condition)
             .then(() => {
                 res.status(200).json({
-                    success: [{ message: 'Profile mis à jour.' }]
+                    success: true,
+                    message: 'Profile mis à jour.'
                 });
             });
     }).catch(err => {
+        console.log(err);
         res.status(500).json({
-            errors: [{ message: 'Une erreur s\'est produite lors de la modification du compte.' }]
+            success: false,
+            message: 'Une erreur s\'est produite lors de la modification du compte.'
         });
     });
 };

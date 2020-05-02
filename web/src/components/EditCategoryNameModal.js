@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { editCategoryName } from '../actions/documentation.actions';
 import { Modal } from 'react-bootstrap';
 
-const EditCategoryNameModal = ({ category }) => {
+const EditCategoryNameModal = ({ category, error }) => {
     const dispatch = useDispatch();
     const [showModal, setShowModal] = useState(false);
     const [categoryName, setCategoryName] = useState(category.categoryName);
@@ -20,6 +20,7 @@ const EditCategoryNameModal = ({ category }) => {
     const onSubmit = (event) => {
         event.preventDefault();
         dispatch(editCategoryName(category.id, {categoryName}));
+        setCategoryName(category.categoryName);
     };
 
     return (

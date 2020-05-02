@@ -3,6 +3,7 @@ import { setAlert } from './alert.actions';
 import  * as actionsType from '../constants/ActionTypes';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
+const defaultErrorMessage = 'Une erreur s\'est produite. Veuillez réessayer plus tard.';
 
 export const setPostsLoading = () => {
     return {
@@ -78,14 +79,16 @@ export const getPosts = (filters, page) => async dispatch => {
     dispatch(setPostsLoading());
     await axios.get(`${BASE_URL}/api/posts/${filters}?page=${page}&pageSize=5`, filters)
         .then( res => {
-            dispatch(getPostsSuccess(res.data.rows, res.data.count))
+            dispatch(getPostsSuccess(res.data.result.rows, res.data.result.count))
         })
         .catch(err => {
-            const errors = err.response.data.errors;
-            if (errors) {
-                errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+            if (err.response) {
+                dispatch(getPostsFailure(err.response.data.message));
+                dispatch(setAlert(err.response.data.message, 'danger'));
+            } else {
+                dispatch(getPostsFailure(defaultErrorMessage));
+                dispatch(setAlert(defaultErrorMessage, 'danger'));
             }
-            dispatch(getPostsFailure(err.response.data.errors))
         })
 };
 
@@ -98,12 +101,16 @@ export const addNewPost = (post) => async dispatch => {
     };
     await axios.post(`${BASE_URL}/api/posts`, post, config)
         .then(res => {
-            dispatch(addPostSuccess(res.data))
+            dispatch(addPostSuccess(res.data.result))
         })
         .catch(err => {
-            const errors = err.response.data.errors;
-            errors.forEach(err => dispatch(setAlert(err.message, 'danger')));
-            dispatch(addPostFailure(err.response.data.errors))
+            if (err.response) {
+                dispatch(addPostFailure(err.response.data.message));
+                dispatch(setAlert(err.response.data.message, 'danger'));
+            } else {
+                dispatch(addPostFailure(defaultErrorMessage));
+                dispatch(setAlert(defaultErrorMessage, 'danger'));
+            }
         })
 };
 
@@ -116,8 +123,11 @@ export const removePost = (postId) => async dispatch => {
             }
         })
         .catch(err => {
-            console.log(err.response.data.errors);
-            dispatch(removePostFailure(err.response.data.errors))
+            if (err.response) {
+                dispatch(removePostFailure(err.response.data.message));
+            } else {
+                dispatch(removePostFailure(defaultErrorMessage));
+            }
         })
 };
 
@@ -130,8 +140,11 @@ export const editFilterPost = (postId, filter) => async dispatch => {
             }
         })
         .catch(err => {
-            console.log(err.response.data.errors);
-            dispatch(editFilterPostFailure(err.response.data.errors))
+            if (err.response) {
+                dispatch(editFilterPostFailure(err.response.data.message));
+            } else {
+                dispatch(editFilterPostFailure(defaultErrorMessage));
+            }
         })
 };
 

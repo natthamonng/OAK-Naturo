@@ -218,12 +218,11 @@ export const getCategoryList = () => async dispatch => {
     dispatch(getCategoryListBegin());
     await axios.get(`${BASE_URL}/api/documentation/categories`)
         .then( res => {
-            dispatch(getCategoryListSuccess(res.data))
+            dispatch(getCategoryListSuccess(res.data.result))
         })
         .catch( err => {
-            const error = err.response.data.error;
-            if (error) {
-                dispatch(getCategoryListFailure(error))
+            if (err.response) {
+                dispatch(getCategoryListFailure(err.response.data.message))
             } else {
                 dispatch(getCategoryListFailure(defaultErrorMessage))
             }
@@ -234,12 +233,11 @@ export const getCategoryFileList = (categoryId) => async dispatch => {
     dispatch(getCategoryFileListBegin());
     await axios.get(`${BASE_URL}/api/documentation/categories/${categoryId}`)
         .then( res => {
-            dispatch(getCategoryFileListSuccess(res.data))
+            dispatch(getCategoryFileListSuccess(res.data.result))
         })
         .catch(err => {
-            const error = err.response.data.error;
-            if (error) {
-                dispatch(getCategoryFileListFailure(error))
+            if (err.response) {
+                dispatch(getCategoryFileListFailure(err.response.data.message))
             } else {
                 dispatch(getCategoryFileListFailure(defaultErrorMessage))
             }
@@ -250,12 +248,11 @@ export const getFile = (categoryId, fileId) => async dispatch => {
     dispatch(getFileBegin());
     await axios.get(`${BASE_URL}/api/documentation/categories/${categoryId}/files/${fileId}`)
         .then( res => {
-            dispatch(getFileSuccess(res.data))
+            dispatch(getFileSuccess(res.data.result))
         })
         .catch(err => {
-            const error = err.response.data.error;
-            if (error) {
-                dispatch(getFileFailure(error))
+            if (err.response) {
+                dispatch(getFileFailure(err.response.data.message))
             } else {
                 dispatch(getFileFailure(defaultErrorMessage))
             }
@@ -266,17 +263,17 @@ export const addNewCategory = (categoryName) => async dispatch => {
     dispatch(addCategoryBegin());
     await axios.post(`${BASE_URL}/api/documentation/categories`, categoryName)
         .then(res => {
-            dispatch(addCategorySuccess(res.data));
-            dispatch(setAlert(`Ajouté catégorie: ${res.data.categoryName}`, 'primary'))
+            dispatch(addCategorySuccess(res.data.result));
+            dispatch(setAlert(`Ajouté catégorie: ${res.data.result.categoryName}`, 'primary'))
         })
         .catch(err => {
-            const error = err.response.data.error;
-            if (error) {
-                dispatch(addCategoryFailure(error))
+            if (err.response) {
+                dispatch(addCategoryFailure(err.response.data.message));
+                dispatch(setAlert(err.response.data.message, 'danger'));
             } else {
-                dispatch(addCategoryFailure(defaultErrorMessage))
+                dispatch(addCategoryFailure(defaultErrorMessage));
+                dispatch(setAlert(defaultErrorMessage, 'danger'));
             }
-            dispatch(setAlert(error || defaultErrorMessage, 'danger'));
         })
 };
 
@@ -289,13 +286,13 @@ export const editCategoryName = (id, categoryName) => async dispatch => {
             }
         })
         .catch(err => {
-            const error = err.response.data.error;
-            if (error) {
-                dispatch(editCategoryNameFailure(error))
+            if (err.response) {
+                dispatch(editCategoryNameFailure(err.response.data.message));
+                dispatch(setAlert(err.response.data.message, 'danger'));
             } else {
-                dispatch(editCategoryNameFailure(defaultErrorMessage))
+                dispatch(editCategoryNameFailure(defaultErrorMessage));
+                dispatch(setAlert(defaultErrorMessage, 'danger'));
             }
-            dispatch(setAlert(error || defaultErrorMessage, 'danger'));
         })
 };
 
@@ -308,13 +305,13 @@ export const removeCategoryAndItsFiles = (categoryId) => async dispatch => {
             }
         })
         .catch(err => {
-            const error = err.response.data.error;
-            if (error) {
-                dispatch(removeCategoryFailure(error))
+            if (err.response) {
+                dispatch(removeCategoryFailure(err.response.data.message));
+                dispatch(setAlert(err.response.data.message, 'danger'));
             } else {
-                dispatch(removeCategoryFailure(defaultErrorMessage))
+                dispatch(removeCategoryFailure(defaultErrorMessage));
+                dispatch(setAlert(defaultErrorMessage, 'danger'));
             }
-            dispatch(setAlert(error || defaultErrorMessage, 'danger'));
         })
 };
 
@@ -322,16 +319,16 @@ export const getDeletedCategories = () => async dispatch => {
     dispatch(getDeletedCategoriesBegin());
     await axios.get(`${BASE_URL}/api/documentation/deletedCategories`)
         .then(res => {
-            dispatch(getDeletedCategoriesSuccess(res.data));
+            dispatch(getDeletedCategoriesSuccess(res.data.result));
         })
         .catch(err => {
-            const error = err.response.data.error;
-            if (error) {
-                dispatch(getDeletedCategoriesFailure(error))
+            if (err.response) {
+                dispatch(getDeletedCategoriesFailure(err.response.data.message));
+                dispatch(setAlert(err.response.data.message, 'danger'));
             } else {
-                dispatch(getDeletedCategoriesFailure(defaultErrorMessage))
+                dispatch(getDeletedCategoriesFailure(defaultErrorMessage));
+                dispatch(setAlert(defaultErrorMessage, 'danger'));
             }
-            dispatch(setAlert(error || defaultErrorMessage, 'danger'));
         })
 };
 
@@ -344,11 +341,12 @@ export const restoreCategoryAndItsFiles = (categoryId) => async dispatch => {
             }
         })
         .catch(err => {
-            const error = err.response.data.error;
-            if (error) {
-                dispatch(restoreCategoryFailure(error))
+            if (err.response) {
+                dispatch(restoreCategoryFailure(err.response.data.message));
+                dispatch(setAlert(err.response.data.message, 'danger'));
             } else {
-                dispatch(restoreCategoryFailure(defaultErrorMessage))
+                dispatch(restoreCategoryFailure(defaultErrorMessage));
+                dispatch(setAlert(defaultErrorMessage, 'danger'));
             }
         })
 };
@@ -358,16 +356,16 @@ export const createNewFile = (file) => async dispatch => {
     await axios.post(`${BASE_URL}/api/documentation/files`, file)
         .then(res => {
             dispatch(setAlert('Nouveau fichier créé avec succès.', 'primary'));
-            dispatch(createFileSuccess(res.data));
+            dispatch(createFileSuccess(res.data.result));
         })
         .catch(err => {
-            const error = err.response.data.error;
-            if (error) {
-                dispatch(createFileFailure(error))
+            if (err.response) {
+                dispatch(createFileFailure(err.response.data.message));
+                dispatch(setAlert(err.response.data.message, 'danger'));
             } else {
-                dispatch(createFileFailure(defaultErrorMessage))
+                dispatch(createFileFailure(defaultErrorMessage));
+                dispatch(setAlert(defaultErrorMessage, 'danger'));
             }
-            dispatch(setAlert(error || defaultErrorMessage, 'danger'))
         })
 };
 
@@ -381,13 +379,13 @@ export const editFile = (file) => async dispatch => {
             }
         })
         .catch(err => {
-            const error = err.response.data.error;
-            if (error) {
-                dispatch(editFileFailure(error))
+            if (err.response) {
+                dispatch(editFileFailure(err.response.data.message));
+                dispatch(setAlert(err.response.data.message, 'danger'));
             } else {
-                dispatch(editFileFailure(defaultErrorMessage))
+                dispatch(editFileFailure(defaultErrorMessage));
+                dispatch(setAlert(defaultErrorMessage, 'danger'));
             }
-            dispatch(setAlert(error || defaultErrorMessage, 'danger'))
         })
 };
 
@@ -400,13 +398,13 @@ export const removeFile = (categoryId, fileId) => async dispatch => {
             }
         })
         .catch(err => {
-            const error = err.response.data.error;
-            if (error) {
-                dispatch(removeFileFailure(error))
+            if (err.response) {
+                dispatch(removeFileFailure(err.response.data.message));
+                dispatch(setAlert(err.response.data.message, 'danger'));
             } else {
-                dispatch(removeFileFailure(defaultErrorMessage))
+                dispatch(removeFileFailure(defaultErrorMessage));
+                dispatch(setAlert(defaultErrorMessage, 'danger'));
             }
-            dispatch(setAlert(error || defaultErrorMessage, 'danger'));
         })
 };
 
@@ -414,16 +412,16 @@ export const getDeletedFiles = () => async dispatch => {
     dispatch(getDeletedFilesBegin());
     await axios.get(`${BASE_URL}/api/documentation/deletedFiles`)
         .then(res => {
-            dispatch(getDeletedFilesSuccess(res.data));
+            dispatch(getDeletedFilesSuccess(res.data.result));
         })
         .catch(err => {
-            const error = err.response.data.error;
-            if (error) {
-                dispatch(getDeletedFilesFailure(error))
+            if (err.response) {
+                dispatch(getDeletedFilesFailure(err.response.data.message));
+                dispatch(setAlert(err.response.data.message, 'danger'));
             } else {
-                dispatch(getDeletedFilesFailure(defaultErrorMessage))
+                dispatch(getDeletedFilesFailure(defaultErrorMessage));
+                dispatch(setAlert(defaultErrorMessage, 'danger'));
             }
-            dispatch(setAlert(error || defaultErrorMessage, 'danger'));
         })
 };
 
@@ -436,13 +434,13 @@ export const restoreFile = (categoryId, fileId) => async dispatch => {
             }
         })
         .catch(err => {
-            const error = err.response.data.error;
-            if (error) {
-                dispatch(restoreFileFailure(error))
+            if (err.response) {
+                dispatch(restoreFileFailure(err.response.data.message));
+                dispatch(setAlert(err.response.data.message, 'danger'));
             } else {
-                dispatch(restoreFileFailure(defaultErrorMessage))
+                dispatch(restoreFileFailure(defaultErrorMessage));
+                dispatch(setAlert(defaultErrorMessage, 'danger'));
             }
-            dispatch(setAlert(error || defaultErrorMessage, 'danger'));
         })
 };
 

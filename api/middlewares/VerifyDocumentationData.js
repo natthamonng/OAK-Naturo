@@ -10,9 +10,10 @@ checkDuplicatedCategory = (req, res, next) => {
     })
     .then(category => {
         if (category) {
-            res.status(400).json(
-                { error: 'Cette catégorie existe déjà.'}
-            );
+            res.status(400).json({
+                success: false,
+                message: 'Cette catégorie existe déjà.'
+            });
             return;
         }
 

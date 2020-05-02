@@ -30,11 +30,11 @@ const ForgotPWD = ({ setAlert, isAuthenticated}) => {
             .then(res => {
                 setIsLoading(false);
                 setEmail('');
-                setAlert(res.data.success, 'primary');
+                setAlert(res.data.message, 'primary');
             })
             .catch(err => {
                 setIsLoading(false);
-                setAlert(err.response.data.error, 'danger');
+                setAlert(err.response.data.message, 'danger');
             })
     };
 

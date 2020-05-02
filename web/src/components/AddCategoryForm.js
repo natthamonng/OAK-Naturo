@@ -27,7 +27,7 @@ const AddCategoryForm = () => {
                 <div className="d-flex flex-column">
                     <div className="form-group">
                         <input className="form-control" type="text" placeholder="nom de catégorie"
-                        onChange={ event => onChange(event)} value={categoryName}/>
+                            onChange={ event => onChange(event)} value={categoryName}/>
                     </div>
 
                     { loading ?

@@ -5,7 +5,7 @@ import EditCategoryNameModal from './EditCategoryNameModal';
 import DeleteCategoryModal from './DeleteCategoryModal';
 import Moment from 'react-moment';
 
-const CategoryListTable = ({ categories }) => {
+const CategoryListTable = ({ categories, error }) => {
     const [filter, setFilter] = useState('');
 
     // Filtered items
@@ -32,9 +32,14 @@ const CategoryListTable = ({ categories }) => {
                 <td><Moment format="DD/MM/YYYY">{ category.updatedAt }</Moment></td>
                 <td>
                     <div className="d-flex justify-content-center">
-                        <EditCategoryNameModal category={category}/>
+                        <EditCategoryNameModal
+                            category={category}
+                            error={error}
+                        />
                         <div className="mx-1"></div>
-                        <DeleteCategoryModal categoryId={category.id} />
+                        <DeleteCategoryModal
+                            categoryId={category.id}
+                        />
                     </div>
                 </td>
             </tr>

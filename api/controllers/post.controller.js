@@ -31,7 +31,8 @@ exports.addNewPost = async (req, res, next) => {
     .catch(err => {
         console.error(err);
         res.status(500).json({
-            errors: [{ message: 'Une erreur s\'est produite lors de la création de la publication.' }]
+            success: false,
+            message: 'Une erreur s\'est produite lors de la création de la publication.'
         });
     })
 };
@@ -78,9 +79,16 @@ exports.getPostById = (req, res) => {
             }
         ]
     }).then((result) => {
-        res.status(200).json(result);
+        res.status(200).json({
+            success: true,
+            result
+        });
     }).catch(err => {
-        res.status(500).json(err);
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            message: 'Une erreur s\'est produite lors de la récupération d\'une publication.'
+        });
     })
 };
 
@@ -144,11 +152,17 @@ exports.getPostsByFilters = (req, res) => {
         distinct: true
     })
     .then((result) => {
-        res.status(200).json(result)
+        res.status(200).json({
+            success: true,
+            result
+        })
     })
     .catch((err) => {
-        res.status(500).json(err);
         console.log(err);
+        res.status(500).json({
+            success: false,
+            message: 'Une erreur s\'est produite lors de la récupération des publications.'
+        });
     })
 };
 
@@ -157,11 +171,14 @@ exports.unPublishPost = (req, res) => {
         {status: 'unpublished'} ,
         {where: {id: req.params.postId}}
     ).then(() => {
-       res.status(200).json({success: true})
+       res.status(200).json({
+           success: true
+       })
     }).catch(err => {
         console.error(err);
         res.status(500).json({
-            errors: [{ message: 'Une erreur s\'est produite lors de la suppression de la publication.' }]
+            success: false,
+            message: 'Une erreur s\'est produite lors de la suppression de la publication.'
         });
     });
 };
@@ -171,11 +188,14 @@ exports.updateFilterPost = (req, res) => {
         {filter: req.params.filter} ,
         {where: {id: req.params.postId}}
     ).then(() => {
-        res.status(200).json({success: true})
+        res.status(200).json({
+            success: true
+        })
     }).catch(err => {
         console.error(err);
         res.status(500).json({
-            errors: [{ message: 'Une erreur s\'est produite lors de la modification d\'un filtre.' }]
+            success: false,
+            message: 'Une erreur s\'est produite lors de la modification d\'un filtre.'
         });
     });
 };

@@ -13,18 +13,20 @@ export const loadUserByJwt = (token) => async dispatch => {
     setAuthToken(token);
     await axios.get(`${BASE_URL}/api/auth/me`)
         .then(res =>{
-            dispatch({
-                type: actionsType.USER_LOADED,
-                payload: res.data
-            });
-            setAuthToken(res.data.token);
-            authService.setToken(res.data.token);
+            if (res.data.success === true) {
+                dispatch({
+                    type: actionsType.USER_LOADED,
+                    payload: res.data
+                });
+                setAuthToken(res.data.token);
+                authService.setToken(res.data.token);
+            }
         })
         .catch(err => {
             if(!err.response) {
                 dispatch(setAlert(defaultErrorMessage, 'danger', 50000))
             } else {
-                dispatch(setAlert(err.response.data.error, 'danger'));
+                dispatch(setAlert(err.response.data.message, 'danger'));
             }
 
             dispatch({
@@ -40,17 +42,19 @@ export const signInUser = (signInData) =>  async dispatch => {
     });
     try {
         const res = await axios.post(`${BASE_URL}/api/auth/signin`, signInData);
-        setAuthToken(res.data.token);
-        authService.setToken(res.data.token);
-        dispatch({
-            type: actionsType.SIGNIN_SUCCESS,
-            payload: res.data
-        });
+        if (res.data.success === true) {
+            setAuthToken(res.data.token);
+            authService.setToken(res.data.token);
+            dispatch({
+                type: actionsType.SIGNIN_SUCCESS,
+                payload: res.data
+            });
+        }
     } catch (err) {
         if(!err.response) {
             dispatch(setAlert(defaultErrorMessage, 'danger', 50000))
         } else {
-            dispatch(setAlert(err.response.data.error, 'danger'));
+            dispatch(setAlert(err.response.data.message, 'danger'));
         }
 
         dispatch({
@@ -69,16 +73,18 @@ export const signOutUser = () => dispatch => {
 // SignUp
 export  const signUpUser = (signUpData) => async dispatch => {
     try {
-        const res = await axios.post(`${BASE_URL}/api/auth/signup`, signUpData, config);
-        dispatch({
-            type: actionsType.SIGNUP_SUCCESS,
-            payload: res.data
-        });
+        const res = await axios.post(`${BASE_URL}/api/auth/signup`, signUpData);
+        if (res.data.success === true) {
+            dispatch({
+                type: actionsType.SIGNUP_SUCCESS,
+                payload: res.data
+            });
+        }
     } catch (err) {
         if(!err.response) {
             dispatch(setAlert(defaultErrorMessage, 'danger', 50000))
         } else {
-            dispatch(setAlert(err.response.data.error, 'danger'));
+            dispatch(setAlert(err.response.data.message, 'danger'));
         }
 
         dispatch({

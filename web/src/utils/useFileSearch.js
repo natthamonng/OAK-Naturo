@@ -24,8 +24,8 @@ export default function useFileSearch(query) {
             url: `${BASE_URL}/api/documentation/search?keyword=${query}`,
             cancelToken: new axios.CancelToken(c => cancel = c)
         }).then(res => {
-            setFiles(res.data.rows);
-            setTotal(res.data.count);
+            setFiles(res.data.result.rows);
+            setTotal(res.data.result.count);
             setLoading(false)
         }).catch(e => {
             if (axios.isCancel(e)) return;

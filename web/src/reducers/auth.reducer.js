@@ -41,7 +41,6 @@ export default function(state = initialState, action) {
                 loading: true
             };
         case SIGNIN_SUCCESS:
-            authService.setToken(payload.token);
             return {
                 ...state,
                 ...payload,
@@ -60,7 +59,6 @@ export default function(state = initialState, action) {
         case SIGNUP_FAILED:
         case SIGNIN_FAILED:
         case SIGNOUT:
-            authService.logout();
             return {
                 ...state,
                 user: null,

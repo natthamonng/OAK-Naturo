@@ -10,6 +10,7 @@ import SpinnerBubble from '../../components/SpinnerBubble';
 const ManageCategory = () => {
     const categoryList = useSelector(state => state.documentation.categoryList);
     const loading = useSelector(state => state.documentation.loading);
+    const error = useSelector(state => state.documentation.error);
     const dispatch = useDispatch();
     
     useEffect(() => {
@@ -41,7 +42,10 @@ const ManageCategory = () => {
                         </div>
 
                         <div className="col-md-8">
-                            <CategoryListTable categories={categoryList}/>
+                            <CategoryListTable
+                                categories={categoryList}
+                                error={error}
+                            />
                         </div>
                     </div>
                 }

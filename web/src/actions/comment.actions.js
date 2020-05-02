@@ -2,6 +2,7 @@ import axios from 'axios';
 import * as actionsType from '../constants/ActionTypes';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
+const defaultErrorMessage = 'Une erreur s\'est produite. Veuillez réessayer plus tard.';
 
 export const addCommentBegin = () => {
     return {
@@ -37,14 +38,16 @@ export const removeCommentFailure = error => ({
 
 export const addNewComment = (comment) => async dispatch => {
     dispatch(addCommentBegin());
-    const body = comment;
-    await axios.post(`${BASE_URL}/api/comments`, body)
+    await axios.post(`${BASE_URL}/api/comments`, comment)
         .then(res => {
-                dispatch(addCommentSuccess(res.data))
+                dispatch(addCommentSuccess(res.data.result))
         })
         .catch(err => {
-            console.log(err.response.data.errors);
-            dispatch(addCommentFailure(err.response.data.errors))
+            if (err.response) {
+                dispatch(addCommentFailure(err.response.data.message));
+            } else {
+                dispatch(addCommentFailure(defaultErrorMessage));
+            }
         })
 };
 
@@ -57,7 +60,10 @@ export const removeComment = (postId, commentId) => async dispatch => {
             }
         })
         .catch(err => {
-            console.log(err.response.data.errors);
-            dispatch(removeCommentFailure(err.response.data.errors))
+            if (err.response) {
+                dispatch(removeCommentFailure(err.response.data.message));
+            } else {
+                dispatch(removeCommentFailure(defaultErrorMessage));
+            }
         })
 };

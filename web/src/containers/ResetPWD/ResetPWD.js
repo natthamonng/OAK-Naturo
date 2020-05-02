@@ -38,7 +38,7 @@ const ResetPWD = ({ setAlert , match}) => {
                 setError(false);
             })
             .catch(err => {
-                const error = err.response.data.error;
+                const error = err.response.data.message;
                 if (error) {
                     console.error(error);
                 }
@@ -77,7 +77,7 @@ const ResetPWD = ({ setAlert , match}) => {
                 }
             })
             .catch(err => {
-                const error = err.response.data.error;
+                const error = err.response.data.message;
                 if (error) {
                     setAlert(error, 'danger');
                 }

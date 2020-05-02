@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import axios from 'axios';
 import { setAlert } from '../../actions/alert.actions';
 import BreadCrumb from '../../components/Breadcrumb';
@@ -22,14 +22,9 @@ const AddUser = ({ setAlert }) => {
         setFormData({...formData, [event.target.id]: event.target.value });
     };
 
-    const onSubmit = async event => {
+    const onSubmit = event => {
         event.preventDefault();
         addNewUser({ username, email, role });
-        setFormData({
-            username: '',
-            email: '',
-            role: 'visitor'
-        })
     };
 
     const addNewUser = (data) => {
@@ -37,15 +32,18 @@ const AddUser = ({ setAlert }) => {
         axios.post(`${BASE_URL}/api/users`, data)
             .then(res => {
                 setLoading(false);
-                const success = res.data.success;
-                success.forEach(msg => setAlert(msg.message, 'primary'));
+                if (res.data.success === true) {
+                    setAlert(res.data.message, 'primary');
+                }
+                setFormData({
+                    username: '',
+                    email: '',
+                    role: 'visitor'
+                })
             })
             .catch(err => {
                 setLoading(false);
-            const errors = err.response.data.errors;
-            if (errors) {
-                errors.forEach(error => setAlert(error.message, 'danger'));
-            }
+                setAlert(err.response.data.message, 'danger');
         })
     };
 

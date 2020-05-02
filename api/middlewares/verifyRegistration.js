@@ -9,9 +9,10 @@ checkDuplicatedData = (req, res, next) => {
         }
     }).then(user => {
         if (user) {
-            res.status(400).json(
-                {error: 'Cet identifiant existe déjà.'}
-            );
+            res.status(400).json({
+                success: false,
+                message: 'Cet identifiant existe déjà.'
+            });
             return;
         }
 
@@ -22,9 +23,10 @@ checkDuplicatedData = (req, res, next) => {
             }
         }).then(user => {
             if (user) {
-                res.status(400).json(
-                    {error: 'Cet email existe déjà.'}
-                );
+                res.status(400).json({
+                    success: false,
+                    message: 'Cet email existe déjà.'
+                });
                 return;
             }
 

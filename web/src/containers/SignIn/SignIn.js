@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, Redirect, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { signInUser } from "../../actions/auth.actions";
+import { signInUser } from '../../actions/auth.actions';
 import Alert from '../../components/Alert';
 import logo from '../../assets/images/acorn.png';
 import photoWide from '../../assets/images/photo-wide-6.jpg';
@@ -12,21 +12,20 @@ import '../../assets/scss/custom/welcome-text.scss';
 function SignIn({ signInUser, isAuthenticated, loading }) {
     let location = useLocation();
     let { from } = location.state || { from: { pathname: "/home" } };
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-    const [formData, setFormData] = useState({
-        email: "",
-        password: ""
-    });
-
-    const { email, password } =  formData;
-
-    const onChange = event => {
-        setFormData({...formData, [event.target.id]: event.target.value});
+    const handleOnEmailChange = event => {
+        setEmail(event.target.value)
     };
 
-    const onSubmit = async event => {
+    const handleOnPasswordChange = event => {
+        setPassword(event.target.value)
+    };
+
+    const onSubmit = event => {
         event.preventDefault();
-        signInUser({email, password});
+        signInUser({ email, password });
     };
 
     if (isAuthenticated) {
@@ -74,7 +73,7 @@ function SignIn({ signInUser, isAuthenticated, loading }) {
                                             className="form-control form-control-rounded"
                                             id="email"
                                             type="email"
-                                            onChange={event => onChange(event)}
+                                            onChange={event => handleOnEmailChange(event)}
                                             value={email}
                                             autoComplete="email"
                                             required
@@ -86,7 +85,7 @@ function SignIn({ signInUser, isAuthenticated, loading }) {
                                             className="form-control form-control-rounded"
                                             id="password"
                                             type="password"
-                                            onChange={event => onChange(event)}
+                                            onChange={event => handleOnPasswordChange(event)}
                                             value={password}
                                             minLength='4' required
                                             autoComplete="current-password"
@@ -121,4 +120,4 @@ const mapStateToProps = state => ({
     loading: state.auth.loading
 });
 
-export default connect(mapStateToProps, {signInUser})(SignIn);
+export default connect(mapStateToProps, { signInUser })(SignIn);
