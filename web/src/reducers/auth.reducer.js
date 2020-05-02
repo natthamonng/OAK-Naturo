@@ -1,4 +1,14 @@
-import {  USER_LOADING, USER_LOADED, AUTH_ERROR, SIGNIN_SUCCESS, SIGNIN_FAILED, SIGNOUT, SIGNUP_SUCCESS, SIGNUP_FAILED } from '../constants/ActionTypes';
+import {
+    USER_LOADING,
+    USER_LOADED,
+    AUTH_ERROR,
+    SIGNIN_SUCCESS,
+    SIGNIN_FAILED,
+    SIGNOUT,
+    SIGNUP_SUCCESS,
+    SIGNUP_FAILED,
+    SIGNIN_REQUEST
+} from '../constants/ActionTypes';
 import { authService } from '../services/auth.service';
 
 const initialState = {
@@ -24,6 +34,11 @@ export default function(state = initialState, action) {
                 loading: false,
                 user: payload.user,
                 token: payload.token
+            };
+        case SIGNIN_REQUEST:
+            return {
+                ...state,
+                loading: true
             };
         case SIGNIN_SUCCESS:
             authService.setToken(payload.token);

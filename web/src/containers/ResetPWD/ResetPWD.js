@@ -4,24 +4,20 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alert.actions';
-
 import Alert from '../../components/Alert';
 import SpinnerBubble from '../../components/SpinnerBubble';
-
 import logo from '../../assets/images/acorn.png';
 import photoWide from '../../assets/images/photo-wide-6.jpg';
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 const ResetPWD = ({ setAlert , match}) => {
-    const [state, setState] = useState({
-        username: '',
-        password: '',
-        password2: '',
-        updated: false,
-        isLoading: true,
-        error: false
-    });
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [repeatedPassword, setRepeatedPassword] = useState('');
+    const [updated, setUpdated] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(false);
 
     useEffect(() => {
         const { params: { token }} = match;
@@ -32,87 +28,61 @@ const ResetPWD = ({ setAlert , match}) => {
             params: {
                 resetPWDToken: token
             }
-        }
+        };
 
-        axios.get(`${process.env.REACT_APP_API_URL}/api/auth/reset-password`, config)
+        axios.get(`${BASE_URL}/api/auth/reset-password`, config)
             .then( res => {
-                setState((previousState) => {
-                    return {
-                        ...previousState,
-                        username: res.data.username,
-                        updated: false,
-                        isLoading: false,
-                        error: false
-                    }
-                });
-                console.log(res.data.success);
+                setUsername(res.data.username);
+                setUpdated(false);
+                setIsLoading(false);
+                setError(false);
             })
             .catch(err => {
-                const errors = err.response.data.errors;
-                if (errors) {
-                console.error(errors);
+                const error = err.response.data.error;
+                if (error) {
+                    console.error(error);
                 }
-                setState((previousState) => {
-                    return {
-                    ...previousState,
-                    updates: false,
-                    isLoading: false,
-                    error: true
-                    }
-                })
+                setUpdated(false);
+                setIsLoading(false);
+                setError(true);
             })
     }, []);
 
-    const { password, password2 } = state;
+    const handleOnPasswordChange = event => {
+        setPassword(event.target.value);
+    };
 
-    const onChange = event => {
-        setState({...state, [event.target.id]: event.target.value });
-    }
+    const handleOnRepeatedPasswordChange = event => {
+        setRepeatedPassword(event.target.value);
+    };
 
     const onSubmit = event => {
         event.preventDefault();
-        if (password !== password2) {
+        if (password !== repeatedPassword) {
             setAlert('Le mot de passe ne correspond pas.', 'danger');
         } else {
-            const { username, password } = state;
             updatePassword({ username, password });
         }
     };
 
     const updatePassword = ({ username, password }) => {
         const {params: {token}} = match;
-        const config = {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        };
+        const body = {username, password, resetPWDToken: token};
 
-        const body = JSON.stringify({username, password, resetPWDToken: token});
-
-        axios.put(`${BASE_URL}/api/auth/update-password`, body, config)
+        axios.put(`${BASE_URL}/api/auth/update-password`, body)
             .then(res => {
-                setState((previousState) => {
-                    return {
-                        ...previousState,
-                        updated: true,
-                        error: false
-                    }
-                });
-                const success = res.data.success;
-                success.forEach(msg => setAlert(msg.message, 'primary'));
+                if (res.data.success === true) {
+                    setUpdated(true);
+                    setError(false);
+                }
             })
             .catch(err => {
-                const errors = err.response.data.errors;
-                if (errors) {
-                    errors.forEach(error => setAlert(error.message, 'danger'));
+                const error = err.response.data.error;
+                if (error) {
+                    setAlert(error, 'danger');
                 }
-                setState((previousState) => {
-                    return {
-                        ...previousState,
-                        updated: false,
-                        error: true
-                    }
-                });
+                setUpdated(false);
+                setError(true);
             })
     };
 
@@ -127,13 +97,13 @@ const ResetPWD = ({ setAlert , match}) => {
                        <div className="col-12">
                            <div className="p-4">
 
-                           { state.isLoading ?
+                           { isLoading ?
                                <SpinnerBubble/>
                                :
                                <div className="auth-logo text-center mb-4"><img src={logo} alt="logo"/></div>
                            }
 
-                           { state.error ?
+                           { error ?
                                <div className="text-center">
                                    <h1 className="mb-3 text-18">
                                        Votre lien de réinitialisation du mot de passe n'est pas valide ou a expiré.
@@ -148,7 +118,7 @@ const ResetPWD = ({ setAlert , match}) => {
                                :
                                <div>
 
-                                   {state.updated ?
+                                   { updated ?
                                        <div className="text-center">
                                        <h1 className="mb-3 text-18">
                                            Votre mot de passe a été réinitialisé avec succès, veuillez vous connecter
@@ -169,9 +139,9 @@ const ResetPWD = ({ setAlert , match}) => {
                                                    id="password"
                                                    type="password"
                                                    value={password}
-                                                   onChange={event => onChange(event)}
+                                                   onChange={event => handleOnPasswordChange(event)}
                                                    autoComplete="new-password"
-                                                   minlength="8" required
+                                                   minLength="8" required
                                                />
                                            </div>
                                            <div className="form-group">
@@ -180,10 +150,10 @@ const ResetPWD = ({ setAlert , match}) => {
                                                    className="form-control form-control-rounded"
                                                    id="password2"
                                                    type="password"
-                                                   value={password2}
-                                                   onChange={event => onChange(event)}
+                                                   value={repeatedPassword}
+                                                   onChange={event => handleOnRepeatedPasswordChange(event)}
                                                    autoComplete="new-password"
-                                                   minlength="8" required
+                                                   minLength="8" required
                                                />
                                            </div>
                                            <button className="btn btn-primary btn-block btn-rounded mt-3"

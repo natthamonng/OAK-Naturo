@@ -49,7 +49,7 @@ exports.uploadFiles = (req, res) => {
 
 exports.getFiles = (req, res) => {
     const page = parseInt(req.query.page) || 0;
-    const pageSize = parseInt(req.query.pageSize) || 5;
+    const pageSize = parseInt(req.query.pageSize) || 30;
     const offset = page * pageSize;
     const limit = pageSize;
     const condition = req.body.status || 'published';
@@ -80,10 +80,10 @@ exports.getFiles = (req, res) => {
             res.status(200).json(result)
         })
         .catch(err => {
-            console.log(err);
-            res.status(500).json({ errors: [
-                { message: 'Une erreur s\'est produite lors de la recupération des fichiers.' }
-            ]})
+            console.error(err);
+            res.status(500).json(
+                { error: 'Une erreur s\'est produite lors de la recupération des fichiers.' }
+            )
         })
 };
 
@@ -111,10 +111,10 @@ exports.getFileById = (req, res) => {
             res.status(200).json(result)
         })
         .catch(err => {
-            console.log(err);
-            res.status(500).json({ errors: [
-                { message: 'Une erreur s\'est produite lors de la recupération d\'un fichier.' }
-            ]})
+            console.error(err);
+            res.status(500).json(
+                { error: 'Une erreur s\'est produite lors de la recupération d\'un fichier.' }
+            )
         })
 };
 
@@ -165,14 +165,13 @@ exports.getFilesByQuery = (req, res) => {
         subQuery: false
     }).then(result => {
         if (result.count === 0){
-            res.status(404).json({ errors: [{ message: 'Aucun résultat trouvé.' }]
-            })
+            res.status(404).json({ error: 'Aucun résultat trouvé.' })
         } else {
             res.status(200).json(result)
         }
     }).catch(err => {
-        res.status(404).json({ errors: [{ message: 'Aucun résultat trouvé.' }]
-        })
+        console.error(err);
+        res.status(404).json({ error: 'Aucun résultat trouvé.' })
     })
 };
 
@@ -210,9 +209,9 @@ exports.getFilesByCategory = (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            res.status(500).json({ errors: [
-                { message: 'Une erreur s\'est produite lors de la recupération des fichiers.' }
-            ]})
+            res.status(500).json(
+                { error: 'Une erreur s\'est produite lors de la recupération des fichiers.' }
+            )
         })
 };
 
@@ -227,9 +226,9 @@ exports.createFile = async (req, res, next) => {
             next();
     }).catch(err => {
         console.log(err);
-        res.status(500).json({ errors: [
-            { message: 'Une erreur s\'est produite lors de la création du fichier.' }
-        ]})
+        res.status(500).json(
+            { error: 'Une erreur s\'est produite lors de la création du fichier.' }
+        )
     })
 };
 
@@ -257,10 +256,10 @@ exports.editFile = (req, res) => {
        ).then(() => {
            res.status(200).json({success: true})
        }).catch(err => {
-           console.error(err);
-           res.status(500).json({
-               errors: [{ message: 'Une erreur s\'est produite lors de la modification du fichier.' }]
-           });
+           console.log(err);
+           res.status(500).json(
+               { error: 'Une erreur s\'est produite lors de la modification du fichier.' }
+           );
        });
    }
 };
@@ -279,9 +278,9 @@ exports.updateStatusFile = (req, res) => {
         res.status(200).json({success: true})
     }).catch(err => {
         console.error(err);
-        res.status(500).json({
-            errors: [{ message: 'Une erreur s\'est produite lors de la modification du fichier.' }]
-        });
+        res.status(500).json(
+            { error: 'Une erreur s\'est produite lors de la modification du fichier.' }
+        );
     });
 };
 

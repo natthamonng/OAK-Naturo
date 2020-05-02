@@ -212,7 +212,7 @@ export const restoreFileFailure = error => ({
     payload: { error }
 });
 
-let error = 'Une erreur s\'est produite.';
+const defaultErrorMessage = 'Une erreur s\'est produite. Veuillez réessayer plus tard.';
 
 export const getCategoryList = () => async dispatch => {
     dispatch(getCategoryListBegin());
@@ -221,10 +221,12 @@ export const getCategoryList = () => async dispatch => {
             dispatch(getCategoryListSuccess(res.data))
         })
         .catch( err => {
-            if (err.response.data.errors) {
-                error = err.response.data.errors
+            const error = err.response.data.error;
+            if (error) {
+                dispatch(getCategoryListFailure(error))
+            } else {
+                dispatch(getCategoryListFailure(defaultErrorMessage))
             }
-            dispatch(getCategoryListFailure(error))
         })
 };
 
@@ -235,8 +237,12 @@ export const getCategoryFileList = (categoryId) => async dispatch => {
             dispatch(getCategoryFileListSuccess(res.data))
         })
         .catch(err => {
-            console.log(err.response.data.errors);
-            dispatch(getCategoryFileListFailure(err.response.data.errors))
+            const error = err.response.data.error;
+            if (error) {
+                dispatch(getCategoryFileListFailure(error))
+            } else {
+                dispatch(getCategoryFileListFailure(defaultErrorMessage))
+            }
         })
 };
 
@@ -247,9 +253,12 @@ export const getFile = (categoryId, fileId) => async dispatch => {
             dispatch(getFileSuccess(res.data))
         })
         .catch(err => {
-            const errors = err.response.data.errors;
-            console.log(errors);
-            dispatch(getFileFailure(errors))
+            const error = err.response.data.error;
+            if (error) {
+                dispatch(getFileFailure(error))
+            } else {
+                dispatch(getFileFailure(defaultErrorMessage))
+            }
         })
 };
 
@@ -261,11 +270,13 @@ export const addNewCategory = (categoryName) => async dispatch => {
             dispatch(setAlert(`Ajouté catégorie: ${res.data.categoryName}`, 'primary'))
         })
         .catch(err => {
-            const errors = err.response.data.errors;
-            if (errors) {
-                errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+            const error = err.response.data.error;
+            if (error) {
+                dispatch(addCategoryFailure(error))
+            } else {
+                dispatch(addCategoryFailure(defaultErrorMessage))
             }
-            dispatch(addCategoryFailure(errors))
+            dispatch(setAlert(error || defaultErrorMessage, 'danger'));
         })
 };
 
@@ -278,11 +289,13 @@ export const editCategoryName = (id, categoryName) => async dispatch => {
             }
         })
         .catch(err => {
-            const errors = err.response.data.errors;
-            if (errors) {
-                errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+            const error = err.response.data.error;
+            if (error) {
+                dispatch(editCategoryNameFailure(error))
+            } else {
+                dispatch(editCategoryNameFailure(defaultErrorMessage))
             }
-            dispatch(editCategoryNameFailure(err.response.data.errors))
+            dispatch(setAlert(error || defaultErrorMessage, 'danger'));
         })
 };
 
@@ -295,11 +308,13 @@ export const removeCategoryAndItsFiles = (categoryId) => async dispatch => {
             }
         })
         .catch(err => {
-            const errors = err.response.data.errors;
-            if (errors) {
-                errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+            const error = err.response.data.error;
+            if (error) {
+                dispatch(removeCategoryFailure(error))
+            } else {
+                dispatch(removeCategoryFailure(defaultErrorMessage))
             }
-            dispatch(removeCategoryFailure(err.response.data.errors))
+            dispatch(setAlert(error || defaultErrorMessage, 'danger'));
         })
 };
 
@@ -310,11 +325,13 @@ export const getDeletedCategories = () => async dispatch => {
             dispatch(getDeletedCategoriesSuccess(res.data));
         })
         .catch(err => {
-            const errors = err.response.data.errors;
-            if (errors) {
-                errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+            const error = err.response.data.error;
+            if (error) {
+                dispatch(getDeletedCategoriesFailure(error))
+            } else {
+                dispatch(getDeletedCategoriesFailure(defaultErrorMessage))
             }
-            dispatch(getDeletedCategoriesFailure(err.response.data.errors))
+            dispatch(setAlert(error || defaultErrorMessage, 'danger'));
         })
 };
 
@@ -327,11 +344,12 @@ export const restoreCategoryAndItsFiles = (categoryId) => async dispatch => {
             }
         })
         .catch(err => {
-            const errors = err.response.data.errors;
-            if (errors) {
-                errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+            const error = err.response.data.error;
+            if (error) {
+                dispatch(restoreCategoryFailure(error))
+            } else {
+                dispatch(restoreCategoryFailure(defaultErrorMessage))
             }
-            dispatch(restoreCategoryFailure(err.response.data.errors))
         })
 };
 
@@ -343,11 +361,13 @@ export const createNewFile = (file) => async dispatch => {
             dispatch(createFileSuccess(res.data));
         })
         .catch(err => {
-            const errors = err.response.data.errors;
-            if (errors) {
-                errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+            const error = err.response.data.error;
+            if (error) {
+                dispatch(createFileFailure(error))
+            } else {
+                dispatch(createFileFailure(defaultErrorMessage))
             }
-            dispatch(createFileFailure(err.response.data.errors))
+            dispatch(setAlert(error || defaultErrorMessage, 'danger'))
         })
 };
 
@@ -361,11 +381,13 @@ export const editFile = (file) => async dispatch => {
             }
         })
         .catch(err => {
-            const errors = err.response.data.errors;
-            if (errors) {
-                errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+            const error = err.response.data.error;
+            if (error) {
+                dispatch(editFileFailure(error))
+            } else {
+                dispatch(editFileFailure(defaultErrorMessage))
             }
-            dispatch(editFileFailure(err.response.data.errors))
+            dispatch(setAlert(error || defaultErrorMessage, 'danger'))
         })
 };
 
@@ -378,11 +400,13 @@ export const removeFile = (categoryId, fileId) => async dispatch => {
             }
         })
         .catch(err => {
-            const errors = err.response.data.errors;
-            if (errors) {
-                errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+            const error = err.response.data.error;
+            if (error) {
+                dispatch(removeFileFailure(error))
+            } else {
+                dispatch(removeFileFailure(defaultErrorMessage))
             }
-            dispatch(removeFileFailure(err.response.data.errors))
+            dispatch(setAlert(error || defaultErrorMessage, 'danger'));
         })
 };
 
@@ -393,11 +417,13 @@ export const getDeletedFiles = () => async dispatch => {
             dispatch(getDeletedFilesSuccess(res.data));
         })
         .catch(err => {
-            const errors = err.response.data.errors;
-            if (errors) {
-                errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+            const error = err.response.data.error;
+            if (error) {
+                dispatch(getDeletedFilesFailure(error))
+            } else {
+                dispatch(getDeletedFilesFailure(defaultErrorMessage))
             }
-            dispatch(getDeletedFilesFailure(err.response.data.errors))
+            dispatch(setAlert(error || defaultErrorMessage, 'danger'));
         })
 };
 
@@ -410,11 +436,13 @@ export const restoreFile = (categoryId, fileId) => async dispatch => {
             }
         })
         .catch(err => {
-            const errors = err.response.data.errors;
-            if (errors) {
-                errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+            const error = err.response.data.error;
+            if (error) {
+                dispatch(restoreFileFailure(error))
+            } else {
+                dispatch(restoreFileFailure(defaultErrorMessage))
             }
-            dispatch(restoreFileFailure(err.response.data.errors))
+            dispatch(setAlert(error || defaultErrorMessage, 'danger'));
         })
 };
 

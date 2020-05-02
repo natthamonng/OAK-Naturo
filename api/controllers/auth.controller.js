@@ -1,6 +1,6 @@
 require('dotenv').config();
+const jwtStrategy = require('../passportStrategies/jwt');
 const passport = require('passport');
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 const crypto = require('crypto');
@@ -20,23 +20,23 @@ exports.signUpCredentials = (req,res) => {
         username: req.body.username,
         password: bcrypt.hashSync(req.body.password, BCRYPT_SALT_ROUNDS)
     }).then(data => {
-        res.status(200).json({
-            success: [{ message: 'Nouvel utilisateur créé avec succès.' }]
-        });
+        res.status(200).json(
+            { success: 'Nouvel utilisateur créé avec succès.' }
+        );
     }).catch(err => {
         console.error(err);
-        res.status(500).json({
-            errors: [{ message: 'Une erreur s\'est produite lors de la création de l\'utilisateur.' }]
-        });
+        res.status(500).json(
+            { error: 'Une erreur s\'est produite lors de la création de l\'utilisateur.' }
+        );
     });
 };
 
 exports.signInCredentials = (req, res) => {
     passport.authenticate('local', {session: false}, (err, user) => {
         if (err || !user) {
-            return res.status(401).json({
-                errors: [{ message: 'Email ou mot de passe invalide.' }]
-            });
+            return res.status(401).json(
+                { error: 'Email ou mot de passe invalide.' }
+            );
         }
         req.user = user;
         const payload = {
@@ -45,12 +45,8 @@ exports.signInCredentials = (req, res) => {
             email: user.email,
             role: user.role
         };
-        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '365d' });
-        if (!token) {
-            return res.status(500).json({
-                errors: [{ message: 'Error signing token.' }]
-            });
-        }
+        const token = jwtStrategy.createNewJwt(payload);
+
         return res.status(200).json({
             token,
             user: payload
@@ -67,22 +63,19 @@ exports.getProfile = (req, res) => {
             exclude: [
                 'password',
                 'resetPWDToken',
-                'resetPWDExpires'
+                'resetPWDExpires',
+                'createdAt',
+                'updatedAt'
             ]
         }})
         .then(data => {
-            const token = jwt.sign(data.dataValues, process.env.JWT_SECRET, { expiresIn: '365d' });
-            if (!token) {
-                return res.status(500).json({
-                    errors: [{ message: 'Error signing token.' }]
-                });
-            }
+            const token = jwtStrategy.createNewJwt(data.dataValues);
             res.status(200).json({user: data, token});
         }).catch(err => {
         console.error(err);
-        res.status(500).json({
-            errors: [{ message: 'Une erreur s\'est produite lors de la récupération les données.' }]
-        });
+        res.status(500).json(
+            { error: 'Une erreur s\'est produite lors de la récupération les données.' }
+        );
     })
 };
 
@@ -93,9 +86,9 @@ exports.forgotPassword = (req, res) => {
         },
     }).then(async(user) => {
         if (user === null) {
-            res.status(403).json({
-                errors: [{message: 'Cet email n\'existe pas.'}]
-            })
+            res.status(403).json(
+                { error: 'Cette adresse mail n\'existe pas.' }
+            )
         } else {
             const token = crypto.randomBytes(20).toString('hex');
             user.update({
@@ -113,14 +106,14 @@ exports.forgotPassword = (req, res) => {
                 + `${process.env.WEB_URL}/reset-password/${token}\n\n`
                 + 'Si vous ne l\'avez pas demandée, veuillez ignorer cet e-mail et votre mot de passe restera identique.\n',
             ).then(() => {
-                res.status(200).json({
-                    success: [{message: 'Email de récupération envoyé.'}]
-                });
+                res.status(200).json(
+                    { success: 'Email de récupération envoyé.' }
+                );
             }).catch((err) => {
                 console.log(err);
-                res.status(500).json({
-                    errors: [{message: 'Une erreur s\'est produite veuillez réessayer plus tard.'}]
-                });
+                res.status(500).json(
+                    { error: 'Une erreur s\'est produite. Veuillez réessayer plus tard.' }
+                );
             })
         }
     });
@@ -137,12 +130,12 @@ exports.resetPassword = async (req, res) => {
     }).then((user) => {
         if (user == null ) {
             res.status(403).json(
-                {errors: [{message: 'Le lien de réinitialisation du mot de passe n\'est pas valide ou a expiré.'}]}
+                {error: 'Le lien de réinitialisation du mot de passe n\'est pas valide ou a expiré.'}
             );
         } else {
             res.status(200).json({
                 username: user.username,
-                success: [{message: 'Le lien de réinitialisation du mot de passe est valide.'}]
+                success: true
             });
         }
     });
@@ -160,7 +153,7 @@ exports.upDatePasswordViaEmail = async (req, res) => {
     }).then( async user => {
         if (user == null) {
             res.status(403).json(
-                {errors: [{message: 'Le lien de réinitialisation du mot de passe n\'est pas valide ou a expiré.'}]}
+                { error: 'Le lien de réinitialisation du mot de passe n\'est pas valide ou a expiré.' }
             );
         } else if (user) {
             const hashedPassword = bcrypt.hashSync(req.body.password, BCRYPT_SALT_ROUNDS);
@@ -171,13 +164,13 @@ exports.upDatePasswordViaEmail = async (req, res) => {
                     })
                 .then(() => {
                     res.status(200).json({
-                        success: [{message: 'Mot de passe mis à jour.'}]
+                        success: true
                     });
                 });
         } else {
-            res.status(401).json({
-                errors: [{message: 'Une erreur est survenue.'}]
-            });
+            res.status(500).json(
+                { error: 'Une erreur s\'est produite.' }
+            );
         }
     });
 };

@@ -6,9 +6,10 @@ import { signInUser } from "../../actions/auth.actions";
 import Alert from '../../components/Alert';
 import logo from '../../assets/images/acorn.png';
 import photoWide from '../../assets/images/photo-wide-6.jpg';
+import SpinnerBubble from '../../components/SpinnerBubble';
 import '../../assets/scss/custom/welcome-text.scss';
 
-function SignIn({ signInUser, isAuthenticated }) {
+function SignIn({ signInUser, isAuthenticated, loading }) {
     let location = useLocation();
     let { from } = location.state || { from: { pathname: "/home" } };
 
@@ -58,7 +59,13 @@ function SignIn({ signInUser, isAuthenticated }) {
                         </div>
                         <div className="col-md-6">
                             <div className="p-4">
-                                <div className="auth-logo text-center mb-4"><img src={logo} alt="logo"/></div>
+                                <div className="auth-logo text-center mb-4">
+                                { loading ?
+                                    <SpinnerBubble/>
+                                    :
+                                    <img src={logo} alt="logo"/>
+                                }
+                                </div>
                                 <h1 className="mb-3 text-18">Se connecter</h1>
                                 <form onSubmit={event => onSubmit(event)}>
                                     <div className="form-group">
@@ -105,11 +112,13 @@ function SignIn({ signInUser, isAuthenticated }) {
 
 SignIn.propTypes = {
     signInUser: PropTypes.func.isRequired,
-    isAuthenticated: PropTypes.bool
+    isAuthenticated: PropTypes.bool,
+    loading: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated
+    isAuthenticated: state.auth.isAuthenticated,
+    loading: state.auth.loading
 });
 
 export default connect(mapStateToProps, {signInUser})(SignIn);

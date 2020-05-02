@@ -18,10 +18,10 @@ exports.getCategoryList = (req, res) => {
             res.status(200).json(categoryList)
         })
         .catch(err => {
-            console.log(err);
-            res.status(500).json({ errors: [
-                { message: 'Une erreur s\'est produite lors de la récupération de la liste des catégories.' }
-            ]})
+            console.error(err);
+            res.status(500).json(
+                { error: 'Une erreur s\'est produite lors de la récupération de la liste des catégories.'}
+            )
         })
 };
 
@@ -54,19 +54,17 @@ exports.getCategoryFileListById = (req, res) => {
         ]
     })
         .then(result => {
-            if(result === null) {
-                res.status(404).json({ errors: [
-                        { message: 'Catégorie introuvable.' }
-                    ]});
+            if (result === null) {
+                res.status(404).json({ error: 'Catégorie introuvable.' });
             } else {
                 res.status(200).json(result);
             }
         })
         .catch(err => {
-            console.log(err);
-            res.status(500).json({ errors: [
-                { message: 'Une erreur s\'est produite lors de la récupération d\'une catégorie.' }
-            ]})
+            console.error(err);
+            res.status(500).json(
+                { error: 'Une erreur s\'est produite lors de la récupération d\'une catégorie.' }
+            )
         })
 };
 
@@ -98,23 +96,21 @@ exports.getCategoryFileById = (req, res) => {
         ]
     })
         .then(result => {
-            if(result.files.length === 0) {
-                res.status(404).json({ errors: [
-                    { message: 'Fichier introuvable.' }
-                ]});
+            if(!result || result.files.length === 0) {
+                res.status(404).json({ error: 'Fichier introuvable.' });
             } else {
                 res.status(200).json(result);
             }
         })
         .catch(err => {
-            console.log(err);
-            res.status(500).json({ errors: [
-                { message: 'Une erreur s\'est produite lors de la récupération d\'une catégorie.' }
-            ]})
+            console.error(err);
+            res.status(500).json(
+                { error: 'Une erreur s\'est produite lors de la récupération d\'une catégorie.' }
+            )
         })
 };
 
-exports.addCategory = async (req, res, next) => {
+exports.addCategory = async (req, res) => {
     await Category.create({
         categoryName: req.body.categoryName
     })
@@ -122,10 +118,10 @@ exports.addCategory = async (req, res, next) => {
         res.status(200).json(category);
     })
     .catch(err => {
-        console.log(err);
-        res.status(500).json({ errors: [
-            { message: 'Une erreur s\'est produite lors de la création d\'une catégorie.' }
-        ]})
+        console.error(err);
+        res.status(500).json(
+            { error:'Une erreur s\'est produite lors de la création d\'une catégorie.' }
+        )
     })
 };
 
@@ -134,17 +130,16 @@ exports.editCategoryName = (req, res) => {
         { categoryName: req.body.categoryName } ,
         { where: { id: req.params.categoryId }}
     ).then(() => {
-        res.status(200).json({success: true})
+        res.status(200).json({ success: true })
     }).catch(err => {
         console.error(err);
-        res.status(500).json({
-            errors: [{ message: 'Une erreur s\'est produite lors de la modification d\'une catégorie.' }]
-        });
+        res.status(500).json(
+            { error: 'Une erreur s\'est produite lors de la modification d\'une catégorie.' }
+        );
     });
 };
 
 exports.updateStatusCategory = (req, res, next) => {
-    console.log(req.params.categoryId);
     Category.update(
         {status: req.body.status} ,
         {where: {id: req.params.categoryId}}
@@ -152,9 +147,9 @@ exports.updateStatusCategory = (req, res, next) => {
         next();
     }).catch(err => {
         console.error(err);
-        res.status(500).json({
-            errors: [{ message: 'Une erreur s\'est produite lors de la modification d\'une catégorie.' }]
-        });
+        res.status(500).json(
+            { error: 'Une erreur s\'est produite lors de la modification d\'une catégorie.' }
+        );
     });
 };
 

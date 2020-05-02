@@ -8,7 +8,7 @@ class JwtStrategy {
         this._options = {
             secret: process.env.JWT_SECRET,
             issuer: process.env.JWT_ISSUER,
-            // audience: process.env.JWT_AUDIENCE
+            audience: process.env.JWT_AUDIENCE
         };
     }
 
@@ -26,7 +26,7 @@ class JwtStrategy {
         // Check if not token
         if (!token) {
             console.log('NO TOKEN PROVIDED');
-            return self.error(new Error('No auth token provided'));
+            return self.error(new Error('No auth token provided.'));
         }
 
         jwt.verify(token, self._options.secret, function (jwt_err, payload) {

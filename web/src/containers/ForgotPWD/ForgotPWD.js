@@ -1,60 +1,42 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {Link, Redirect} from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { setAlert } from '../../actions/alert.actions';
 import Alert from '../../components/Alert';
 import SpinnerBubble  from '../../components/SpinnerBubble';
-
-
 import PhotoWide from '../../assets/images/photo-wide-6.jpg';
 import Logo from '../../assets/images/acorn.png'
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 const ForgotPWD = ({ setAlert, isAuthenticated}) => {
-    const [formData, setFormData] = useState({
-        email: ""
-    });
-
+    const [email, setEmail] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const { email } =  formData;
-
     const onChange = event => {
-        setFormData({...formData, [event.target.id]: event.target.value});
+        setEmail(event.target.value)
     };
 
     const onSubmit = async event => {
         event.preventDefault();
-        forgotPassword({ email });
+        forgotPassword({email});
     };
 
-    const forgotPassword = ({ email }) => {
+    const forgotPassword = (email) => {
         setIsLoading(true);
-        const config = {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        };
-
-        const body = JSON.stringify({ email });
-
-        axios.post(`${BASE_URL}/api/auth/forgot-password`, body, config)
+        axios.post(`${BASE_URL}/api/auth/forgot-password`, email)
             .then(res => {
                 setIsLoading(false);
-                const success = res.data.success;
-                success.forEach(msg => setAlert(msg.message, 'primary'));
+                setEmail('');
+                setAlert(res.data.success, 'primary');
             })
             .catch(err => {
                 setIsLoading(false);
-                const errors = err.response.data.errors;
-                if (errors) {
-                    errors.forEach(error => setAlert(error.message, 'danger'));
-                }
+                setAlert(err.response.data.error, 'danger');
             })
-    }
+    };
 
     if (isAuthenticated) {
         // If signed in and user navigates to ForgotPWD page, should redirect them to home
@@ -108,7 +90,7 @@ const ForgotPWD = ({ setAlert, isAuthenticated}) => {
             </div>
         </div>
     )
-}
+};
 
 ForgotPWD.propTypes = {
     setAlert: PropTypes.func.isRequired,

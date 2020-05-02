@@ -12,6 +12,11 @@ const EditCategoryNameModal = ({ category }) => {
         setCategoryName(event.target.value);
     };
 
+    const handleOnCancelClick = () => {
+        setCategoryName(category.categoryName);
+        setShowModal(false);
+    };
+
     const onSubmit = (event) => {
         event.preventDefault();
         dispatch(editCategoryName(category.id, {categoryName}));
@@ -57,7 +62,7 @@ const EditCategoryNameModal = ({ category }) => {
 
                         <div className="modal-footer">
                             <button className="btn btn-secondary" data-dismiss="modal" type="button"
-                                    onClick={()=>{setShowModal(false)}}>Annuler</button>
+                                    onClick={handleOnCancelClick}>Annuler</button>
                             <button className="btn btn-primary"  type="submit"
                                     onClick={()=>{setShowModal(false)}}>Modifier</button>
                         </div>

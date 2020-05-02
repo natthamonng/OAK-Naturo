@@ -29,7 +29,7 @@ export const fetchUserData = () => {
                 dispatch(profileDataFetchSuccess(data));
             }).catch(err => dispatch(profileDataFetchFailure(err)));
         }
-        else{
+        else {
             response.json().then(error => {
                 dispatch(profileDataFetchFailure(error));
             }).catch(err => dispatch(profileDataFetchFailure(err)));

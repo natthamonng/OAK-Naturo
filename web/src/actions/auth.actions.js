@@ -1,58 +1,60 @@
 import axios from 'axios';
 import { setAlert } from './alert.actions';
 import { authService } from '../services/auth.service';
-import {USER_LOADING, USER_LOADED, AUTH_ERROR, SIGNUP_SUCCESS, SIGNUP_FAILED, SIGNIN_SUCCESS, SIGNIN_FAILED, SIGNOUT} from '../constants/ActionTypes';
-import setAuthToken from "../utils/setAuthToken";
+import * as actionsType  from '../constants/ActionTypes';
+import setAuthToken from '../utils/setAuthToken';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
+const defaultErrorMessage = 'Une erreur s\'est produite. Veuillez réessayer plus tard.';
 
 // Check token & load user by JWT
 export const loadUserByJwt = (token) => async dispatch => {
-    dispatch({ type: USER_LOADING });
+    dispatch({ type: actionsType.USER_LOADING });
     setAuthToken(token);
     await axios.get(`${BASE_URL}/api/auth/me`)
         .then(res =>{
             dispatch({
-                type: USER_LOADED,
+                type: actionsType.USER_LOADED,
                 payload: res.data
             });
             setAuthToken(res.data.token);
             authService.setToken(res.data.token);
         })
         .catch(err => {
-            const errors = err.response.data.errors;
-            if (errors) {
-                errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+            if(!err.response) {
+                dispatch(setAlert(defaultErrorMessage, 'danger', 50000))
+            } else {
+                dispatch(setAlert(err.response.data.error, 'danger'));
             }
+
             dispatch({
-                type: AUTH_ERROR
+                type: actionsType.AUTH_ERROR
             });
         });
 };
 
 // SignIn
 export const signInUser = (signInData) =>  async dispatch => {
-    const config = {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    };
-    const body = JSON.stringify(signInData);
+    dispatch({
+        type: actionsType.SIGNIN_REQUEST
+    });
     try {
-        const res = await axios.post(`${BASE_URL}/api/auth/signin`, body, config);
+        const res = await axios.post(`${BASE_URL}/api/auth/signin`, signInData);
         setAuthToken(res.data.token);
         authService.setToken(res.data.token);
         dispatch({
-            type: SIGNIN_SUCCESS,
+            type: actionsType.SIGNIN_SUCCESS,
             payload: res.data
         });
     } catch (err) {
-        const errors = err.response.data.errors;
-        if (errors) {
-            errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+        if(!err.response) {
+            dispatch(setAlert(defaultErrorMessage, 'danger', 50000))
+        } else {
+            dispatch(setAlert(err.response.data.error, 'danger'));
         }
+
         dispatch({
-            type: SIGNIN_FAILED
+            type: actionsType.SIGNIN_FAILED
         });
     }
 };
@@ -61,30 +63,26 @@ export const signInUser = (signInData) =>  async dispatch => {
 export const signOutUser = () => dispatch => {
     setAuthToken(null);
     authService.logout();
-    dispatch({ type: SIGNOUT });
+    dispatch({ type: actionsType.SIGNOUT });
 };
 
 // SignUp
-export  const signUpUser = ({ username, email, password }) => async dispatch => {
-    const config = {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    };
-    const body = JSON.stringify({username, email, password });
+export  const signUpUser = (signUpData) => async dispatch => {
     try {
-        const res = await axios.post(`${BASE_URL}/api/auth/signup`, body, config);
+        const res = await axios.post(`${BASE_URL}/api/auth/signup`, signUpData, config);
         dispatch({
-            type: SIGNUP_SUCCESS,
+            type: actionsType.SIGNUP_SUCCESS,
             payload: res.data
         });
     } catch (err) {
-        const errors = err.response.data.errors;
-        if (errors) {
-            errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+        if(!err.response) {
+            dispatch(setAlert(defaultErrorMessage, 'danger', 50000))
+        } else {
+            dispatch(setAlert(err.response.data.error, 'danger'));
         }
+
         dispatch({
-            type: SIGNUP_FAILED
+            type: actionsType.SIGNUP_FAILED
         });
     }
 };
