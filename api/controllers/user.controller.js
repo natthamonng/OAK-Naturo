@@ -131,7 +131,7 @@ exports.resetPassword = (req, res) => {
     });
 };
 
-exports.editProfile = (req, res) => {
+exports.editProfile = (req, res, next) => {
     let condition;
     if (req.body.username){
         condition = {username: req.body.username}
@@ -145,10 +145,11 @@ exports.editProfile = (req, res) => {
     }).then((userInfo) => {
         userInfo.update(condition)
             .then(() => {
-                res.status(200).json({
-                    success: true,
-                    message: 'Profile mis à jour.'
-                });
+                // res.status(200).json({
+                //     success: true,
+                //     message: 'Profile mis à jour.'
+                // });
+                next();
             });
     }).catch(err => {
         console.log(err);

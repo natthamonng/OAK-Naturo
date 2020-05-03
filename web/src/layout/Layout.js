@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { signOutUser } from '../actions/auth.actions';
 import Navbar from '../components/Navbar';
-import MainRoutes from '../routing/MainRoutes';
+import MainRoutes from '../routes/MainRoutes';
 import Footer from '../components/Footer';
 
 const Layout = (props) => {

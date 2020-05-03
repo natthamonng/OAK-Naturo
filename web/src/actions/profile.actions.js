@@ -1,40 +1,43 @@
+import axios from 'axios';
+import { setAlert } from './alert.actions';
 import { authService } from '../services/auth.service';
+import * as actionsType  from '../constants/ActionTypes';
+import setAuthToken from '../utils/setAuthToken';
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = process.env.REACT_APP_API_URL;
+const defaultErrorMessage = 'Une erreur s\'est produite. Veuillez réessayer plus tard.';
 
-export const profileDataFetchSuccess = (data) => {
+export const editProfileBegin = () => {
     return {
-        type:'PROFILE_DATA_REQ_SUCCESS',
-        data
+        type: actionsType.EDIT_PROFILE_BEGIN
     }
 };
 
-export const profileDataFetchFailure = () => {
-    return {
-        type:'PROFILE_DATA_REQ_FAILED'
-    }
-};
+export const editProfileSuccess = ( data ) => ({
+    type: actionsType.EDIT_PROFILE_SUCCESS,
+    payload: { data }
+});
 
-export const fetchUserData = () => {
-    return async (dispatch) => {
-        const response = await fetch( `${BASE_URL}/api/me`, {
-            method: 'GET',
-            headers: {
-                'Authorization': authService.getToken()
+export const editProfileFailure = error => ({
+    type: actionsType.EDIT_PROFILE_FAILURE,
+    payload: { error }
+});
+
+export const editProfile = (data) => async dispatch => {
+    dispatch(editProfileBegin());
+    await axios.put(`${BASE_URL}/api/users/${data.id}`, data)
+        .then(res => {
+            if (res.data.success === true) {
+                dispatch(editProfileSuccess(res.data))
             }
-        });
-
-        if(response.ok){
-            response.json().then(data => {
-                dispatch(profileDataFetchSuccess(data));
-            }).catch(err => dispatch(profileDataFetchFailure(err)));
-        }
-        else {
-            response.json().then(error => {
-                dispatch(profileDataFetchFailure(error));
-            }).catch(err => dispatch(profileDataFetchFailure(err)));
-        }
-
-        return response;
-    }
+            setAuthToken(res.data.token);
+            authService.setToken(res.data.token);
+        })
+        .catch(err => {
+            if (err.response) {
+                dispatch(editProfileFailure(err.response.data.message));
+            } else {
+                dispatch(editProfileFailure(defaultErrorMessage));
+            }
+        })
 };

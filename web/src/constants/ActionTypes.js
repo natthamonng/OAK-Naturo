@@ -13,6 +13,11 @@ export const USER_LOADED  = 'USER_LOADED';
 export const AUTH_ERROR = 'AUTH-ERROR';
 export const SIGNOUT =  'SIGNOUT';
 
+//Profile
+export const EDIT_PROFILE_BEGIN = 'EDIT_PROFILE_BEGIN';
+export const EDIT_PROFILE_SUCCESS = 'EDIT_PROFILE_SUCCESS';
+export const EDIT_PROFILE_FAILURE = 'EDIT_PROFILE_FAILURE';
+
 //Posts
 export const POSTS_LOADING = 'POSTS_LOADING';
 export const GET_POSTS_SUCCESS = 'GET_POSTS_SUCCESS';

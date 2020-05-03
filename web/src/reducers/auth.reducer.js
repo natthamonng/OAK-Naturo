@@ -1,14 +1,4 @@
-import {
-    USER_LOADING,
-    USER_LOADED,
-    AUTH_ERROR,
-    SIGNIN_SUCCESS,
-    SIGNIN_FAILED,
-    SIGNOUT,
-    SIGNUP_SUCCESS,
-    SIGNUP_FAILED,
-    SIGNIN_REQUEST
-} from '../constants/ActionTypes';
+import  * as actionsType from '../constants/ActionTypes';
 import { authService } from '../services/auth.service';
 
 const initialState = {
@@ -22,12 +12,13 @@ export default function(state = initialState, action) {
     const { type, payload } = action;
 
     switch ( type ) {
-        case USER_LOADING:
+        case actionsType.USER_LOADING:
+        case actionsType.EDIT_PROFILE_BEGIN:
             return {
                 ...state,
                 loading: true
             };
-        case USER_LOADED:
+        case actionsType.USER_LOADED:
             return {
                 ...state,
                 isAuthenticated: true,
@@ -35,12 +26,19 @@ export default function(state = initialState, action) {
                 user: payload.user,
                 token: payload.token
             };
-        case SIGNIN_REQUEST:
+        case actionsType.EDIT_PROFILE_SUCCESS:
+            return {
+                ...state,
+                user: payload.data.user,
+                token: payload.data.token,
+                loading: false
+            };
+        case actionsType.SIGNIN_REQUEST:
             return {
                 ...state,
                 loading: true
             };
-        case SIGNIN_SUCCESS:
+        case actionsType.SIGNIN_SUCCESS:
             return {
                 ...state,
                 ...payload,
@@ -48,17 +46,22 @@ export default function(state = initialState, action) {
                 loading: false,
                 user: payload.user
             };
-        case SIGNUP_SUCCESS:
+        case actionsType.SIGNUP_SUCCESS:
             return {
                 ...state,
                 ...payload,
                 isAuthenticated: false,
                 loading: false
             };
-        case AUTH_ERROR:
-        case SIGNUP_FAILED:
-        case SIGNIN_FAILED:
-        case SIGNOUT:
+        case actionsType.EDIT_PROFILE_FAILURE:
+            return {
+                ...state,
+                loading: false
+            };
+        case actionsType.AUTH_ERROR:
+        case actionsType.SIGNUP_FAILED:
+        case actionsType.SIGNIN_FAILED:
+        case actionsType.SIGNOUT:
             return {
                 ...state,
                 user: null,

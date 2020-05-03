@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Routes from './routing/Routes';
+import Routes from './routes/Routes';
 import SignIn from './containers/SignIn/SignIn';
 
 // Redux
