@@ -25,9 +25,9 @@
 }
 
 @media print {
-    body * {
-      visibility: hidden;
-    }
+    // body * {
+    //   visibility: hidden;
+    // }
     .main-content-wrap {
         width: 100% !important;
     }

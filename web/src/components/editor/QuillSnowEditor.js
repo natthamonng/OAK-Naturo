@@ -4,7 +4,7 @@ import 'react-quill/dist/quill.snow.css';
 import '../../assets/scss/custom/quill-editor.scss';
 
 import axios from 'axios';
-import {REMOVE_ALERT} from "../../constants/ActionTypes";
+// const __ISMSIE__ = navigator.userAgent.match(/Trident/i) ? true : false;
 const __ISMSIE__ = !!navigator.userAgent.match(/Trident/i);
 const BASE_URL = process.env.REACT_APP_API_URL;
 

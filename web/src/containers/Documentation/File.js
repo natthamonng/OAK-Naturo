@@ -9,6 +9,7 @@ import EditFileForm from '../../components/EditFileForm';
 import SpinnerBubble from '../../components/SpinnerBubble';
 import _404 from '../../components/_404';
 import Alert from '../../components/Alert';
+import PrintButton from '../../components/PrintButton';
 
 const File = () => {
     const { categoryId, fileId } = useParams();
@@ -20,14 +21,13 @@ const File = () => {
     const editingFile = useSelector(state => state.documentation.actionFileLoading);
 
     const [isEditMode, setIsEditMode] = useState(false);
-    const [showAdminMenu, setShowAdminMenu] = useState(false);
 
     useEffect(() => {
         dispatch(getFile(categoryId, fileId));
     }, [categoryId, fileId]);
 
     let file, categoryTarget;
-    if (categoryList.length !== 0) {
+    if (categoryList.length !== 0 && !fileLoading) {
         categoryTarget = categoryList.find(element => element.id === Number(categoryId));
         file = categoryTarget.files.find(element => element.id === Number(fileId));
     }
@@ -75,27 +75,10 @@ const File = () => {
 
                                 <div>
                                     <div className="d-flex align-items-start">
-                                    <h1 className="mb-4">{file.title}</h1>
+                                        <h1 className="mb-4">{file.title}</h1>
                                         <div className="flex-grow-1"></div>
-                                        { ( file.content && ( user.role === 'admin' || file.user_id === user.id)) &&
-                                        <button className={`dropdown bg-white border-0 ${showAdminMenu? 'show' : ''}`}
-                                                style={{outline: 'none'}}
-                                                onClick={()=> {setShowAdminMenu(!showAdminMenu)}}
-                                                onBlur={()=> {setShowAdminMenu(false)}} >
-                                            <i className="i-Arrow-Down header-icon" id="dropdownMenuButton"
-                                               role="button" data-toggle="dropdown" aria-haspopup="true"
-                                               aria-expanded={`${showAdminMenu}`}>
-                                            </i>
-                                            <div className={`dropdown-menu dropdown-menu-right ${showAdminMenu? 'show' : ''}`}
-                                                 aria-labelledby="dropdownMenuButton">
-                                                <div className="dropdown-item" onClick={()=> setIsEditMode(true)}>
-                                                    <i className="i-Pen-3" ></i> Modifier le fichier
-                                                </div>
-                                            </div>
-                                        </button>
-                                        }
                                     </div>
-
+                                    
                                     <div className="content-body" dangerouslySetInnerHTML={{ __html: file.content }} />
 
                                     <div className="separator-breadcrumb border-top"></div>
@@ -115,12 +98,15 @@ const File = () => {
                                             </div>
                                         </div>
                                         <div className="flex-grow-1"></div>
+                                        <div className="d-flex flex-column">
                                         { ( file.content && ( user.role === 'admin' || file.user_id === user.id)) &&
                                             <button className="btn btn-outline-primary m-1"
                                                     onClick={()=> setIsEditMode(true)}>
                                                 <i className="i-Pen-3" ></i> Modifier le fichier
                                             </button>
                                         }
+                                        <PrintButton file={file}/>
+                                        </div>
                                     </div>
                                 </div>
                             }
