@@ -37,9 +37,9 @@ const Category = () => {
                         <BreadCrumb mainName={"Documentation"} mainPath={"/documentation"} sectionName={"Catégories"}
                                     sectionPath={"/documentation"} pageName={fileList.categoryName} />
                     </div>
-                    <div className="col-md-4">
-                        <Search/>
-                    </div>
+                    {/*<div className="col-md-4">*/}
+                    {/*    <Search/>*/}
+                    {/*</div>*/}
                 </div>
                 <div className="separator-breadcrumb border-top"></div>
                 <section className="widget-app">

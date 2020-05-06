@@ -2,3 +2,20 @@
     margin: 100px;
 }
 
+@media print {
+    video, iframe, video {
+        display: none;
+    }
+    div.content-body {
+        padding: 2rem 0;
+        text-align: justify;
+    }
+    blockquote {
+        border: none;
+        border-left: 2px solid #eee;
+        padding-left: 1rem;
+        margin: 0 2rem;
+        font-size: 1.01625rem;
+    }
+}
+

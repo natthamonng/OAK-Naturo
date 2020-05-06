@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getFile } from '../../actions/documentation.actions';
 import Moment from 'react-moment';
 import BreadCrumb from '../../components/Breadcrumb';
-import Search from '../../components/Search';
 import EditFileForm from '../../components/EditFileForm';
 import SpinnerBubble from '../../components/SpinnerBubble';
 import _404 from '../../components/_404';
@@ -40,13 +39,10 @@ const File = () => {
         return (
             <div className="main-content">
                 <div className="row">
-                    <div className="col-md-8">
+                    <div className="col">
                         <BreadCrumb mainName={"Documentation"} mainPath={"/documentation"}
                                     sectionName={"Fichiers"} sectionPath={`/documentation/categories/${categoryId}`}
                                     pageName={categoryTarget.categoryName} />
-                    </div>
-                    <div className="col-md-4">
-                        <Search/>
                     </div>
                 </div>
                 <div className="separator-breadcrumb border-top"></div>
@@ -61,42 +57,39 @@ const File = () => {
                                         categories={categoryList}
                                         loading={editingFile}
                                     />
-
                                     <button className="btn btn-secondary m-4 mt-0 border-0"
                                             type="button" onClick={()=> setIsEditMode(false)}>
                                          <ins>Annuler</ins>
                                     </button>
                                 </div>
-
                                     <Alert />
                                 </>
 
                                 :
 
                                 <div>
+                                    <h1 className="mb-4">{file.title}</h1>
                                     <div className="d-flex align-items-start">
-                                        <h1 className="mb-4">{file.title}</h1>
-                                        <div className="flex-grow-1"></div>
+                                        <div className="ml-4 mb-2">
+                                            <span className="text-muted text-small"><strong>Auteur:</strong> {' '}
+                                                { file.author.username }
+                                            </span>
+                                            {' '}
+                                            <span className="text-muted text-small"><strong>Créé:</strong> {' '}
+                                                <Moment format="DD/MM/YYYY">{ file.createdAt }</Moment>
+                                            </span>
+                                            {' '}
+                                            <span className="text-muted text-small"><strong>Modifié:</strong> {' '}
+                                                <Moment format="DD/MM/YYYY">{ file.updatedAt }</Moment>
+                                            </span>
+                                        </div>
                                     </div>
-                                    
-                                    <div className="content-body" dangerouslySetInnerHTML={{ __html: file.content }} />
+                                    <div className="separator-breadcrumb border-top"></div>
+
+                                    <div className="content-body text-justify px-4" dangerouslySetInnerHTML={{ __html: file.content }} />
 
                                     <div className="separator-breadcrumb border-top"></div>
                                     <div className="d-flex align-items-start">
-                                        <div className="ml-2">
-                                            <p className="m-0 text-title text-16"><strong>Auteur:</strong> {' '}
-                                                { file.author.username }
-                                            </p>
-                                            <div>
-                                                <span className="text-muted text-small"><strong>Créé:</strong> {' '}
-                                                    <Moment format="DD/MM/YYYY">{ file.createdAt }</Moment>
-                                                </span>
-                                                {' '}
-                                                <span className="text-muted text-small"><strong>Modifié:</strong> {' '}
-                                                    <Moment format="DD/MM/YYYY">{ file.updatedAt }</Moment>
-                                                </span>
-                                            </div>
-                                        </div>
                                         <div className="flex-grow-1"></div>
                                         <div className="d-flex flex-column">
                                         { ( file.content && ( user.role === 'admin' || file.user_id === user.id)) &&
@@ -105,7 +98,7 @@ const File = () => {
                                                 <i className="i-Pen-3" ></i> Modifier le fichier
                                             </button>
                                         }
-                                        <PrintButton file={file}/>
+                                            <PrintButton file={file}/>
                                         </div>
                                     </div>
                                 </div>
