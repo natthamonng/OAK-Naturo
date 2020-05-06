@@ -17,6 +17,7 @@
     "react": "^16.13.0",
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.0",
+    "react-helmet": "^6.0.0",
     "react-modal-image": "^2.5.0",
     "react-moment": "^0.9.7",
     "react-perfect-scrollbar": "^1.5.8",
