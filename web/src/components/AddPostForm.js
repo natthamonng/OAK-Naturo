@@ -71,7 +71,7 @@ const AddPostForm = ({ deFaultFilter }) => {
     const onSubmit = event => {
         event.preventDefault();
 
-        if (postContent === '' && imagesData === [] ) return;
+        if (postContent.length === 0) return;
         const data = new FormData();
         data.append('user_id', user.id);
         data.append('filter', postFilter);

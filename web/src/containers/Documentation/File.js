@@ -69,19 +69,18 @@ const File = () => {
 
                                 <div>
                                     <h1 className="mb-4">{file.title}</h1>
-                                    <div className="d-flex align-items-start">
-                                        <div className="ml-4 mb-2">
-                                            <span className="text-muted text-small"><strong>Auteur:</strong> {' '}
-                                                { file.author.username }
-                                            </span>
+                                    <div className="d-flex align-items-start flex-column mb-2 ml-4">
+                                        <small className="text-muted text-16 font-weight-bold">Auteur: {' '}
+                                            { file.author.username }
+                                        </small>
+                                        <div>
+                                            <small className="text-muted text-small font-weight-bold">Créé: {' '}
+                                                <Moment format="DD MMMM YYYY">{ file.createdAt }</Moment>
+                                            </small>
                                             {' '}
-                                            <span className="text-muted text-small"><strong>Créé:</strong> {' '}
-                                                <Moment format="DD/MM/YYYY">{ file.createdAt }</Moment>
-                                            </span>
-                                            {' '}
-                                            <span className="text-muted text-small"><strong>Modifié:</strong> {' '}
-                                                <Moment format="DD/MM/YYYY">{ file.updatedAt }</Moment>
-                                            </span>
+                                            <small className="text-muted text-small font-weight-bold">Modifié: {' '}
+                                                <Moment format="DD MMMM YYYY">{ file.updatedAt }</Moment>
+                                            </small>
                                         </div>
                                     </div>
                                     <div className="separator-breadcrumb border-top"></div>

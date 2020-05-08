@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import ReactToPrint from 'react-to-print';
 import '../assets/scss/custom/print.scss';
-import Moment from "react-moment";
+import Moment from 'react-moment';
 
 class ComponentToPrint extends React.Component {
   constructor(props) {
@@ -15,25 +15,26 @@ class ComponentToPrint extends React.Component {
     const file = this.state.file;
     return (
       <div>
-        <h1 className="mb-4">{file.title}</h1>
-        <div className="content-body" dangerouslySetInnerHTML={{ __html: file.content }} />
-          <div className="separator-breadcrumb border-top"></div>
-          <div className="d-flex align-items-start">
-              <div className="ml-2">
-                  <p className="m-0 text-title text-16"><strong>Auteur:</strong> {' '}
-                      { file.author.username }
-                  </p>
-                  <div>
-                    <span className="text-muted text-small"><strong>Créé:</strong> {' '}
-                        <Moment format="DD/MM/YYYY">{ file.createdAt }</Moment>
-                    </span>
-                      {' '}
-                      <span className="text-muted text-small"><strong>Modifié:</strong> {' '}
-                          <Moment format="DD/MM/YYYY">{ file.updatedAt }</Moment>
-                                                </span>
-                  </div>
+          <h1 className="mb-4">{file.title}</h1>
+
+          <div className="d-flex align-items-start flex-column mb-2 ml-4">
+              <small className="text-muted text-16 font-weight-bold">Auteur: {' '}
+                  { file.author.username }
+              </small>
+              <div>
+                  <small className="text-muted text-small font-weight-bold">Créé: {' '}
+                      <Moment format="DD MMMM YYYY">{ file.createdAt }</Moment>
+                  </small>
+                  {' '}
+                  <small className="text-muted text-small font-weight-bold">Modifié: {' '}
+                      <Moment format="DD MMMM YYYY">{ file.updatedAt }</Moment>
+                  </small>
               </div>
           </div>
+          <div className="separator-breadcrumb border-top"></div>
+
+          <div className="content-body" dangerouslySetInnerHTML={{ __html: file.content }} />
+
       </div>
     );
   }
