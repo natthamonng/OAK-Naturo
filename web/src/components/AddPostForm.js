@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { addNewPost } from '../actions/post.actions';
 import { setAlert } from '../actions/alert.actions';
 import Alert from './Alert';
 import Spinner from './Spinner';
 
-const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter, addPostLoading }) => {
+const AddPostForm = ({ deFaultFilter }) => {
     const location = useLocation();
-    const userId = user.id;
+    const dispatch = useDispatch();
+    const user = useSelector(state => state.auth.user);
+    const addPostLoading = useSelector(state => state.posts.addPostLoading);
+
     const [postFilter, setPostFilter] = useState(deFaultFilter);
     const [postContent, setPostContent] = useState('');
     const [imagesData, setImagesData] = useState([]);
@@ -36,11 +39,12 @@ const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter, addPostLoading
         }
     };
 
-    let thumbnails =  previews.map(url => {
-        return <img key={url} alt="preview image" src={url} className="avatar-lg mb-3 rounded mr-2" />
-    });
+    const renderThumbnails = () =>
+        previews && previews.map((url) => (
+            <img key={url} alt="preview image" src={url} className="avatar-lg mb-3 rounded mr-2" />
+        ));
 
-    const checkMimeType = event =>{
+    const checkMimeType = event => {
         let files = event.target.files;
         let message = '';
         const types = ['image/png', 'image/jpeg'];
@@ -52,7 +56,7 @@ const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter, addPostLoading
         }
 
         if (message !== '') {
-            setAlert(message, 'secondary');
+            dispatch(setAlert(message, 'secondary'));
             event.target.value = null;
             return false;
         }
@@ -67,16 +71,16 @@ const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter, addPostLoading
     const onSubmit = event => {
         event.preventDefault();
 
-        if (postContent === '' || imagesData === [] ) return;
+        if (postContent === '' && imagesData === [] ) return;
         const data = new FormData();
-        data.append('user_id', userId);
+        data.append('user_id', user.id);
         data.append('filter', postFilter);
         data.append('content', postContent);
         for (const image of imagesData) {
             data.append('file', image)
         }
 
-        addNewPost(data);
+        dispatch(addNewPost(data));
 
         setPostContent('');
         setPostFilter(deFaultFilter);
@@ -93,20 +97,20 @@ const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter, addPostLoading
                 </div>
             </div>
             <div className="pl-3 pr-3 pt-3 pb-3 box-shadow-1 chat-input-area">
-                { thumbnails.length > 0 &&
-                    <div className="mt-2">
-                        { thumbnails }
 
-                        { thumbnails.length > 0 &&
+                <div className="mt-2">
+                    { previews && (renderThumbnails())}
+
+                    { previews.length > 0 &&
                         <div className="text-danger mb-2"
                              style={{cursor: 'pointer'}}
                              onClick={() => removeAll()}>
                             <i className="nav-icon i-Close-Window font-weight-bold"></i>
                             {' '}Annuler
                         </div>
-                        }
-                    </div>
-                }
+                    }
+                </div>
+
                 <form className="inputForm" onSubmit={event => onSubmit(event)}>
                     <div className="form-group">
                         <textarea
@@ -115,7 +119,7 @@ const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter, addPostLoading
                             placeholder={ 'Que voulez-vous dire, ' + user.username + ' ?'}
                             cols="30" rows="3"
                             value={postContent}
-                            onChange={event=> onPostContentChange(event)}
+                            onChange={onPostContentChange}
                         />
                     </div>
                     <div className="d-flex">
@@ -125,7 +129,7 @@ const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter, addPostLoading
                                 <div className="input-group-prepend">
                                     <span className="input-group-text i-Tag-3" id="basic-addon1"></span>
                                 </div>
-                                    <select onChange={event => onFilterChange(event)} id="filter" className="form-control">
+                                    <select onChange={onFilterChange} id="filter" className="form-control">
                                         <option value="general">Général</option>
                                         <option value="witness">Témoignage</option>
                                         <option value="protocol">Protocole</option>
@@ -142,7 +146,7 @@ const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter, addPostLoading
                             <input
                                 id="image" type="file" multiple
                                 accept="image/png, image/jpeg"
-                                onChange={event => onImageChange(event)}
+                                onChange={onImageChange}
                                 style={{ position: 'absolute', fontSize: '50px', opacity: '0', right: '0', top: '0'}}
                             />
                         </button>
@@ -161,9 +165,4 @@ const AddPostForm = ({ setAlert, addNewPost, user, deFaultFilter, addPostLoading
     )
 };
 
-const mapStateToProps = state => ({
-    user: state.auth.user,
-    addPostLoading: state.posts.addPostLoading
-});
-
-export default connect( mapStateToProps, { setAlert, addNewPost })(AddPostForm);
+export default AddPostForm;

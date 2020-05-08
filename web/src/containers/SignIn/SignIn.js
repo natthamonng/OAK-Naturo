@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import { Link, Redirect, useLocation } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { signInUser } from '../../actions/auth.actions';
+import { Helmet } from 'react-helmet';
 import Alert from '../../components/Alert';
 import logo from '../../assets/images/acorn.png';
 import photoWide from '../../assets/images/photo-wide-6.jpg';
 import SpinnerBubble from '../../components/SpinnerBubble';
 import '../../assets/scss/custom/welcome-text.scss';
 
-function SignIn({ signInUser, isAuthenticated, loading }) {
+
+function SignIn() {
     let location = useLocation();
     let { from } = location.state || { from: { pathname: "/home" } };
+
+    const dispatch = useDispatch();
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+    const loading = useSelector(state => state.auth.loading);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -25,7 +30,7 @@ function SignIn({ signInUser, isAuthenticated, loading }) {
 
     const onSubmit = event => {
         event.preventDefault();
-        signInUser({ email, password });
+        dispatch(signInUser({ email, password }));
     };
 
     if (isAuthenticated) {
@@ -35,6 +40,10 @@ function SignIn({ signInUser, isAuthenticated, loading }) {
 
     return (
         <div className="auth-layout-wrap" style={{backgroundImage: 'url(' + photoWide +')'}}>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Oak - Se connecter</title>
+            </Helmet>
             <div className="auth-content">
                 <Alert/>
                 <div className="card o-hidden">
@@ -109,15 +118,4 @@ function SignIn({ signInUser, isAuthenticated, loading }) {
     );
 }
 
-SignIn.propTypes = {
-    signInUser: PropTypes.func.isRequired,
-    isAuthenticated: PropTypes.bool,
-    loading: PropTypes.bool.isRequired
-};
-
-const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated,
-    loading: state.auth.loading
-});
-
-export default connect(mapStateToProps, { signInUser })(SignIn);
+export default SignIn;

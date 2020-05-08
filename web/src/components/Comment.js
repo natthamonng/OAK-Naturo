@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { removeComment } from '../actions/comment.actions';
 import Avatar from "./Avatar";
 import Moment from "react-moment";
 
-const Comment = ({ comment, postId, removeComment }) => {
+const Comment = ({ comment, postId }) => {
+    const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
     const [showAdminMenu, setShowAdminMenu] = useState(false);
 
@@ -14,21 +15,21 @@ const Comment = ({ comment, postId, removeComment }) => {
                 <Avatar username={comment.author.username}/>
             </div>
             { (user.role === 'admin' || user.id === comment.user_id) &&
-            <button className={`dropdown border-0 bg-white ${showAdminMenu? 'show' : ''} float-right ml-1`}
-                    style={{cursor: 'pointer', outline: 'none'}}
-                    onClick={()=> {setShowAdminMenu(!showAdminMenu)}}
-                    onBlur={()=> {setShowAdminMenu(false)}} >
-                <i className="i-Remove header-icon" id="dropdownMenuButton"
-                   role="button" data-toggle="dropdown" aria-haspopup="true"
-                   aria-expanded={`${showAdminMenu? 'true' : 'false'}`}>
-                </i>
-                <div className={`dropdown-menu dropdown-menu-right ${showAdminMenu? 'show' : ''}`}
-                     aria-labelledby="dropdownMenuButton">
-                    <div className="dropdown-item" onClick={() => removeComment(postId, comment.id)}>
-                        Supprimer
+                <button className={`dropdown border-0 bg-white ${showAdminMenu? 'show' : ''} float-right ml-1`}
+                        style={{cursor: 'pointer', outline: 'none'}}
+                        onClick={()=> {setShowAdminMenu(!showAdminMenu)}}
+                        onBlur={()=> {setShowAdminMenu(false)}} >
+                    <i className="i-Close header-icon" id="dropdownMenuButton"
+                       role="button" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded={`${showAdminMenu? 'true' : 'false'}`}>
+                    </i>
+                    <div className={`dropdown-menu dropdown-menu-right ${showAdminMenu? 'show' : ''}`}
+                         aria-labelledby="dropdownMenuButton">
+                        <div className="dropdown-item" onClick={() => dispatch(removeComment(postId, comment.id))}>
+                            Supprimer
+                        </div>
                     </div>
-                </div>
-            </button>
+                </button>
             }
             <div className="message">
                 <div>
@@ -42,4 +43,4 @@ const Comment = ({ comment, postId, removeComment }) => {
     )
 };
 
-export default connect( null, { removeComment })(Comment);
+export default Comment;

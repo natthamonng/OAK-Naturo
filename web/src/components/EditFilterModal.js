@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { editFilterPost } from '../actions/post.actions';
 import { Modal } from 'react-bootstrap';
 
-const EditFilterModal = (props) => {
-    const { post, editFilterPost } = props;
+const EditFilterModal = ({ post }) => {
+    const dispatch = useDispatch();
     const [showModal, setShowModal] = useState(false);
     const [filter, setFilter] = useState(post.filter);
 
-    const onChange = event => {
+    const handleOnFilterChange = event => {
         setFilter(event.target.value);
     };
 
     const onSubmit = (event) => {
         event.preventDefault();
-        editFilterPost(post.id, filter)
+        dispatch(editFilterPost(post.id, filter));
     };
 
     return (
@@ -36,7 +36,7 @@ const EditFilterModal = (props) => {
                                         <input className="form-check-input"
                                                id={`general-${post.id}`} type="radio"
                                                name="filters" value="general"
-                                               onChange={event => onChange(event)}
+                                               onChange={handleOnFilterChange}
                                                checked={filter === 'general'} />
                                         <label className="form-check-label ml-3" htmlFor={`general-${post.id}`}>
                                             Général
@@ -46,7 +46,7 @@ const EditFilterModal = (props) => {
                                         <input className="form-check-input"
                                                id={`witness-${post.id}`} type="radio"
                                                name="filters" value="witness"
-                                               onChange={event => onChange(event)}
+                                               onChange={handleOnFilterChange}
                                                checked={filter === 'witness'} />
                                         <label className="form-check-label ml-3" htmlFor={`witness-${post.id}`}>
                                             Témoignage
@@ -56,7 +56,7 @@ const EditFilterModal = (props) => {
                                         <input className="form-check-input"
                                                id={`protocol-${post.id}`} type="radio"
                                                name="filters" value="protocol"
-                                               onChange={event => onChange(event)}
+                                               onChange={handleOnFilterChange}
                                                checked={filter === 'protocol'} />
                                         <label className="form-check-label ml-3" htmlFor={`protocol-${post.id}`}>
                                             Protocole
@@ -82,4 +82,4 @@ const EditFilterModal = (props) => {
     )
 };
 
-export default connect( null, { editFilterPost })(EditFilterModal);
+export default EditFilterModal;

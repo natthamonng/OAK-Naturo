@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setAlert } from '../../actions/alert.actions';
+import { Helmet } from 'react-helmet';
 import Alert from '../../components/Alert';
 import SpinnerBubble from '../../components/SpinnerBubble';
 import logo from '../../assets/images/acorn.png';
@@ -11,7 +12,8 @@ import photoWide from '../../assets/images/photo-wide-6.jpg';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
-const ResetPWD = ({ setAlert , match}) => {
+const ResetPWD = ({ match }) => {
+    const dispatch = useDispatch();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [repeatedPassword, setRepeatedPassword] = useState('');
@@ -59,7 +61,7 @@ const ResetPWD = ({ setAlert , match}) => {
     const onSubmit = event => {
         event.preventDefault();
         if (password !== repeatedPassword) {
-            setAlert('Le mot de passe ne correspond pas.', 'danger');
+            dispatch(setAlert('Le mot de passe ne correspond pas.', 'danger'));
         } else {
             updatePassword({ username, password });
         }
@@ -79,7 +81,7 @@ const ResetPWD = ({ setAlert , match}) => {
             .catch(err => {
                 const error = err.response.data.message;
                 if (error) {
-                    setAlert(error, 'danger');
+                    dispatch(setAlert(error, 'danger'));
                 }
                 setUpdated(false);
                 setError(true);
@@ -88,6 +90,10 @@ const ResetPWD = ({ setAlert , match}) => {
 
    return (
        <div className="auth-layout-wrap" style={{backgroundImage: 'url(' + photoWide +')'}}>
+           <Helmet>
+               <meta charSet="utf-8" />
+               <title>Oak - Réinitialiser le mot de passe</title>
+           </Helmet>
            <div className="auth-content">
 
                 <Alert />
@@ -171,10 +177,9 @@ const ResetPWD = ({ setAlert , match}) => {
            </div>
        </div>
    )
-}
+};
 
 ResetPWD.propTypes = {
-    setAlert: PropTypes.func.isRequired,
     match: PropTypes.shape({
         params: PropTypes.shape({
             token: PropTypes.string.isRequired,
@@ -182,7 +187,4 @@ ResetPWD.propTypes = {
     }),
 };
 
-export default connect(
-    null,
-    { setAlert }
-)(ResetPWD);
+export default ResetPWD;

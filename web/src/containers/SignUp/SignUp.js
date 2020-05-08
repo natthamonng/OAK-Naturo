@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, Redirect } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { setAlert } from '../../actions/alert.actions';
 import { signUpUser } from '../../actions/auth.actions';
 
@@ -10,7 +9,10 @@ import logo from '../../assets/images/acorn.png';
 import photoWide from '../../assets/images/photo-wide-9.jpg';
 import photoLong from '../../assets/images/photo-wide-8.jpg';
 
-const SignUp = ({ setAlert, signUpUser, isAuthenticated  }) => {
+const SignUp = () => {
+    const dispatch = useDispatch();
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+
     const [formData, setFormData] = useState({
         username:'',
         email: '',
@@ -27,9 +29,9 @@ const SignUp = ({ setAlert, signUpUser, isAuthenticated  }) => {
     const onSubmit = async event => {
         event.preventDefault();
         if (password !== password2) {
-            setAlert('Le mot de passe ne correspond pas.', 'danger');
+            dispatch(setAlert('Le mot de passe ne correspond pas.', 'danger'));
         } else {
-            signUpUser({ username, email, password });
+            dispatch(signUpUser({ username, email, password }));
         }
     };
 
@@ -126,19 +128,6 @@ const SignUp = ({ setAlert, signUpUser, isAuthenticated  }) => {
            </div>
        </div>
    )
-}
-
-SignUp.propTypes = {
-    setAlert: PropTypes.func.isRequired,
-    signUpUser: PropTypes.func.isRequired,
-    isAuthenticated: PropTypes.bool
 };
 
-const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated
-});
-
-export default connect(
-    mapStateToProps,
-    { setAlert, signUpUser }
-)(SignUp);
+export default SignUp;

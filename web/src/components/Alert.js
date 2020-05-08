@@ -1,9 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-const Alert = ({ alerts }) => {
-
+const Alert = () => {
+    const alerts = useSelector(state => state.alert);
     return(
         alerts !== null && alerts.length > 0 && alerts.map(alert => (
             <div key={alert.id} className={`alert text-center alert-${alert.alertType}`} role ="alert">
@@ -13,12 +12,4 @@ const Alert = ({ alerts }) => {
     );
 };
 
-Alert.propTypes = {
-    alerts: PropTypes.array.isRequired
-};
-
-const mapStateToProps = state => ({
-    alerts: state.alert
-});
-
-export default connect(mapStateToProps)(Alert);
+export default Alert;

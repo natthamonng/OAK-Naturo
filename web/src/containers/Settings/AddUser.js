@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
 import { setAlert } from '../../actions/alert.actions';
 import BreadCrumb from '../../components/Breadcrumb';
 import Alert from '../../components/Alert';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
-const AddUser = ({ setAlert }) => {
+const AddUser = () => {
+    const dispatch = useDispatch();
     const [formData, setFormData] = useState({
         username:'',
         email: '',
         role: 'visitor'
     });
+
     const [loading, setLoading] = useState(false);
 
     const { username, email, role } = formData;
@@ -33,7 +34,7 @@ const AddUser = ({ setAlert }) => {
             .then(res => {
                 setLoading(false);
                 if (res.data.success === true) {
-                    setAlert(res.data.message, 'primary');
+                    dispatch(setAlert(res.data.message, 'primary'));
                 }
                 setFormData({
                     username: '',
@@ -43,7 +44,7 @@ const AddUser = ({ setAlert }) => {
             })
             .catch(err => {
                 setLoading(false);
-                setAlert(err.response.data.message, 'danger');
+                dispatch(setAlert(err.response.data.message, 'danger'));
         })
     };
 
@@ -107,8 +108,4 @@ const AddUser = ({ setAlert }) => {
     )
 };
 
-AddUser.propTypes = {
-    setAlert: PropTypes.func.isRequired
-};
-
-export default connect( null, { setAlert })(AddUser);
+export default AddUser;

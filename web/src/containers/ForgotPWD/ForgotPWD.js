@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { setAlert } from '../../actions/alert.actions';
@@ -8,14 +7,17 @@ import Alert from '../../components/Alert';
 import SpinnerBubble  from '../../components/SpinnerBubble';
 import PhotoWide from '../../assets/images/photo-wide-6.jpg';
 import Logo from '../../assets/images/acorn.png'
+import { Helmet } from 'react-helmet';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
-const ForgotPWD = ({ setAlert, isAuthenticated}) => {
+const ForgotPWD = () => {
+    const dispatch = useDispatch();
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const [email, setEmail] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const onChange = event => {
+    const handleOnEmailChange = event => {
         setEmail(event.target.value)
     };
 
@@ -30,11 +32,11 @@ const ForgotPWD = ({ setAlert, isAuthenticated}) => {
             .then(res => {
                 setIsLoading(false);
                 setEmail('');
-                setAlert(res.data.message, 'primary');
+                dispatch(setAlert(res.data.message, 'primary'));
             })
             .catch(err => {
                 setIsLoading(false);
-                setAlert(err.response.data.message, 'danger');
+                dispatch(setAlert(err.response.data.message, 'danger'));
             })
     };
 
@@ -45,6 +47,10 @@ const ForgotPWD = ({ setAlert, isAuthenticated}) => {
 
     return (
         <div className="auth-layout-wrap" style={{backgroundImage: 'url(' + PhotoWide + ')'}}>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Oak - Mot de passe oublié</title>
+            </Helmet>
             <div className="auth-content">
                 <Alert/>
                 <div className="card o-hidden">
@@ -68,7 +74,7 @@ const ForgotPWD = ({ setAlert, isAuthenticated}) => {
                                             className="form-control form-control-rounded"
                                             id="email"
                                             type="email"
-                                            onChange={event => onChange(event)}
+                                            onChange={handleOnEmailChange}
                                             value={email}
                                             autoComplete="email"
                                             required
@@ -92,16 +98,4 @@ const ForgotPWD = ({ setAlert, isAuthenticated}) => {
     )
 };
 
-ForgotPWD.propTypes = {
-    setAlert: PropTypes.func.isRequired,
-    isAuthenticated: PropTypes.bool
-};
-
-const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated
-});
-
-export default connect(
-    mapStateToProps,
-    { setAlert }
-)(ForgotPWD);
+export default ForgotPWD;

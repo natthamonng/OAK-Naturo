@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { removePost } from '../actions/post.actions';
 import Moment from 'react-moment';
@@ -9,8 +9,9 @@ import Comment from './Comment';
 import EditFilterModal from './EditFilterModal';
 import ModalImage from 'react-modal-image';
 
-const Post = ({ post, removePost, user }) => {
+const Post = ({ post, user }) => {
     let location = useLocation();
+    const dispatch = useDispatch();
     const [showDeleteMenu, setShowDeleteMenu] = useState(false);
 
     const postId = post.id;
@@ -44,7 +45,6 @@ const Post = ({ post, removePost, user }) => {
             <div className="card-body pb-0">
                 <div className="d-flex align-items-start">
                     <Avatar username={ post.author.username } />
-                    {/*<img className="avatar-sm rounded-circle mr-2" src={face} alt="alt"/>*/}
                     <div className="ml-2">
                         <p className="m-0 text-title text-16 flex-grow-1">{ post.author.username }</p>
                         <p className="text-muted text-small"><Moment fromNow>{ post.createdAt }</Moment></p>
@@ -55,13 +55,13 @@ const Post = ({ post, removePost, user }) => {
                             style={{cursor: 'pointer', outline: 'none'}}
                             onClick={()=> {setShowDeleteMenu(!showDeleteMenu)}}
                             onBlur={()=> {setShowDeleteMenu(false)}} >
-                        <i className="i-Arrow-Down header-icon" id="dropdownMenuButton"
+                        <i className="i-Close header-icon" id="dropdownMenuButton"
                            role="button" data-toggle="dropdown" aria-haspopup="true"
                            aria-expanded={`${showDeleteMenu? 'true' : 'false'}`}>
                         </i>
                         <div className={`dropdown-menu dropdown-menu-right ${showDeleteMenu? 'show' : ''}`}
                              aria-labelledby="dropdownMenuButton">
-                            <div className="dropdown-item" onClick={() => removePost(postId)}>
+                            <div className="dropdown-item" onClick={() => dispatch(removePost(postId))}>
                                 Supprimer
                             </div>
                         </div>
@@ -99,8 +99,7 @@ const Post = ({ post, removePost, user }) => {
                 </div>
             </div>
         </div>
-
     )
 };
 
-export default connect( null, { removePost })(Post);
+export default Post;
