@@ -56,7 +56,8 @@ export const removeComment = (postId, commentId) => async dispatch => {
     await axios.put(`${BASE_URL}/api/comments/${postId}/${commentId}`)
         .then(res => {
             if (res.data.success === true) {
-                dispatch(removeCommentSuccess(postId, commentId))
+                // dispatch(removeCommentSuccess(postId, commentId))
+                console.log('Comment removed.')
             }
         })
         .catch(err => {

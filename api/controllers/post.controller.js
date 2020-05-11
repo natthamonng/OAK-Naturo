@@ -5,8 +5,15 @@ const Post = db.posts;
 const User = db.users;
 const Comment = db.comments;
 const Image = db.images;
+const io = require('../socket');
 
 exports.addNewPost = async (req, res, next) => {
+    let location;
+    if(req.body.filter === 'general' || req.body.filter === 'witness' || req.body.filter === 'protocol') {
+        location = 'le forum de discussion'
+    } else if (req.body.filter === 'pro') {
+        location = 'l\'espace pro'
+    }
     await Post.create({
         user_id: req.body.user_id,
         content: req.body.content,
@@ -26,6 +33,15 @@ exports.addNewPost = async (req, res, next) => {
             });
         }
         req.post = post;
+        req.body.message = "new post";
+        // Sends message to all connected users
+        io.getIO().emit("notifications", {
+            action: "add new post",
+            authorId: req.user.id,
+            postId: post.id,
+            location,
+            message: `${req.user.username} vient de créer une nouvelle publication dans ${location} !`,
+        });
         next();
     })
     .catch(err => {
@@ -37,15 +53,17 @@ exports.addNewPost = async (req, res, next) => {
     })
 };
 
-exports.getPostById = (req, res) => {
+exports.getPostById = async (req, res) => {
     let postId;
     if (req.post) {
         postId = req.post.id
     } else if (req.comment) {
         postId = req.comment.dataValues.post_id;
+    } else if (req.params.postId){
+        postId = req.params.postId
     }
-
-    Post.findOne({
+    console.log(postId);
+    await Post.findOne({
         where: {
             id: postId,
             status: 'published'
@@ -84,7 +102,7 @@ exports.getPostById = (req, res) => {
             result
         });
     }).catch(err => {
-        console.log(err);
+        console.log(req.user.username, err);
         res.status(500).json({
             success: false,
             message: 'Une erreur s\'est produite lors de la récupération d\'une publication.'
@@ -166,11 +184,16 @@ exports.getPostsByFilters = (req, res) => {
     })
 };
 
-exports.unPublishPost = (req, res) => {
+exports.unpublishPost = (req, res) => {
     Post.update(
         {status: 'unpublished'} ,
         {where: {id: req.params.postId}}
     ).then(() => {
+        // Sends message to all connected users
+        io.getIO().emit("post event", {
+            action: "unpublish post",
+            postId: Number(req.params.postId),
+        });
        res.status(200).json({
            success: true
        })
@@ -188,6 +211,12 @@ exports.updateFilterPost = (req, res) => {
         {filter: req.params.filter} ,
         {where: {id: req.params.postId}}
     ).then(() => {
+        // Sends message to all connected users
+        io.getIO().emit("post event", {
+            action: "update filter post",
+            postId: Number(req.params.postId),
+            filter: req.params.filter
+        });
         res.status(200).json({
             success: true
         })

@@ -36,6 +36,17 @@ export default (state = initialState, action) =>
                 draft.hasMore = !(draft.postCount <= draft.posts.length);
                 draft.loading =  false;
                 break;
+            //TODO WIP
+            case actionsType.NEW_POST_FROM_SOCKET:
+                let postIndex = draft.posts.findIndex(post => post.id === action.payload.id);
+                if (postIndex === -1) {
+                    // Object not exists
+                    draft.posts = [action.payload, ...draft.posts];
+                    draft.postCount += 1;
+                } else {
+                    draft.posts[postIndex] = action.payload;
+                }
+                break;
             case actionsType.SET_GET_POST_PAGE:
                 if (draft.hasMore) {
                     draft.page = state.page + 1;
@@ -68,13 +79,14 @@ export default (state = initialState, action) =>
                     ...state.posts
                 ];
                 draft.addPostLoading =  false;
+                draft.postCount += 1;
                 break;
             case actionsType.REMOVE_POST_SUCCESS:
-                let removedPostId = action.payload.postId;
-                draft.posts = state.posts.filter(function(element) {
-                    return element.id !== removedPostId;
+                draft.posts = draft.posts.filter(function(element) {
+                    return element.id !== action.payload.postId;
                 });
                 draft.removePostLoading = false;
+                draft.postCount += 1;
                 break;
             case actionsType.EDIT_FILTER_POST_SUCCESS:
                 let objPostIndex = state.posts.findIndex((post => post.id === action.payload.postId));

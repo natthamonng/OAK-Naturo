@@ -38,6 +38,12 @@ export const addPostSuccess = ( post ) => ({
     payload: { post }
 });
 
+// export const addPostSuccess = () => {
+//     return {
+//         type: actionsType.ADD_POST_SUCCESS
+//     }
+// };
+
 export const addPostFailure = error => ({
     type: actionsType.ADD_POST_FAILURE,
     payload: { error }
@@ -101,7 +107,10 @@ export const addNewPost = (post) => async dispatch => {
     };
     await axios.post(`${BASE_URL}/api/posts`, post, config)
         .then(res => {
-            dispatch(addPostSuccess(res.data.result))
+            if (res.data.success === true) {
+                dispatch(addPostSuccess(res.data.result));
+                // dispatch(addPostSuccess())
+            }
         })
         .catch(err => {
             if (err.response) {
@@ -119,7 +128,8 @@ export const removePost = (postId) => async dispatch => {
     await axios.put(`${BASE_URL}/api/posts/${postId}`)
         .then(res => {
             if (res.data.success === true) {
-                dispatch(removePostSuccess(postId))
+                // dispatch(removePostSuccess(postId))
+                console.log('Post removed.')
             }
         })
         .catch(err => {
@@ -136,7 +146,8 @@ export const editFilterPost = (postId, filter) => async dispatch => {
     await axios.put(`${BASE_URL}/api/posts/${postId}/${filter}`)
         .then(res => {
             if (res.data.success === true) {
-                dispatch(editFilterPostSuccess(postId, filter))
+                // dispatch(editFilterPostSuccess(postId, filter))
+                console.log('Filter edited.')
             }
         })
         .catch(err => {
@@ -157,4 +168,28 @@ export const reinitializeState = () => {
     return {
         type:'REINITIALIZE_STATE'
     }
+};
+
+export function getPostFromSocketSuccess(data){
+    return {
+        type: actionsType.NEW_POST_FROM_SOCKET,
+        payload: data
+    }
+}
+
+export const getPostFromSocket = (postId) => async dispatch => {
+    console.log(postId)
+    console.log('before req sent');
+    await axios.get(`${BASE_URL}/api/posts/post/${postId}`)
+        .then( res => {
+            console.log('res', res.data);
+            dispatch(getPostFromSocketSuccess(res.data.result))
+        })
+        .catch(err => {
+            if (err.response) {
+                console.log(err.response.data.message)
+            } else {
+                console.log(defaultErrorMessage)
+            }
+        })
 };

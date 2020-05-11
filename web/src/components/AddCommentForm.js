@@ -33,13 +33,10 @@ const AddCommentForm = ({ postId, userId }) => {
                        value={comment}
                 />
 
-                { addCommentLoading ?
-                    <Spinner/>
-                    :
-                    <button className="btn btn-icon btn-rounded btn-primary">
-                        <i className="i-Paper-Plane"></i>
-                    </button>
-                }
+                <button className="btn btn-icon btn-rounded btn-primary">
+                    <i className="i-Paper-Plane"></i>
+                </button>
+
             </div>
         </form>
     )

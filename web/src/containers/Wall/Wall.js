@@ -1,18 +1,24 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import {getPosts, reinitializeState, setGetPostsPage} from '../../actions/post.actions';
+import { getPosts, reinitializeState, setGetPostsPage, getPostFromSocket, removePostSuccess, editFilterPostSuccess } from '../../actions/post.actions';
+import { removeCommentSuccess } from '../../actions/comment.actions';
+import { setNotification } from '../../actions/notification.actions';
 import BreadCrumb from '../../components/Breadcrumb';
 import Filter from '../../components/Filter';
 import VisiblePostList from '../VisiblePostList/VisiblePostList';
 import AddPostForm from '../../components/AddPostForm';
 import SpinnerBubble from '../../components/SpinnerBubble';
 
+import io from 'socket.io-client'
+const BASE_URL = process.env.REACT_APP_API_URL;
+
 const Wall = () => {
     const dispatch = useDispatch();
     const loading = useSelector(state => state.posts.loading);
     const page = useSelector(state => state.posts.page);
     const hasMore = useSelector(state => state.posts.hasMore);
+    const user = useSelector(state => state.auth.user);
 
     let location = useLocation();
     let filters, defaultFilter, pageName;
@@ -35,6 +41,32 @@ const Wall = () => {
             dispatch(getPosts(filters, page));
         }          
     }, [page, hasMore]);
+
+    const socket = io(BASE_URL);
+
+    useEffect( ()=> {
+        socket.on('post event', postEvent => {
+            if (postEvent.action === 'unpublish post') {
+                dispatch(removePostSuccess(postEvent.postId));
+            }
+            if (postEvent.action === 'update filter post') {
+                dispatch(editFilterPostSuccess(postEvent.postId, postEvent.filter));
+            }
+        });
+        socket.on('comment event', commentEvent => {
+            if (commentEvent.action === 'unpublish comment' ) {
+                dispatch(removeCommentSuccess(commentEvent.postId, commentEvent.commentId ));
+            }
+        });
+        socket.on('notifications', notification => {
+            if(notification.action === 'add new post' && notification.location === 'l\'espace pro' && user.role === 'visitor') return;
+            if(user.id !== notification.authorId){
+                dispatch(setNotification(notification));
+                //TODO WIP
+                dispatch(getPostFromSocket(notification.postId));
+            }
+        })
+    }, []);
     
     const observer = useRef();
     const bottomBoundaryRef = useCallback(node => {

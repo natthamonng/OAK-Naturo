@@ -3,6 +3,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const app = express();
+const server = require('http').createServer(app);
+
 const corsOptions = { origin: 'http://localhost:3000' };
 app.use(cors(corsOptions));
 app.use((req, res, next) => {
@@ -48,8 +50,7 @@ app.use('/api/users', require('./routes/user.routes'));
 app.use('/api/posts', require('./routes/post.routes'));
 app.use('/api/comments', require('./routes/comment.routes'));
 app.use('/api/documentation', require('./routes/documentation.routes'));
-//use this to show the image in node js server to client
-//https://stackoverflow.com/questions/48914987/send-image-path-from-node-js-express-server-to-react-client
+//use this to send path from server to client
 app.use('/uploads/files', express.static('uploads/files'));
 
 // Initial Route
@@ -59,6 +60,15 @@ app.get('/', (req, res) => {
 
 // Set port, listen for requests
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server listening on port http://localhost:${PORT}`);
+});
+
+// Create socket io connection
+const io = require('./socket').init(server);
+//Setting up a socket with the namespace "connection" for new sockets
+io.on('connection', (socket) => {
+    console.log(`CLIENT ID: ${socket.id}  CONNECTED.`);
+    //A special namespace "disconnect" for when a client disconnects
+    socket.on('disconnect', () => console.log(`CLIENT ID: ${socket.id} DISCONNECTED.`));
 });

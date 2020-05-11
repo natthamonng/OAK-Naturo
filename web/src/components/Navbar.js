@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '../assets/images/acorn.png';
+import NotificationList from './NotificationList';
 
 const Navbar = ({ auth: { user }, signOutUser }) => {
     const { role } = user;
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [showAdminMenu, setShowAdminMenu] = useState(false);
-    const [showNotification, setShowNotification] = useState(false);
     const [showAvatarMenu, setShowAvatarMenu] = useState(false);
 
     return (
@@ -49,34 +49,7 @@ const Navbar = ({ auth: { user }, signOutUser }) => {
                 }
                 {/* Notificaiton */}
                 <div className="dropdown">
-                    <button className="badge-top-container bg-white border-0"
-                            role="button" id="dropdownNotification" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false"
-                            style={{outline: 'none'}}
-                            onClick={()=> {setShowNotification(!showNotification)}}
-                            onBlur={()=> {setShowNotification(false)}}>
-                        <span className="badge badge-primary">1</span>
-                        <i className="i-Bell text-muted header-icon"></i>
-                    </button>
-                    {/* Notification dropdown */}
-                    <div className={`dropdown-menu dropdown-menu-right notification-dropdown 
-                         rtl-ps-none ${showNotification? 'show' : ''}`}
-                         aria-labelledby="dropdownNotification" data-perfect-scrollbar data-suppress-scroll-x="true">
-                        <div className="dropdown-item d-flex">
-                            <div className="notification-icon">
-                                <i className="i-Speach-Bubble-6 text-primary mr-1"></i>
-                            </div>
-                            <div className="notification-details flex-grow-1">
-                                <p className="m-0 d-flex align-items-center">
-                                    <span>New message</span>
-                                    <span className="badge badge-pill badge-primary ml-1 mr-1">new</span>
-                                    <span className="flex-grow-1"></span>
-                                    <span className="text-small text-muted ml-auto">10 sec ago</span>
-                                </p>
-                                <p className="text-small text-muted m-0">James: Hey! are you busy?</p>
-                            </div>
-                        </div>
-                    </div>
+                    <NotificationList />
                 </div>
                 {/* User avatar dropdown*/}
                 <div className="dropdown"
