@@ -47,6 +47,14 @@ export default (state = initialState, action) =>
                     draft.posts[postIndex] = action.payload;
                 }
                 break;
+            case actionsType.NEW_COMMENT_FROM_SOCKET:
+                draft.posts.forEach((element, index) => {
+                    if (element.id === action.payload.id) {
+                        draft.posts[index] = action.payload
+                    }
+                });
+                draft.addCommentLoading =  false;
+                break;
             case actionsType.SET_GET_POST_PAGE:
                 if (draft.hasMore) {
                     draft.page = state.page + 1;
@@ -98,6 +106,8 @@ export default (state = initialState, action) =>
                 draft.posts.forEach((element, index) => {
                     if (element.id === newPostComment.id) {
                         draft.posts[index] = newPostComment
+                    } else {
+                        console.log('no post object')
                     }
                 });
                 draft.addCommentLoading =  false;

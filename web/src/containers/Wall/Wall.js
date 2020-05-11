@@ -59,11 +59,26 @@ const Wall = () => {
             }
         });
         socket.on('notifications', notification => {
-            if(notification.action === 'add new post' && notification.location === 'l\'espace pro' && user.role === 'visitor') return;
-            if(user.id !== notification.authorId){
-                dispatch(setNotification(notification));
+            if(notification.action === 'add new post' && notification.location === 'l\'espace pro' && location.pathname === '/home'){
+                console.log('new post', 'pro post', '/home');
+                return;
+            }
+            if(notification.action === 'add new post' && notification.location === 'le forum de discussion' && location.pathname === '/pro'){
+                console.log('new post', 'general post', '/pro');
+                return;
+            }
+            if(notification.action === 'add new post' && notification.location === 'l\'espace pro' && user.role === 'visitor'){
+                console.log('new post', 'pro post', 'visitor');
+                return;
+            }
+            if(notification.action === 'add new post' && user.id !== notification.authorId){
+                // dispatch(setNotification(notification));
                 //TODO WIP
-                dispatch(getPostFromSocket(notification.postId));
+                dispatch(getPostFromSocket(notification.postId, 'post'));
+            }
+            if(notification.action === 'add new comment'){
+                //TODO WIP
+                dispatch(getPostFromSocket(notification.postId, 'comment'));
             }
         })
     }, []);

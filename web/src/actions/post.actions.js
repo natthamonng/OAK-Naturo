@@ -177,13 +177,22 @@ export function getPostFromSocketSuccess(data){
     }
 }
 
-export const getPostFromSocket = (postId) => async dispatch => {
-    console.log(postId)
-    console.log('before req sent');
+export function getCommentFromSocketSuccess(post){
+    return {
+        type: actionsType.NEW_COMMENT_FROM_SOCKET,
+        payload: post
+    }
+}
+
+export const getPostFromSocket = (postId, type) => async dispatch => {
     await axios.get(`${BASE_URL}/api/posts/post/${postId}`)
         .then( res => {
-            console.log('res', res.data);
-            dispatch(getPostFromSocketSuccess(res.data.result))
+            if (type === 'post') {
+                dispatch(getPostFromSocketSuccess(res.data.result))
+            }
+            if (type === 'comment') {
+                dispatch(getCommentFromSocketSuccess(res.data.result))
+            }
         })
         .catch(err => {
             if (err.response) {

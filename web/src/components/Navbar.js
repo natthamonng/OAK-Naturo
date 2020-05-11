@@ -49,7 +49,8 @@ const Navbar = ({ auth: { user }, signOutUser }) => {
                 }
                 {/* Notificaiton */}
                 <div className="dropdown">
-                    <NotificationList />
+                    {/*TODO Notification*/}
+                    {/*<NotificationList />*/}
                 </div>
                 {/* User avatar dropdown*/}
                 <div className="dropdown"
