@@ -97,12 +97,18 @@ exports.getPostById = async (req, res) => {
             }
         ]
     }).then((result) => {
+        if(req.user.role === 'visitor' && result.filter === 'pro') {
+            res.status(403).json({
+                success: false,
+                message: 'Non autorisé.'
+            })
+        }
         res.status(200).json({
             success: true,
             result
         });
     }).catch(err => {
-        console.log(req.user.username, err);
+        console.log(err);
         res.status(500).json({
             success: false,
             message: 'Une erreur s\'est produite lors de la récupération d\'une publication.'
