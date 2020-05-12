@@ -34,6 +34,7 @@ const Wall = () => {
 
     useEffect(() => {
         dispatch(reinitializeState());
+        createSocketConnection();
     }, []);
 
     useEffect(() => {
@@ -42,46 +43,29 @@ const Wall = () => {
         }          
     }, [page, hasMore]);
 
-    const socket = io(BASE_URL);
+    const createSocketConnection = () => {
+        const socket = io(`${BASE_URL}${location.pathname}`);
 
-    useEffect( ()=> {
-        socket.on('post event', postEvent => {
-            if (postEvent.action === 'unpublish post') {
-                dispatch(removePostSuccess(postEvent.postId));
-            }
-            if (postEvent.action === 'update filter post') {
-                dispatch(editFilterPostSuccess(postEvent.postId, postEvent.filter));
+        socket.on('new post', newPost => {
+            if (newPost.namespace !== location.pathname) return;
+            if (newPost.namespace === '/pro' && user.role === 'visitor') return;
+            if (newPost.authorId !== user.id) {
+                dispatch(getPostFromSocket(newPost.postId, 'post'))
             }
         });
-        socket.on('comment event', commentEvent => {
-            if (commentEvent.action === 'unpublish comment' ) {
-                dispatch(removeCommentSuccess(commentEvent.postId, commentEvent.commentId ));
-            }
+        socket.on('unpublish post', post => {
+            dispatch(removePostSuccess(post.postId));
         });
-        socket.on('notifications', notification => {
-            if(notification.action === 'add new post' && notification.location === 'l\'espace pro' && location.pathname === '/home'){
-                console.log('new post', 'pro post', '/home');
-                return;
-            }
-            if(notification.action === 'add new post' && notification.location === 'le forum de discussion' && location.pathname === '/pro'){
-                console.log('new post', 'general post', '/pro');
-                return;
-            }
-            if(notification.action === 'add new post' && notification.location === 'l\'espace pro' && user.role === 'visitor'){
-                console.log('new post', 'pro post', 'visitor');
-                return;
-            }
-            if(notification.action === 'add new post' && user.id !== notification.authorId){
-                // dispatch(setNotification(notification));
-                //TODO WIP
-                dispatch(getPostFromSocket(notification.postId, 'post'));
-            }
-            if(notification.action === 'add new comment'){
-                //TODO WIP
-                dispatch(getPostFromSocket(notification.postId, 'comment'));
-            }
-        })
-    }, []);
+        socket.on('update filter post', post => {
+            dispatch(editFilterPostSuccess(post.postId, post.filter));
+        });
+        socket.on('new comment', newComment => {
+            dispatch(getPostFromSocket(newComment.postId, 'comment'));
+        });
+        socket.on('unpublish comment', comment => {
+            dispatch(removeCommentSuccess(comment.postId, comment.commentId ));
+        });
+    };
     
     const observer = useRef();
     const bottomBoundaryRef = useCallback(node => {

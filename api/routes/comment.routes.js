@@ -4,8 +4,8 @@ const postController = require("../controllers/post.controller");
 const commentController = require("../controllers/comment.controller");
 const { passportJwt, verifyAuthority } = require("../middlewares");
 
-router.post('/', [passportJwt.authenticateJwt], commentController.addNewComment, postController.getPostById);
+router.post('/', [passportJwt.authenticateJwt], postController.getTargetPost, commentController.addNewComment, postController.getPostById);
 
-router.put('/:postId/:commentId', [passportJwt.authenticateJwt], commentController.unpublishComment);
+router.put('/:postId/:commentId', [passportJwt.authenticateJwt], postController.getTargetPost, commentController.unpublishComment);
 
 module.exports = router;

@@ -13,9 +13,9 @@ router.get('/post/:postId', [passportJwt.authenticateJwt], postController.getPos
 router.post('/', [passportJwt.authenticateJwt], upload.array('file'),
     postController.addNewPost, postController.getPostById);
 
-router.put('/:postId', [passportJwt.authenticateJwt], postController.unpublishPost);
+router.put('/:postId', [passportJwt.authenticateJwt], postController.getTargetPost, postController.unpublishPost);
 
-router.put('/:postId/:filter', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin],
+router.put('/:postId/:filter', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin], postController.getTargetPost,
     postController.updateFilterPost);
 
 module.exports = router;

@@ -81,7 +81,7 @@ const ForgotPWD = () => {
                                         />
                                     </div>
                                     <button className="btn btn-primary btn-block btn-rounded mt-3">
-                                        submit
+                                        Valider
                                     </button>
                                 </form>
                                 <div className="mt-3 text-center">

@@ -32,7 +32,7 @@ const Navbar = ({ auth: { user }, signOutUser }) => {
                             onClick={()=> {setShowAdminMenu(!showAdminMenu)}}>
                         <i className="i-Geek text-muted header-icon" id="dropdownMenuButton"
                            role="button" data-toggle="dropdown" aria-haspopup="true"
-                           aria-expanded={`${showAdminMenu? 'true' : 'false'}`}>
+                           aria-expanded={`${showAdminMenu? true : false}`}>
                         </i>
                         <div className={`dropdown-menu dropdown-menu-right ${showAdminMenu? 'show' : ''}`}
                              aria-labelledby="dropdownMenuButton">

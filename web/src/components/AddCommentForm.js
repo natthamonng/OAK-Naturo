@@ -16,8 +16,8 @@ const AddCommentForm = ({ postId, userId }) => {
         event.preventDefault();
         if (comment.length === 0 ) return;
         dispatch(addNewComment({
-            user_id: userId,
-            post_id: postId,
+            userId: userId,
+            postId: postId,
             comment
         }));
         setComment("")

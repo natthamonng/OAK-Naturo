@@ -66,9 +66,21 @@ server.listen(PORT, () => {
 
 // Create socket io connection
 const io = require('./socket').init(server);
-//Setting up a socket with the namespace "connection" for new sockets
-io.on('connection', (socket) => {
-    console.log(`CLIENT ID: ${socket.id}  CONNECTED.`);
-    //A special namespace "disconnect" for when a client disconnects
-    socket.on('disconnect', () => console.log(`CLIENT ID: ${socket.id} DISCONNECTED.`));
+// io.on('connection', (socket) => {
+//     console.log(`CLIENT ID: ${socket.id}  CONNECTED.`);
+//     socket.on('disconnect', () => console.log(`CLIENT ID: ${socket.id} DISCONNECTED.`));
+// });
+
+const homeSpace = io.of('/home');
+homeSpace.on('connection', (socket) => {
+    console.log(`${socket.id} CONNECTED TO HOME`);
+    socket.on('disconnect', () => console.log(`${socket.id} DISCONNECTED.`));
 });
+
+const proSpace = io.of('/pro');
+proSpace.on('connection', (socket) => {
+    console.log(`${socket.id} CONNECTED TO PRO`);
+    socket.on('disconnect', () => console.log(`${socket.id} DISCONNECTED.`));
+});
+
+

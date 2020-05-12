@@ -36,18 +36,16 @@ exports.getPostComments = (req, res, next) => {
 
 exports.addNewComment = async (req, res, next) => {
     await Comment.create({
-        user_id: req.body.user_id,
-        post_id: req.body.post_id,
+        user_id: req.body.userId,
+        post_id: req.body.postId,
         comment: req.body.comment,
     }).then(comment => {
         req.comment = comment;
-        req.body.message = "new comment";
-        // Sends message to all connected users
-        io.getIO().emit("notifications", {
-            action: "add new comment",
+        // Sends message to namespace connected users
+        io.getIO().of(req.namespace).emit("new comment", {
             authorId: req.user.id,
-            postId: req.body.post_id,
-            message: `${req.user.username} vient de créer un nouveau commentaire !`,
+            postId: req.body.postId,
+            namespace: req.namespace
         });
         next();
     }).catch(err => {
@@ -67,11 +65,11 @@ exports.unpublishComment = (req, res) => {
             post_id: req.params.postId
         }}
     ).then(() => {
-        // Sends message to all connected users
-        io.getIO().emit("comment event", {
-            action: "unpublish comment",
+        // Sends message to namespace connected users
+        io.getIO().of(req.namespace).emit("unpublish comment", {
             postId: Number(req.params.postId),
             commentId: Number(req.params.commentId),
+            namespace: req.namespace
         });
         res.status(200).json({
             success: true

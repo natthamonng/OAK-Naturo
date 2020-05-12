@@ -93,6 +93,7 @@ const Post = ({ post, user }) => {
                     <AddCommentForm
                         postId={postId}
                         userId={user.id} />
+
                     <div>
                         { commentsList }
                     </div>
