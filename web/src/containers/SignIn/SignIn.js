@@ -12,7 +12,7 @@ import '../../assets/scss/custom/welcome-text.scss';
 
 function SignIn() {
     let location = useLocation();
-    let { from } = location.state || { from: { pathname: "/home" } };
+    let { from } = location.state || { from: { pathname: "/forum" } };
 
     const dispatch = useDispatch();
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);

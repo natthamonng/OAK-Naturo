@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getPosts, reinitializeState, setGetPostsPage, getPostFromSocket, removePostSuccess, editFilterPostSuccess } from '../../actions/post.actions';
+import { getPosts, reinitializeState, setVisibilityFilter, setGetPostsPage, getPostFromSocket, removePostSuccess, editFilterPostSuccess } from '../../actions/post.actions';
 import { removeCommentSuccess } from '../../actions/comment.actions';
-import { setNotification } from '../../actions/notification.actions';
 import BreadCrumb from '../../components/Breadcrumb';
 import Filter from '../../components/Filter';
 import VisiblePostList from '../VisiblePostList/VisiblePostList';
@@ -22,7 +21,7 @@ const Wall = () => {
 
     let location = useLocation();
     let filters, defaultFilter, pageName;
-    if (location.pathname === '/home') {
+    if (location.pathname === '/forum') {
         filters  = ['general', 'witness', 'protocol'];
         defaultFilter = 'general';
         pageName = 'Forum de discussions';
@@ -34,6 +33,9 @@ const Wall = () => {
 
     useEffect(() => {
         dispatch(reinitializeState());
+        if (location.pathname ==='/pro') {
+            dispatch(setVisibilityFilter('PRO'));
+        }
         createSocketConnection();
     }, []);
 
@@ -44,11 +46,15 @@ const Wall = () => {
     }, [page, hasMore]);
 
     const createSocketConnection = () => {
-        const socket = io(`${BASE_URL}${location.pathname}`);
+        let namespace;
+        if (user.role === 'visitor') {
+            namespace = '/visitor'
+        } else {
+            namespace = '/pro'
+        }
+        const socket = io(`${BASE_URL}${namespace}`);
 
         socket.on('new post', newPost => {
-            if (newPost.namespace !== location.pathname) return;
-            if (newPost.namespace === '/pro' && user.role === 'visitor') return;
             if (newPost.authorId !== user.id) {
                 dispatch(getPostFromSocket(newPost.postId, 'post'))
             }
@@ -59,6 +65,7 @@ const Wall = () => {
         socket.on('update filter post', post => {
             dispatch(editFilterPostSuccess(post.postId, post.filter));
         });
+
         socket.on('new comment', newComment => {
             dispatch(getPostFromSocket(newComment.postId, 'comment'));
         });
@@ -97,7 +104,7 @@ const Wall = () => {
                         <AddPostForm deFaultFilter={defaultFilter} />
 
                         <div className="mt-4"></div>
-                        { location.pathname === '/home' &&
+                        { location.pathname === '/forum' &&
                             <>
                                 <div className="separator-breadcrumb border-top"></div>
                                 <div className="breadcrumb d-flex justify-content-end">

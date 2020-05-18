@@ -19,7 +19,7 @@ const Routes = () => {
         <section>
             <Switch>
                 {/*<PrivateRoute exact path='/home' component={Visitor(Home)} />*/}
-                <PrivateRoute exact path='/home' component={Visitor(Wall)} />
+                <PrivateRoute exact path='/forum' component={Visitor(Wall)} />
                 <PrivateRoute exact path='/pro' component={Partner(Wall)} />
                 <PrivateRoute exact path='/documentation' component={Partner(Documentation)} />
                 <PrivateRoute exact path='/documentation/categories/:categoryId' component={Partner(Category)} />

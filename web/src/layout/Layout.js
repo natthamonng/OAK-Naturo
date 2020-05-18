@@ -7,6 +7,7 @@ import MainRoutes from '../routes/MainRoutes';
 import Footer from '../components/Footer';
 
 const Layout = (props) => {
+
     return (
         <div className="app-admin-wrap layout-horizontal-bar">
             <Navbar {...props} />

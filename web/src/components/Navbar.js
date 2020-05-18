@@ -84,9 +84,9 @@ const Navbar = ({ auth: { user }, signOutUser }) => {
                             <li>
                                 <div>
                                     <div>
-                                        <label className="toggle" htmlFor="drop-2">Accueil</label>
-                                        <Link to="/home">
-                                            <i className="nav-icon mr-2 i-Home1"></i> Accueil
+                                        <label className="toggle" htmlFor="drop-2">Forum de discussion</label>
+                                        <Link to="/forum">
+                                            <i className="nav-icon mr-2 i-Speach-Bubbles"></i> Forum de discussion
                                         </Link>
                                         <input id="drop-2" type="checkbox"/>
                                     </div>

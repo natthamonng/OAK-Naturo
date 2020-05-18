@@ -8,7 +8,7 @@ const Authorization = (WrappedComponent, allowedRoles, auth) => {
         if (allowedRoles.includes(auth.user.role)) {
             return <WrappedComponent />
         } else {
-            return <Redirect to="/home" />
+            return <Redirect to="/forum" />
         }
     };
     return WithAuthorization;

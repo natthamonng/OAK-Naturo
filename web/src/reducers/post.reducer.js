@@ -94,7 +94,7 @@ export default (state = initialState, action) =>
                     return element.id !== action.payload.postId;
                 });
                 draft.removePostLoading = false;
-                draft.postCount += 1;
+                draft.postCount -= 1;
                 break;
             case actionsType.EDIT_FILTER_POST_SUCCESS:
                 let objPostIndex = state.posts.findIndex((post => post.id === action.payload.postId));

@@ -86,7 +86,7 @@ const Post = ({ post, user }) => {
                         { post.filter === 'protocol' && <><i className="i-Conference"></i> Protocole</> }
                         { post.filter === 'pro' && <><i className="i-Bar-Chart"></i> Pro</> }
                     </div>
-                    { (user.role === "admin" && location.pathname === '/home') && <EditFilterModal post={post}/> }
+                    { (user.role === "admin") && <EditFilterModal post={post}/> }
                 </div>
 
                 <div className="pt-2">

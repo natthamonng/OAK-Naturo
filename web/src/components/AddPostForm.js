@@ -123,7 +123,7 @@ const AddPostForm = ({ deFaultFilter }) => {
                         />
                     </div>
                     <div className="d-flex">
-                    { location.pathname === '/home' &&
+                    { location.pathname === '/forum' &&
                         <div className="form-group">
                             <div className="input-group input-group-sm">
                                 <div className="input-group-prepend">

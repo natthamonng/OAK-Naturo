@@ -37,7 +37,7 @@ const SignUp = () => {
 
     if (isAuthenticated) {
         // If signed in and user navigates to Signup page, should redirect them to home
-        return <Redirect to='/home' />
+        return <Redirect to='/forum' />
     }
 
    return (

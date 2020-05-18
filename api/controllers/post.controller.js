@@ -8,12 +8,6 @@ const Image = db.images;
 const io = require('../socket');
 
 exports.addNewPost = async (req, res, next) => {
-    let namespace;
-    if(req.body.filter === 'general' || req.body.filter === 'witness' || req.body.filter === 'protocol') {
-        namespace = '/home'
-    } else if (req.body.filter === 'pro') {
-        namespace = '/pro'
-    }
     await Post.create({
         user_id: req.body.user_id,
         content: req.body.content,
@@ -33,17 +27,23 @@ exports.addNewPost = async (req, res, next) => {
             });
         }
         req.post = post;
-        // Sends message to all connected users
-        // io.getIO().emit("new post", {
-        //     authorId: req.user.id,
-        //     postId: post.id,
-        //     namespace
-        // });
-        io.getIO().of(namespace).emit("new post", {
-            authorId: req.user.id,
-            postId: post.id,
-            namespace
-        });
+
+        if (post.filter === 'pro') {
+            io.getIO().of('/pro').emit("new post", {
+                authorId: req.user.id,
+                postId: post.id,
+            });
+        } else {
+            io.getIO().of('/visitor').emit("new post", {
+                authorId: req.user.id,
+                postId: post.id,
+            });
+            io.getIO().of('/pro').emit("new post", {
+                authorId: req.user.id,
+                postId: post.id,
+            });
+        }
+
         next();
     })
     .catch(err => {
@@ -99,12 +99,6 @@ exports.getPostById = async (req, res) => {
             }
         ]
     }).then((result) => {
-        // if(req.user.role === 'visitor' && result.filter === 'pro') {
-        //     res.status(403).json({
-        //         success: false,
-        //         message: 'Non autorisé.'
-        //     })
-        // }
         res.status(200).json({
             success: true,
             result
@@ -196,11 +190,21 @@ exports.unpublishPost = (req, res) => {
         {status: 'unpublished'} ,
         {where: {id: req.params.postId}}
     ).then(() => {
-        // Sends message to all connected users
-        io.getIO().of(req.namespace).emit("unpublish post", {
-            postId: Number(req.params.postId),
-            namespace: req.namespace
-        });
+        if (req.post.filter === 'pro') {
+            io.getIO().of('/pro').emit("unpublish post", {
+                authorId: req.user.id,
+                postId: req.post.id,
+            });
+        } else {
+            io.getIO().of('/visitor').emit("unpublish post", {
+                authorId: req.user.id,
+                postId: req.post.id,
+            });
+            io.getIO().of('/pro').emit("unpublish post", {
+                authorId: req.user.id,
+                postId: req.post.id,
+            });
+        }
        res.status(200).json({
            success: true
        })
@@ -215,15 +219,25 @@ exports.unpublishPost = (req, res) => {
 
 exports.updateFilterPost = (req, res) => {
     Post.update(
-        {filter: req.params.filter} ,
-        {where: {id: req.params.postId}}
+        { filter: req.params.filter },
+        { where: { id: req.params.postId }}
     ).then(() => {
-        // Sends message to all connected users
-        io.getIO().of(req.namespace).emit("update filter post", {
-            postId: Number(req.params.postId),
-            filter: req.params.filter,
-            namespace: req.namespace
-        });
+        if (req.post.filter === 'pro') {
+            io.getIO().of('/pro').emit("update filter post", {
+                postId: req.post.id,
+                filter: req.params.filter,
+            });
+        } else {
+            io.getIO().of('/visitor').emit("update filter post", {
+                postId: req.post.id,
+                filter: req.params.filter
+            });
+            io.getIO().of('/pro').emit("update filter post", {
+                postId: req.post.id,
+                filter: req.params.filter
+            });
+        }
+
         res.status(200).json({
             success: true
         })
@@ -244,19 +258,10 @@ exports.getTargetPost = (req, res, next) => {
         postId = req.body.postId;
     }
 
-    console.log('getTargetPost', postId);
     Post.findOne({
         where: {id: postId}
     }).then((post) => {
-        let namespace;
-        if(post.filter === 'general' || post.filter === 'witness' || post.filter === 'protocol') {
-            namespace = '/home'
-        } else if (post.filter === 'pro') {
-            namespace = '/pro'
-        }
-            req.post = post;
-            req.namespace = namespace;
-            next()
-        }
-    );
+        req.post = post;
+        next()
+    });
 };

@@ -66,20 +66,16 @@ server.listen(PORT, () => {
 
 // Create socket io connection
 const io = require('./socket').init(server);
-// io.on('connection', (socket) => {
-//     console.log(`CLIENT ID: ${socket.id}  CONNECTED.`);
-//     socket.on('disconnect', () => console.log(`CLIENT ID: ${socket.id} DISCONNECTED.`));
-// });
 
-const homeSpace = io.of('/home');
-homeSpace.on('connection', (socket) => {
-    console.log(`${socket.id} CONNECTED TO HOME`);
+const visitorSpace = io.of('/visitor');
+visitorSpace.on('connection', (socket) => {
+    console.log(`VISITOR ID: ${socket.id} CONNECTED`);
     socket.on('disconnect', () => console.log(`${socket.id} DISCONNECTED.`));
 });
 
 const proSpace = io.of('/pro');
 proSpace.on('connection', (socket) => {
-    console.log(`${socket.id} CONNECTED TO PRO`);
+    console.log(`PRO ID: ${socket.id} CONNECTED`);
     socket.on('disconnect', () => console.log(`${socket.id} DISCONNECTED.`));
 });
 

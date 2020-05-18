@@ -41,12 +41,23 @@ exports.addNewComment = async (req, res, next) => {
         comment: req.body.comment,
     }).then(comment => {
         req.comment = comment;
-        // Sends message to namespace connected users
-        io.getIO().of(req.namespace).emit("new comment", {
-            authorId: req.user.id,
-            postId: req.body.postId,
-            namespace: req.namespace
-        });
+
+        if (req.post.filter === 'pro') {
+            io.getIO().of('/pro').emit("new comment", {
+                postId: req.post.id,
+                authorId: req.user.id
+            });
+        } else {
+            io.getIO().of('/visitor').emit("new comment", {
+                postId: req.post.id,
+                authorId: req.user.id
+            });
+            io.getIO().of('/pro').emit("new comment", {
+                postId: req.post.id,
+                authorId: req.user.id
+            });
+        }
+
         next();
     }).catch(err => {
         console.error(err);
@@ -65,12 +76,23 @@ exports.unpublishComment = (req, res) => {
             post_id: req.params.postId
         }}
     ).then(() => {
-        // Sends message to namespace connected users
-        io.getIO().of(req.namespace).emit("unpublish comment", {
-            postId: Number(req.params.postId),
-            commentId: Number(req.params.commentId),
-            namespace: req.namespace
-        });
+
+        if (req.post.filter === 'pro') {
+            io.getIO().of('/pro').emit("unpublish comment", {
+                postId: req.post.id,
+                commentId: Number(req.params.commentId)
+            });
+        } else {
+            io.getIO().of('/visitor').emit("unpublish comment", {
+                postId: req.post.id,
+                commentId: Number(req.params.commentId)
+            });
+            io.getIO().of('/pro').emit("unpublish comment", {
+                postId: req.post.id,
+                commentId: Number(req.params.commentId)
+            });
+        }
+
         res.status(200).json({
             success: true
         })

@@ -5,7 +5,7 @@ import { VisibilityFilters } from '../../constants/PostFilters';
 const getVisiblePosts = (posts, filter) => {
     switch (filter) {
         case VisibilityFilters.ALL:
-            return posts;
+            return posts.filter(posts => posts.filter !== 'pro');
         case VisibilityFilters.GENERAL:
             return posts.filter(posts => posts.filter === 'general');
         case VisibilityFilters.WITNESS:
