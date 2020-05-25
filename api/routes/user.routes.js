@@ -14,4 +14,9 @@ router.post('/', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin], [ ver
 router.put('/:id', [passportJwt.authenticateJwt], [verifyAuthority.isOwnProfile],
     userController.editProfile, authController.getProfile);
 
+router.put('/editProfile/:id', [passportJwt.authenticateJwt], [verifyAuthority.isAdmin],
+    userController.editUserProfileByAdmin);
+
+
+
 module.exports = router;

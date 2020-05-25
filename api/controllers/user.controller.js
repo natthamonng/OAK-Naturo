@@ -135,7 +135,8 @@ exports.editProfile = (req, res, next) => {
     let condition;
     if (req.body.username){
         condition = {username: req.body.username}
-    } else if (req.body.email){
+    }
+    if (req.body.email){
         condition = {email: req.body.email}
     }
     User.findOne({
@@ -145,11 +146,34 @@ exports.editProfile = (req, res, next) => {
     }).then((userInfo) => {
         userInfo.update(condition)
             .then(() => {
-                // res.status(200).json({
-                //     success: true,
-                //     message: 'Profile mis à jour.'
-                // });
                 next();
+            });
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            message: 'Une erreur s\'est produite lors de la modification du compte.'
+        });
+    });
+};
+
+exports.editUserProfileByAdmin = (req, res) => {
+    console.log(req.params.id);
+    User.findOne({
+        where: {
+            id: req.params.id,
+        },
+    }).then((userInfo) => {
+        userInfo.update({
+            username: req.body.username,
+            email: req.body.email,
+            role: req.body.role
+        })
+            .then(() => {
+                res.status(200).json({
+                    success: true,
+                    message: 'Profile d\'utilisateur mis à jour.'
+                });
             });
     }).catch(err => {
         console.log(err);

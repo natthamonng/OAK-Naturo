@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import Moment from 'react-moment';
 import Pagination from './Pagination';
+import EditUserProfileModal from './EditUserProfileModal';
 
-const UserListTable = ({ users }) => {
+const UserListTable = ({ users, editUserProfile }) => {
     const [filter, setFilter] = useState('');
 
     // Filtered items
@@ -12,7 +13,7 @@ const UserListTable = ({ users }) => {
 
     // State for pagination
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
+    const itemsPerPage = 10;
 
     // Get current items to show
     const indexOfLastUser = currentPage * itemsPerPage;
@@ -29,6 +30,7 @@ const UserListTable = ({ users }) => {
                 <td>{ user.email }</td>
                 <td>{ user.role }</td>
                 <td><Moment format="DD/MM/YYYY">{ user.createdAt }</Moment></td>
+                <td><EditUserProfileModal userProfile={user} editUserProfile={editUserProfile}/></td>
             </tr>
         )
     });
@@ -68,6 +70,7 @@ const UserListTable = ({ users }) => {
                                 <th scope="col">Adresse mail</th>
                                 <th scope="col">Rôle</th>
                                 <th scope="col">Créé</th>
+                                <th scope="col">Modifier</th>
                             </tr>
                             </thead>
                             <tbody>
