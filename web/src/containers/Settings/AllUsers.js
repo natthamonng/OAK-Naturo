@@ -27,11 +27,11 @@ const AllUsers = () => {
                             right: 10,
                             zIndex: '1000'
                         }}
-                        onClose={() => setShow(!show)} show={show} delay={10000} autohide>
+                        onClose={() => setShow(!show)} show={show} delay={3000} autohide>
                         <Toast.Header className="bg-primary text-white">
                             <strong className="mr-auto">Notification</strong>
                         </Toast.Header>
-                        <Toast.Body>Profile d'utilisateur mis à jour !</Toast.Body>
+                        <Toast.Body>Profil d'utilisateur mis à jour !</Toast.Body>
                     </Toast>
                 }
 

@@ -3,6 +3,7 @@ import { setAlert } from './alert.actions';
 import { authService } from '../services/auth.service';
 import * as actionsType  from '../constants/ActionTypes';
 import setAuthToken from '../utils/setAuthToken';
+import {socketService} from '../services/socket.service';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 const defaultErrorMessage = 'Une erreur s\'est produite. Veuillez réessayer plus tard.';
@@ -20,6 +21,7 @@ export const loadUserByJwt = (token) => async dispatch => {
                 });
                 setAuthToken(res.data.token);
                 authService.setToken(res.data.token);
+                socketService.createSocketConnection();
             }
         })
         .catch(err => {
@@ -49,6 +51,7 @@ export const signInUser = (signInData) =>  async dispatch => {
                 type: actionsType.SIGNIN_SUCCESS,
                 payload: res.data
             });
+            socketService.createSocketConnection();
         }
     } catch (err) {
         if(!err.response) {
@@ -68,6 +71,7 @@ export const signOutUser = () => dispatch => {
     setAuthToken(null);
     authService.logout();
     dispatch({ type: actionsType.SIGNOUT });
+    socketService.disconnectSocket();
 };
 
 // SignUp

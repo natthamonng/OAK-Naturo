@@ -16,7 +16,7 @@ const App = () => {
         if (token) {
             store.dispatch(loadUserByJwt(token));
         }
-    }, [loadUserByJwt]);
+    }, []);
 
     return (
         <Provider store={store}>
@@ -28,6 +28,6 @@ const App = () => {
             </Router>
         </Provider>
     );
-}
+};
 
 export default App;

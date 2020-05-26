@@ -1,23 +1,18 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getPosts, reinitializeState, setVisibilityFilter, setGetPostsPage, getPostFromSocket, removePostSuccess, editFilterPostSuccess } from '../../actions/post.actions';
-import { removeCommentSuccess } from '../../actions/comment.actions';
+import { getPosts, reinitializeState, setVisibilityFilter, setGetPostsPage } from '../../actions/post.actions';
 import BreadCrumb from '../../components/Breadcrumb';
 import Filter from '../../components/Filter';
 import VisiblePostList from '../VisiblePostList/VisiblePostList';
 import AddPostForm from '../../components/AddPostForm';
 import SpinnerBubble from '../../components/SpinnerBubble';
 
-import io from 'socket.io-client'
-const BASE_URL = process.env.REACT_APP_API_URL;
-
 const Wall = () => {
     const dispatch = useDispatch();
     const loading = useSelector(state => state.posts.loading);
     const page = useSelector(state => state.posts.page);
     const hasMore = useSelector(state => state.posts.hasMore);
-    const user = useSelector(state => state.auth.user);
 
     let location = useLocation();
     let filters, defaultFilter, pageName;
@@ -36,7 +31,6 @@ const Wall = () => {
         if (location.pathname ==='/pro') {
             dispatch(setVisibilityFilter('PRO'));
         }
-        createSocketConnection();
     }, []);
 
     useEffect(() => {
@@ -44,35 +38,6 @@ const Wall = () => {
             dispatch(getPosts(filters, page));
         }          
     }, [page, hasMore]);
-
-    const createSocketConnection = () => {
-        let namespace;
-        if (user.role === 'visitor') {
-            namespace = '/visitor'
-        } else {
-            namespace = '/pro'
-        }
-        const socket = io(`${BASE_URL}${namespace}`);
-
-        socket.on('new post', newPost => {
-            if (newPost.authorId !== user.id) {
-                dispatch(getPostFromSocket(newPost.postId, 'post'))
-            }
-        });
-        socket.on('unpublish post', post => {
-            dispatch(removePostSuccess(post.postId));
-        });
-        socket.on('update filter post', post => {
-            dispatch(editFilterPostSuccess(post.postId, post.filter));
-        });
-
-        socket.on('new comment', newComment => {
-            dispatch(getPostFromSocket(newComment.postId, 'comment'));
-        });
-        socket.on('unpublish comment', comment => {
-            dispatch(removeCommentSuccess(comment.postId, comment.commentId ));
-        });
-    };
     
     const observer = useRef();
     const bottomBoundaryRef = useCallback(node => {
@@ -99,7 +64,7 @@ const Wall = () => {
             <div className="separator-breadcrumb border-top"></div>
             <section className="widget-app">
                 <div className="row">
-                    <div className="col-12 col-lg-10  offset-md-1 mb-4">
+                    <div className="col-12 col-lg-10  offset-lg-1 mb-4">
 
                         <AddPostForm deFaultFilter={defaultFilter} />
 

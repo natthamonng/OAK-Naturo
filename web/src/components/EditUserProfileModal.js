@@ -26,7 +26,6 @@ const EditUserProfileModal = ({ userProfile, editUserProfile }) => {
         setShowModal(false);
     };
 
-    //TODO WIP
     const onSubmit = (event) => {
         event.preventDefault();
         editUserProfile({username, email, role}, userProfile.id)
@@ -39,7 +38,7 @@ const EditUserProfileModal = ({ userProfile, editUserProfile }) => {
 
             <Modal show={showModal} onHide={()=> setShowModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Modifier le profile d'utilisateur</Modal.Title>
+                    <Modal.Title>Modifier le profil d'utilisateur</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <form onSubmit={event => onSubmit(event)}>
