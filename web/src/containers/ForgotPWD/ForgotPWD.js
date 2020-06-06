@@ -41,8 +41,8 @@ const ForgotPWD = () => {
     };
 
     if (isAuthenticated) {
-        // If signed in and user navigates to ForgotPWD page, should redirect them to home
-        return <Redirect to='/home'/>
+        // If signed in and user navigates to ForgotPWD page, should redirect them to forum
+        return <Redirect to='/forum'/>
     }
 
     return (
