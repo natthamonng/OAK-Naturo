@@ -61,7 +61,7 @@ exports.addProfile = async (req, res, next) => {
             where: {
                 email: req.body.email,
             },
-         }).then(async (user) => {
+         }).then(user => {
             if (user === null) {
                 res.status(403).json({
                     success: false,
@@ -75,7 +75,7 @@ exports.addProfile = async (req, res, next) => {
                 });
 
                 const mailer = new Mailer();
-                await mailer.sendEmail(
+                mailer.sendEmail(
                     user,
                     'Réinitialisation de mot de passe.',
                     `Bonjour, ${user.username} !\n\n`
