@@ -9,7 +9,7 @@
     "axios": "^0.19.2",
     "dotenv": "^8.2.0",
     "highlight.js": "^9.18.1",
-    "immer": "^6.0.3",
+    "immer": "^8.0.1",
     "install": "^0.13.0",
     "jwt-decode": "^2.2.0",
     "moment": "^2.24.0",
